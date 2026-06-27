@@ -63,6 +63,14 @@
 
 :root {
   --radius: 0.625rem;
+  --brand-navy: oklch(0.22 0.05 250);
+  --brand-navy-deep: oklch(0.17 0.045 250);
+  --brand-teal: oklch(0.68 0.12 195);
+  --brand-teal-deep: oklch(0.55 0.13 200);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-deep: var(--brand-navy-deep);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-deep: var(--brand-teal-deep);
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
