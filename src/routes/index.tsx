@@ -103,7 +103,7 @@ function Index() {
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-20 pt-10 lg:grid-cols-2 lg:pb-28 lg:pt-16">
           <div className="max-w-xl">
-            <h1 className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+            <h1 className="font-display text-6xl leading-[1.02] tracking-tight sm:text-7xl">
               Cuidados premium
               <br />
               para o seu lar.
