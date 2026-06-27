@@ -70,7 +70,7 @@ function Index() {
         className="relative overflow-hidden text-white"
         style={{
           background:
-            "linear-gradient(135deg, oklch(0.17 0.045 250) 0%, oklch(0.22 0.05 250) 100%)",
+            "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)",
         }}
       >
         <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5">
