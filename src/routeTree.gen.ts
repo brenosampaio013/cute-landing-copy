@@ -9,7 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as ProfissionaisRouteImport } from './routes/profissionais'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
+import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as AvaliacoesRouteImport } from './routes/avaliacoes'
+import { Route as AgendarRouteImport } from './routes/agendar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardServicosRouteImport } from './routes/dashboard.servicos'
@@ -18,9 +26,49 @@ import { Route as DashboardPagamentosRouteImport } from './routes/dashboard.paga
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
 import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
 
+const ServicosRoute = ServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfissionaisRoute = ProfissionaisRouteImport.update({
+  id: '/profissionais',
+  path: '/profissionais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComoFuncionaRoute = ComoFuncionaRouteImport.update({
+  id: '/como-funciona',
+  path: '/como-funciona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AvaliacoesRoute = AvaliacoesRouteImport.update({
+  id: '/avaliacoes',
+  path: '/avaliacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgendarRoute = AgendarRouteImport.update({
+  id: '/agendar',
+  path: '/agendar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -61,7 +109,15 @@ const DashboardAgendamentosRoute = DashboardAgendamentosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agendar': typeof AgendarRoute
+  '/avaliacoes': typeof AvaliacoesRoute
+  '/cadastro': typeof CadastroRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
+  '/profissionais': typeof ProfissionaisRoute
+  '/servicos': typeof ServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
@@ -71,6 +127,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agendar': typeof AgendarRoute
+  '/avaliacoes': typeof AvaliacoesRoute
+  '/cadastro': typeof CadastroRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/contato': typeof ContatoRoute
+  '/login': typeof LoginRoute
+  '/profissionais': typeof ProfissionaisRoute
+  '/servicos': typeof ServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
@@ -81,7 +145,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agendar': typeof AgendarRoute
+  '/avaliacoes': typeof AvaliacoesRoute
+  '/cadastro': typeof CadastroRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/login': typeof LoginRoute
+  '/profissionais': typeof ProfissionaisRoute
+  '/servicos': typeof ServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
@@ -93,7 +165,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agendar'
+    | '/avaliacoes'
+    | '/cadastro'
+    | '/como-funciona'
+    | '/contato'
     | '/dashboard'
+    | '/login'
+    | '/profissionais'
+    | '/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/pagamentos'
@@ -103,6 +183,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agendar'
+    | '/avaliacoes'
+    | '/cadastro'
+    | '/como-funciona'
+    | '/contato'
+    | '/login'
+    | '/profissionais'
+    | '/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/pagamentos'
@@ -112,7 +200,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/agendar'
+    | '/avaliacoes'
+    | '/cadastro'
+    | '/como-funciona'
+    | '/contato'
     | '/dashboard'
+    | '/login'
+    | '/profissionais'
+    | '/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/pagamentos'
@@ -123,16 +219,80 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgendarRoute: typeof AgendarRoute
+  AvaliacoesRoute: typeof AvaliacoesRoute
+  CadastroRoute: typeof CadastroRoute
+  ComoFuncionaRoute: typeof ComoFuncionaRoute
+  ContatoRoute: typeof ContatoRoute
   DashboardRoute: typeof DashboardRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  ProfissionaisRoute: typeof ProfissionaisRoute
+  ServicosRoute: typeof ServicosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/servicos': {
+      id: '/servicos'
+      path: '/servicos'
+      fullPath: '/servicos'
+      preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profissionais': {
+      id: '/profissionais'
+      path: '/profissionais'
+      fullPath: '/profissionais'
+      preLoaderRoute: typeof ProfissionaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/como-funciona': {
+      id: '/como-funciona'
+      path: '/como-funciona'
+      fullPath: '/como-funciona'
+      preLoaderRoute: typeof ComoFuncionaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/avaliacoes': {
+      id: '/avaliacoes'
+      path: '/avaliacoes'
+      fullPath: '/avaliacoes'
+      preLoaderRoute: typeof AvaliacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agendar': {
+      id: '/agendar'
+      path: '/agendar'
+      fullPath: '/agendar'
+      preLoaderRoute: typeof AgendarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -211,7 +371,15 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgendarRoute: AgendarRoute,
+  AvaliacoesRoute: AvaliacoesRoute,
+  CadastroRoute: CadastroRoute,
+  ComoFuncionaRoute: ComoFuncionaRoute,
+  ContatoRoute: ContatoRoute,
   DashboardRoute: DashboardRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ProfissionaisRoute: ProfissionaisRoute,
+  ServicosRoute: ServicosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
