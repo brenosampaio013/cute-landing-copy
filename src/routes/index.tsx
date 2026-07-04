@@ -73,11 +73,11 @@ function Index() {
             "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)",
         }}
       >
-        <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6">
+        <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5">
           <a href="#inicio" className="flex shrink-0 items-center gap-2">
             <img src={logo} alt="Maré Nobre" className="h-16 w-auto sm:h-[70px]" />
           </a>
-          <nav className="hidden items-center gap-7 lg:flex">
+          <nav className="hidden flex-1 justify-center gap-5 lg:flex">
             {navLinks.map((l) => (
               <a
                 key={l.href}
@@ -103,16 +103,19 @@ function Index() {
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-20 pt-10 lg:grid-cols-2 lg:pb-28 lg:pt-16">
           <div className="max-w-xl">
-            <h1 className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
-              Cuidados premium
+            <h1
+              className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl"
+              style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
+            >
+              Mais que limpeza.
               <br />
-              para o seu lar.
+              Cuidado completo para o seu lar.
             </h1>
             <p className="mt-6 text-lg text-white/75">
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
             <div className="mt-8">
-              <button className="inline-flex items-center gap-2 rounded-md bg-brand-teal-deep px-6 py-3 text-base font-semibold text-white shadow-xl shadow-black/30 transition hover:brightness-110">
+              <button className="inline-flex items-center gap-2 rounded-full bg-[#2DD4BF] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-black/25 transition hover:brightness-110">
                 Agendar agora <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -133,7 +136,15 @@ function Index() {
               alt="Profissional de limpeza Maré Nobre"
               width={1024}
               height={1024}
-              className="mx-auto h-auto w-full max-w-md rounded-2xl object-cover shadow-2xl shadow-black/40 lg:max-w-lg"
+              className="mx-auto h-auto w-full max-w-md object-cover lg:max-w-lg"
+              style={{
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent 0%, black 12%, black 100%), linear-gradient(to top, transparent 0%, black 15%, black 100%)",
+                WebkitMaskComposite: "source-in",
+                maskImage:
+                  "linear-gradient(to right, transparent 0%, black 12%, black 100%), linear-gradient(to top, transparent 0%, black 15%, black 100%)",
+                maskComposite: "intersect",
+              }}
             />
           </div>
         </div>
