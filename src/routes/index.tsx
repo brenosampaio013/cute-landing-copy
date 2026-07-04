@@ -34,14 +34,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const navLinks = [
-  { label: "Início", href: "#inicio" },
-  { label: "Serviços", href: "#servicos" },
-  { label: "Como funciona", href: "#como-funciona" },
-  { label: "Profissionais", href: "#profissionais" },
-  { label: "Avaliações", href: "#avaliacoes" },
-  { label: "Contato", href: "#contato" },
-];
 
 const services = [
   { icon: iconLimpeza.url, title: "Limpeza Residencial", desc: "Ambientes sempre limpos e aconchegantes." },
