@@ -1,7 +1,10 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { AuthShell, GoogleButton } from "@/components/auth-shell";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
+import { friendlyAuthError } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -22,21 +25,46 @@ function Login() {
   const [showPwd, setShowPwd] = useState(false);
   const [remember, setRemember] = useState(true);
   const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const emailError = email && !emailRegex.test(email) ? "E-mail inválido." : "";
   const passwordError =
     password && password.length < 6 ? "A senha deve ter no mínimo 6 caracteres." : "";
   const canSubmit = useMemo(
-    () => emailRegex.test(email) && password.length >= 6,
-    [email, password]
+    () => emailRegex.test(email) && password.length >= 6 && !loading,
+    [email, password, loading]
   );
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    setFormError(null);
     if (!canSubmit) {
       setTouched({ email: true, password: true });
       return;
     }
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) {
+      setFormError(friendlyAuthError(error.message));
+      return;
+    }
+    navigate({ to: "/dashboard" });
+  }
+
+  async function onGoogle() {
+    setFormError(null);
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setLoading(false);
+      setFormError(friendlyAuthError(result.error.message ?? "Falha ao entrar com Google."));
+      return;
+    }
+    if (result.redirected) return;
     navigate({ to: "/dashboard" });
   }
 
@@ -56,7 +84,6 @@ function Login() {
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 space-y-4" noValidate>
-        {/* Email */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             E-mail
@@ -69,6 +96,7 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => setTouched((t) => ({ ...t, email: true }))}
               placeholder="voce@exemplo.com"
+              autoComplete="email"
               className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20"
             />
           </div>
@@ -77,7 +105,6 @@ function Login() {
           )}
         </div>
 
-        {/* Password */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             Senha
@@ -90,6 +117,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               onBlur={() => setTouched((t) => ({ ...t, password: true }))}
               placeholder="••••••••"
+              autoComplete="current-password"
               className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm text-slate-800 outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20"
             />
             <button
@@ -121,11 +149,18 @@ function Login() {
           </a>
         </div>
 
+        {formError && (
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-100">
+            {formError}
+          </p>
+        )}
+
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-2 w-full rounded-lg bg-[#0A1A2F] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#0A1A2F] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-50"
         >
+          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
           Entrar
         </button>
 
@@ -140,7 +175,9 @@ function Login() {
           </div>
         </div>
 
-        <GoogleButton label="Continuar com Google" />
+        <div onClick={onGoogle}>
+          <GoogleButton label="Continuar com Google" />
+        </div>
 
         <p className="pt-4 text-center text-sm text-slate-500">
           Não tem uma conta?{" "}
