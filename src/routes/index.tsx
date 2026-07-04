@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+
 
 import {
   Calendar,
@@ -204,92 +204,61 @@ function Index() {
 }
 
 function HowItWorks() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            setVisible(true);
-            obs.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2 },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
   return (
     <section
       id="como-funciona"
       className="py-28 text-white sm:py-32"
-      style={{ backgroundColor: "oklch(0.17 0.045 250)" }}
+      style={{
+        background: "linear-gradient(160deg, #071A33 0%, #0B2342 100%)",
+      }}
     >
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-6xl px-6">
         <div className="text-center">
           <h2
-            className="text-4xl font-bold sm:text-5xl"
+            className="text-4xl font-bold text-white sm:text-5xl"
             style={{ fontFamily: "var(--font-serif-bold)", fontWeight: 700 }}
           >
             Como funciona
           </h2>
-          <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-[#2DD4BF]" />
+          <div className="mx-auto mt-4 h-[3px] w-16 rounded-full bg-[#19C6C5]" />
         </div>
-        <div ref={ref} className="relative mt-20 grid gap-14 md:grid-cols-4 md:gap-6">
-          {/* Progress line */}
-          <div
-            className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-12 hidden h-[2px] overflow-hidden rounded-full bg-white/10 md:block"
-            aria-hidden
-          >
-            <div
-              className="h-full origin-left rounded-full transition-transform duration-[1600ms] ease-out"
-              style={{
-                background:
-                  "linear-gradient(to right, rgba(45,212,191,0), #2DD4BF 40%, #2DD4BF 100%)",
-                transform: visible ? "scaleX(1)" : "scaleX(0)",
-              }}
-            />
-          </div>
 
-          {steps.map((step, i) => (
-            <div
-              key={step.n}
-              className="group relative flex flex-col items-center text-center"
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(24px)",
-                transition: `opacity 600ms ease-out ${i * 150}ms, transform 600ms ease-out ${i * 150}ms`,
-              }}
-            >
-              <div className="relative">
+        <div className="relative mt-20">
+          {/* Connector line — centered on the 74px circles (top-1/2 within a 74px block = 37px) */}
+          <div
+            className="pointer-events-none absolute left-[12.5%] right-[12.5%] hidden h-[2px] bg-[#0F6D8C] md:block"
+            style={{ top: "36px" }}
+            aria-hidden
+          />
+
+          <div className="relative grid gap-14 md:grid-cols-4 md:gap-8">
+            {steps.map((step) => (
+              <div
+                key={step.n}
+                className="flex flex-col items-center text-center"
+              >
                 <div
-                  className="flex h-24 w-24 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:scale-110"
-                  style={{
-                    background:
-                      "linear-gradient(140deg, #2DD4BF 0%, #14b8a6 55%, #0d9488 100%)",
-                    boxShadow:
-                      "0 0 0 6px rgba(45,212,191,0.08), 0 10px 40px -8px rgba(45,212,191,0.55)",
-                  }}
+                  className="flex items-center justify-center rounded-full border border-white/10 bg-[#19C6C5]"
+                  style={{ width: 74, height: 74 }}
                 >
-                  <step.icon className="h-10 w-10 text-white" strokeWidth={2} />
+                  <step.icon
+                    className="h-8 w-8 text-white"
+                    strokeWidth={1.75}
+                  />
                 </div>
-                <div className="absolute -right-1 -top-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#2DD4BF] text-sm font-bold text-white shadow-lg ring-4 ring-[color:oklch(0.17_0.045_250)]">
-                  {step.n}
-                </div>
+                <h3 className="mt-8 text-base font-semibold tracking-tight text-white">
+                  {step.title}
+                </h3>
+                <p className="mt-2 max-w-[210px] text-sm leading-relaxed text-white/70">
+                  {step.desc}
+                </p>
               </div>
-              <h3 className="mt-7 text-lg font-bold text-white">{step.title}</h3>
-              <p className="mt-2 max-w-[220px] text-sm text-[#B0BEC5]">{step.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
 
