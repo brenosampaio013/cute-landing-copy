@@ -192,37 +192,8 @@ function Index() {
       </section>
 
       {/* How it works */}
-      <section
-        id="como-funciona"
-        className="py-20 text-white"
-        style={{ backgroundColor: "oklch(0.17 0.045 250)" }}
-      >
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">Como funciona</h2>
-            <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-brand-teal" />
-          </div>
-          <div className="relative mt-14 grid gap-10 md:grid-cols-4">
-            {steps.map((step, i) => (
-              <div key={step.n} className="relative flex flex-col items-center text-center">
-                {i < steps.length - 1 && (
-                  <div className="absolute left-[60%] right-[-40%] top-10 hidden border-t-2 border-dashed border-white/25 md:block" />
-                )}
-                <div className="relative">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-white/30 bg-brand-navy-deep">
-                    <step.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="absolute -left-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-brand-teal-deep text-sm font-bold text-white shadow-md">
-                    {step.n}
-                  </div>
-                </div>
-                <h3 className="mt-5 text-base font-bold">{step.title}</h3>
-                <p className="mt-2 max-w-[200px] text-sm text-white/70">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowItWorks />
+
 
       {/* Footer */}
       <footer id="contato" className="bg-brand-navy-deep py-10 text-center text-sm text-white/60">
