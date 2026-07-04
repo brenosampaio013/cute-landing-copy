@@ -1,32 +1,318 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { SitePage } from "@/components/site-page";
+import { useMemo, useState, type FormEvent } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { AuthShell, GoogleButton } from "@/components/auth-shell";
 
 export const Route = createFileRoute("/cadastro")({
-  head: () => ({ meta: [{ title: "Cadastro — Maré Nobre" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [
+      { title: "Criar conta — Maré Nobre" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: Cadastro,
 });
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function maskPhone(v: string) {
+  const d = v.replace(/\D/g, "").slice(0, 11);
+  if (d.length <= 2) return d.length ? `(${d}` : "";
+  if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
+function passwordStrength(pwd: string): { score: 0 | 1 | 2 | 3; label: string; color: string } {
+  let s = 0;
+  if (pwd.length >= 6) s++;
+  if (/[A-Z]/.test(pwd) || /[0-9]/.test(pwd)) s++;
+  if (pwd.length >= 10 && /[^A-Za-z0-9]/.test(pwd)) s++;
+  const map = [
+    { label: "", color: "bg-slate-200" },
+    { label: "Fraca", color: "bg-red-400" },
+    { label: "Média", color: "bg-amber-400" },
+    { label: "Forte", color: "bg-emerald-500" },
+  ] as const;
+  return { score: s as 0 | 1 | 2 | 3, ...map[s] };
+}
+
 function Cadastro() {
+  const navigate = useNavigate();
+  const [tab, setTab] = useState<"cliente" | "profissional">("cliente");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [pwd2, setPwd2] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [showPwd2, setShowPwd2] = useState(false);
+  const [accept, setAccept] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const strength = passwordStrength(pwd);
+
+  const errors = {
+    name: name && name.trim().length < 3 ? "Informe seu nome completo." : "",
+    email: email && !emailRegex.test(email) ? "E-mail inválido." : "",
+    phone: phone && phone.replace(/\D/g, "").length < 10 ? "Telefone inválido." : "",
+    pwd: pwd && pwd.length < 6 ? "Mínimo de 6 caracteres." : "",
+    pwd2: pwd2 && pwd2 !== pwd ? "As senhas não coincidem." : "",
+  };
+
+  const canSubmit = useMemo(
+    () =>
+      name.trim().length >= 3 &&
+      emailRegex.test(email) &&
+      phone.replace(/\D/g, "").length >= 10 &&
+      pwd.length >= 6 &&
+      pwd2 === pwd &&
+      accept,
+    [name, email, phone, pwd, pwd2, accept]
+  );
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!canSubmit) {
+      setTouched({ name: true, email: true, phone: true, pwd: true, pwd2: true });
+      return;
+    }
+    navigate({ to: "/dashboard" });
+  }
+
+  const inputBase =
+    "w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20";
+
   return (
-    <SitePage title="Criar conta" subtitle="Cadastre-se e agende seu primeiro serviço em minutos.">
-      <form className="mx-auto max-w-md space-y-4 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
-        {[
-          { label: "Nome completo", type: "text" },
-          { label: "E-mail", type: "email" },
-          { label: "Telefone", type: "tel" },
-          { label: "Senha", type: "password" },
-        ].map((f) => (
-          <label key={f.label} className="block">
-            <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">{f.label}</span>
-            <input type={f.type} className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20" />
+    <AuthShell
+      quote="Comece a cuidar do seu lar hoje."
+      imageUrl="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80"
+    >
+      <h1
+        className="text-3xl text-[#0A1A2F] sm:text-4xl"
+        style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
+      >
+        Crie sua conta
+      </h1>
+      <p className="mt-2 text-sm text-slate-500">
+        Encontre os melhores profissionais para o seu lar
+      </p>
+
+      {/* Tabs */}
+      <div className="mt-6 inline-flex w-full rounded-lg bg-slate-100 p-1 text-sm font-semibold">
+        <button
+          type="button"
+          onClick={() => setTab("cliente")}
+          className={`flex-1 rounded-md px-3 py-2 transition ${
+            tab === "cliente"
+              ? "bg-[#2DD4BF] text-white shadow-sm"
+              : "text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Sou cliente
+        </button>
+        <button
+          type="button"
+          onClick={() => setTab("profissional")}
+          className={`flex-1 rounded-md px-3 py-2 transition ${
+            tab === "profissional"
+              ? "bg-[#2DD4BF] text-white shadow-sm"
+              : "text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Sou profissional
+        </button>
+      </div>
+
+      <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
+        {/* Name */}
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Nome completo
           </label>
-        ))}
-        <button type="button" className="w-full rounded-lg bg-[#2DD4BF] px-4 py-3 text-sm font-semibold text-white hover:brightness-110">Criar conta</button>
-        <p className="text-center text-sm text-slate-500">
-          Já tem conta?{" "}
-          <Link to="/login" className="font-semibold text-[#2DD4BF] hover:underline">Entrar</Link>
+          <div className="relative">
+            <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+              placeholder="Seu nome"
+              className={inputBase}
+            />
+          </div>
+          {touched.name && errors.name && (
+            <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+          )}
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+            E-mail
+          </label>
+          <div className="relative">
+            <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+              placeholder="voce@exemplo.com"
+              className={inputBase}
+            />
+          </div>
+          {touched.email && errors.email && (
+            <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+          )}
+        </div>
+
+        {/* Phone */}
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Telefone / WhatsApp
+          </label>
+          <div className="relative">
+            <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="tel"
+              inputMode="numeric"
+              value={phone}
+              onChange={(e) => setPhone(maskPhone(e.target.value))}
+              onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
+              placeholder="(00) 00000-0000"
+              className={inputBase}
+            />
+          </div>
+          {touched.phone && errors.phone && (
+            <p className="mt-1 text-xs text-red-500">{errors.phone}</p>
+          )}
+        </div>
+
+        {/* Password */}
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Senha
+          </label>
+          <div className="relative">
+            <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type={showPwd ? "text" : "password"}
+              value={pwd}
+              onChange={(e) => setPwd(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, pwd: true }))}
+              placeholder="Mínimo 6 caracteres"
+              className={`${inputBase} pr-10`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPwd((s) => !s)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 hover:text-slate-600"
+              aria-label={showPwd ? "Ocultar senha" : "Mostrar senha"}
+            >
+              {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          {pwd && (
+            <div className="mt-2 flex items-center gap-2">
+              <div className="flex flex-1 gap-1">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className={`h-1.5 flex-1 rounded-full transition ${
+                      i <= strength.score ? strength.color : "bg-slate-200"
+                    }`}
+                  />
+                ))}
+              </div>
+              {strength.label && (
+                <span className="w-14 text-right text-xs font-medium text-slate-500">
+                  {strength.label}
+                </span>
+              )}
+            </div>
+          )}
+          {touched.pwd && errors.pwd && (
+            <p className="mt-1 text-xs text-red-500">{errors.pwd}</p>
+          )}
+        </div>
+
+        {/* Confirm password */}
+        <div>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Confirmar senha
+          </label>
+          <div className="relative">
+            <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type={showPwd2 ? "text" : "password"}
+              value={pwd2}
+              onChange={(e) => setPwd2(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, pwd2: true }))}
+              placeholder="Repita sua senha"
+              className={`${inputBase} pr-10`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPwd2((s) => !s)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 hover:text-slate-600"
+              aria-label={showPwd2 ? "Ocultar senha" : "Mostrar senha"}
+            >
+              {showPwd2 ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          {touched.pwd2 && errors.pwd2 && (
+            <p className="mt-1 text-xs text-red-500">{errors.pwd2}</p>
+          )}
+        </div>
+
+        {/* Terms */}
+        <label className="flex cursor-pointer items-start gap-2 text-sm text-slate-600">
+          <input
+            type="checkbox"
+            checked={accept}
+            onChange={(e) => setAccept(e.target.checked)}
+            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#2DD4BF] focus:ring-[#2DD4BF]"
+          />
+          <span>
+            Aceito os{" "}
+            <a href="#" className="font-semibold text-[#2DD4BF] hover:underline">
+              Termos de Uso
+            </a>{" "}
+            e{" "}
+            <a href="#" className="font-semibold text-[#2DD4BF] hover:underline">
+              Política de Privacidade
+            </a>
+          </span>
+        </label>
+
+        <button
+          type="submit"
+          disabled={!canSubmit}
+          className="mt-2 w-full rounded-lg bg-[#2DD4BF] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Criar conta
+        </button>
+
+        <div className="relative py-3">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-3 text-xs uppercase tracking-wide text-slate-400">
+              ou
+            </span>
+          </div>
+        </div>
+
+        <GoogleButton label="Continuar com Google" />
+
+        <p className="pt-4 text-center text-sm text-slate-500">
+          Já tem uma conta?{" "}
+          <Link to="/login" className="font-semibold text-[#2DD4BF] hover:underline">
+            Entrar
+          </Link>
         </p>
       </form>
-    </SitePage>
+    </AuthShell>
   );
 }
