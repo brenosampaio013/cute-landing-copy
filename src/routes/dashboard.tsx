@@ -1,5 +1,5 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { useState, type ComponentType, type SVGProps } from "react";
+import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState, type ComponentType, type SVGProps } from "react";
 import {
   Home,
   Calendar,
@@ -15,17 +15,15 @@ import {
   Leaf,
   Menu,
   X,
+  Loader2,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Maré Nobre" },
-      {
-        name: "description",
-        content:
-          "Área do cliente: agende serviços, acompanhe pagamentos e avalie profissionais.",
-      },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -33,13 +31,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 type IconType = ComponentType<SVGProps<SVGSVGElement>>;
-
-type NavItem = {
-  label: string;
-  icon: IconType;
-  to?: string;
-  exact?: boolean;
-};
+type NavItem = { label: string; icon: IconType; to?: string; exact?: boolean };
 
 const NAV: NavItem[] = [
   { label: "Dashboard", icon: Home, to: "/dashboard", exact: true },
@@ -54,43 +46,75 @@ const NAV: NavItem[] = [
 ];
 
 function DashboardLayout() {
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState<{ nome: string | null; foto_url: string | null } | null>(null);
+
+  // Client-side auth guard
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/login" });
+  }, [loading, user, navigate]);
+
+  // Load profile display data
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("nome, foto_url")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (!cancelled) setProfile(data ?? { nome: null, foto_url: null });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  }
+
+  if (loading || !user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F5F7FA] text-slate-500">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    );
+  }
+
+  const displayName =
+    profile?.nome || (user.user_metadata as { nome?: string })?.nome || user.email || "Cliente";
+  const initial = displayName.trim().charAt(0).toUpperCase() || "C";
 
   return (
     <div className="min-h-screen bg-[#F5F7FA]">
-      {/* Mobile top bar */}
       <div className="flex items-center justify-between border-b border-slate-200 bg-[#0A1A2F] px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2 text-white">
           <Leaf className="h-5 w-5 text-[#2DD4BF]" />
           <span className="font-display text-lg">Maré Nobre</span>
         </div>
-        <button
-          aria-label="Abrir menu"
-          onClick={() => setOpen((v) => !v)}
-          className="text-white"
-        >
+        <button aria-label="Abrir menu" onClick={() => setOpen((v) => !v)} className="text-white">
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
       <div className="lg:flex">
-        {/* Sidebar */}
         <aside
           className={`${
             open ? "block" : "hidden"
           } fixed inset-y-0 left-0 z-40 w-[280px] flex-shrink-0 bg-[#0A1A2F] text-white lg:sticky lg:top-0 lg:block lg:h-screen`}
         >
           <div className="flex h-full flex-col">
-            {/* Brand */}
             <div className="border-b border-white/5 px-7 pb-6 pt-8">
               <div className="flex items-center gap-2">
                 <Leaf className="h-5 w-5 text-[#2DD4BF]" />
                 <span
                   className="text-2xl text-white"
-                  style={{
-                    fontFamily: "var(--font-serif-bold)",
-                    fontWeight: 700,
-                  }}
+                  style={{ fontFamily: "var(--font-serif-bold)", fontWeight: 700 }}
                 >
                   MARÉ NOBRE
                 </span>
@@ -100,23 +124,15 @@ function DashboardLayout() {
               </p>
             </div>
 
-            {/* Nav */}
             <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
               {NAV.map((item) => {
-                const inactive =
-                  "text-white/70 hover:bg-white/5 hover:text-white";
-                const active =
-                  "bg-[#2DD4BF]/15 text-white ring-1 ring-inset ring-[#2DD4BF]/30";
-                const base =
-                  "flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition";
+                const inactive = "text-white/70 hover:bg-white/5 hover:text-white";
+                const active = "bg-[#2DD4BF]/15 text-white ring-1 ring-inset ring-[#2DD4BF]/30";
+                const base = "flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition";
 
                 if (!item.to) {
                   return (
-                    <a
-                      key={item.label}
-                      href="#"
-                      className={`${base} ${inactive}`}
-                    >
+                    <a key={item.label} href="#" className={`${base} ${inactive}`}>
                       <item.icon className="h-[18px] w-[18px]" />
                       {item.label}
                     </a>
@@ -138,22 +154,19 @@ function DashboardLayout() {
               })}
             </nav>
 
-            {/* Logout */}
             <div className="border-t border-white/5 px-4 py-4">
-              <a
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white"
+              <button
+                onClick={handleLogout}
+                className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-white/70 transition hover:bg-white/5 hover:text-white"
               >
                 <LogOut className="h-[18px] w-[18px]" />
                 Sair
-              </a>
+              </button>
             </div>
           </div>
         </aside>
 
-        {/* Main */}
         <main className="min-w-0 flex-1 px-5 py-8 sm:px-8 lg:px-10">
-          {/* Top-right user bar */}
           <div className="mb-6 flex items-center justify-end gap-4">
             <button
               aria-label="Notificações"
@@ -163,13 +176,19 @@ function DashboardLayout() {
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#2DD4BF]" />
             </button>
             <div className="flex items-center gap-3">
-              <img
-                src="https://i.pravatar.cc/80?img=47"
-                alt="Juliana Silva"
-                className="h-10 w-10 rounded-full object-cover ring-2 ring-white"
-              />
+              {profile?.foto_url ? (
+                <img
+                  src={profile.foto_url}
+                  alt={displayName}
+                  className="h-10 w-10 rounded-full object-cover ring-2 ring-white"
+                />
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2DD4BF] font-semibold text-white ring-2 ring-white">
+                  {initial}
+                </div>
+              )}
               <span className="hidden text-sm font-semibold text-[#0A1A2F] sm:inline">
-                Juliana Silva
+                {displayName}
               </span>
             </div>
           </div>
@@ -180,4 +199,3 @@ function DashboardLayout() {
     </div>
   );
 }
-
