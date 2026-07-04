@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeading } from "./dashboard";
+import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/perfil")({
   head: () => ({ meta: [{ title: "Perfil — Maré Nobre" }] }),

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageCircle, Mail, Phone, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { PageHeading } from "./dashboard";
+import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/ajuda")({
   head: () => ({ meta: [{ title: "Ajuda — Maré Nobre" }] }),

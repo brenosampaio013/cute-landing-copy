@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CreditCard, Download, CheckCircle2 } from "lucide-react";
-import { PageHeading } from "./dashboard";
+import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/pagamentos")({
   head: () => ({ meta: [{ title: "Pagamentos — Maré Nobre" }] }),

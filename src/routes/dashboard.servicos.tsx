@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Home, Sparkles, Shirt, Wrench, Zap, Leaf, ArrowRight } from "lucide-react";
-import { PageHeading } from "./dashboard";
+import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/servicos")({
   head: () => ({ meta: [{ title: "Serviços — Maré Nobre" }] }),

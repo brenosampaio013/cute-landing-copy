@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Calendar, Clock, Home, Shirt, Sparkles, Plus } from "lucide-react";
-import { PageHeading } from "./dashboard";
+import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/agendamentos")({
   head: () => ({ meta: [{ title: "Agendamentos — Maré Nobre" }] }),
