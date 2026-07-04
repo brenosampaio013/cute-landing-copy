@@ -44,12 +44,10 @@ const navLinks = [
 ];
 
 const services = [
-  { icon: Home, title: "Limpeza Residencial", desc: "Ambientes sempre limpos e aconchegantes." },
-  { icon: Sparkles, title: "Limpeza Pós-obra", desc: "Deixamos tudo pronto para você aproveitar." },
-  { icon: Shirt, title: "Passadoria", desc: "Suas roupas cuidadas com todo carinho." },
-  { icon: Wrench, title: "Hidráulica", desc: "Soluções rápidas e eficientes." },
-  { icon: Zap, title: "Elétrica", desc: "Instalações e reparos com segurança." },
-  { icon: Leaf, title: "Jardinagem", desc: "Seu jardim sempre bonito e saudável." },
+  { icon: iconLimpeza.url, title: "Limpeza Residencial", desc: "Ambientes sempre limpos e aconchegantes." },
+  { icon: iconPosObra.url, title: "Limpeza Pós-obra", desc: "Deixamos tudo pronto para você aproveitar." },
+  { icon: iconPassadoria.url, title: "Passadoria", desc: "Suas roupas cuidadas com todo carinho." },
+  { icon: iconJardinagem.url, title: "Jardinagem", desc: "Seu jardim sempre bonito e saudável." },
 ];
 
 const steps = [
