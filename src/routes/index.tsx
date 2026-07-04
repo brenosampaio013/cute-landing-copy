@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import {
   Calendar,
@@ -7,14 +6,13 @@ import {
   UserCheck,
   Star,
   ArrowRight,
-  Menu,
 } from "lucide-react";
 import heroCleaner from "@/assets/hero-cleaner.jpg";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
 import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
 import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
-import logo from "@/assets/logo.png";
+import { SiteHeader } from "@/components/site-header";
 
 export const Route = createFileRoute("/")({
   head: () => ({
