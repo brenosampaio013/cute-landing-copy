@@ -61,33 +61,7 @@ function Index() {
             "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)",
         }}
       >
-        <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5">
-          <a href="#inicio" className="flex shrink-0 items-center gap-2">
-            <img src={logo} alt="Maré Nobre" className="h-16 w-auto sm:h-[70px]" />
-          </a>
-          <nav className="hidden flex-1 justify-center gap-5 lg:flex">
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-sm font-medium text-white/85 transition hover:text-white"
-              >
-                {l.label}
-              </a>
-            ))}
-          </nav>
-          <div className="flex items-center gap-3">
-            <button className="hidden rounded-md border border-white/30 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 sm:inline-flex">
-              Entrar
-            </button>
-            <button className="rounded-md bg-brand-teal-deep px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:brightness-110">
-              Cadastrar
-            </button>
-            <button className="lg:hidden" aria-label="Menu">
-              <Menu className="h-6 w-6" />
-            </button>
-          </div>
-        </header>
+        <SiteHeader transparent />
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-20 pt-10 lg:grid-cols-2 lg:pb-28 lg:pt-16">
           <div className="max-w-xl">
@@ -103,9 +77,12 @@ function Index() {
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
             <div className="mt-8">
-              <button className="inline-flex items-center gap-2 rounded-full bg-[#2DD4BF] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-black/25 transition hover:brightness-110">
+              <Link
+                to="/agendar"
+                className="inline-flex items-center gap-2 rounded-full bg-[#2DD4BF] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-black/25 transition hover:brightness-110"
+              >
                 Agendar agora <ArrowRight className="h-4 w-4" />
-              </button>
+              </Link>
             </div>
             <div className="mt-8 flex items-center gap-3 text-sm">
               <div className="flex">
