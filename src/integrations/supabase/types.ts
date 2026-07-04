@@ -14,7 +14,157 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agendamentos: {
+        Row: {
+          cliente_id: string
+          created_at: string
+          data: string
+          endereco: string | null
+          horario_fim: string
+          horario_inicio: string
+          id: string
+          profissional_id: string | null
+          servico: string
+          status: Database["public"]["Enums"]["booking_status"]
+          updated_at: string
+        }
+        Insert: {
+          cliente_id: string
+          created_at?: string
+          data: string
+          endereco?: string | null
+          horario_fim: string
+          horario_inicio: string
+          id?: string
+          profissional_id?: string | null
+          servico: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string
+        }
+        Update: {
+          cliente_id?: string
+          created_at?: string
+          data?: string
+          endereco?: string | null
+          horario_fim?: string
+          horario_inicio?: string
+          id?: string
+          profissional_id?: string | null
+          servico?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      avaliacoes: {
+        Row: {
+          agendamento_id: string
+          cliente_id: string
+          comentario: string | null
+          created_at: string
+          id: string
+          nota: number
+          profissional_id: string | null
+        }
+        Insert: {
+          agendamento_id: string
+          cliente_id: string
+          comentario?: string | null
+          created_at?: string
+          id?: string
+          nota: number
+          profissional_id?: string | null
+        }
+        Update: {
+          agendamento_id?: string
+          cliente_id?: string
+          comentario?: string | null
+          created_at?: string
+          id?: string
+          nota?: number
+          profissional_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avaliacoes_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: true
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pagamentos: {
+        Row: {
+          agendamento_id: string
+          created_at: string
+          data_pagamento: string | null
+          id: string
+          metodo: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          valor: number
+        }
+        Insert: {
+          agendamento_id: string
+          created_at?: string
+          data_pagamento?: string | null
+          id?: string
+          metodo?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          valor: number
+        }
+        Update: {
+          agendamento_id?: string
+          created_at?: string
+          data_pagamento?: string | null
+          id?: string
+          metodo?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pagamentos_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          foto_url: string | null
+          id: string
+          nome: string | null
+          telefone: string | null
+          tipo_usuario: Database["public"]["Enums"]["user_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          foto_url?: string | null
+          id: string
+          nome?: string | null
+          telefone?: string | null
+          tipo_usuario?: Database["public"]["Enums"]["user_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          foto_url?: string | null
+          id?: string
+          nome?: string | null
+          telefone?: string | null
+          tipo_usuario?: Database["public"]["Enums"]["user_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +173,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      booking_status: "confirmado" | "concluido" | "cancelado" | "pendente"
+      payment_status: "pago" | "pendente" | "estornado"
+      user_type: "cliente" | "profissional"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +302,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      booking_status: ["confirmado", "concluido", "cancelado", "pendente"],
+      payment_status: ["pago", "pendente", "estornado"],
+      user_type: ["cliente", "profissional"],
+    },
   },
 } as const
