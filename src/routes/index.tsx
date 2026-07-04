@@ -147,28 +147,41 @@ function Index() {
       </section>
 
       {/* Services */}
-      <section id="servicos" className="bg-white py-20">
+      <section id="servicos" className="bg-[#fafbfc] py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-brand-navy sm:text-4xl">Nossos serviços</h2>
-            <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-brand-teal" />
+            <h2
+              className="text-4xl font-bold text-brand-navy sm:text-5xl"
+              style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
+            >
+              Nossos serviços
+            </h2>
+            <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-[#2DD4BF]" />
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((s) => (
               <div
                 key={s.title}
-                className="group flex flex-col items-center rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="group flex flex-col items-center rounded-2xl border border-slate-200/70 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-slate-200"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-50 text-brand-teal-deep ring-1 ring-slate-100">
-                  <s.icon className="h-7 w-7" />
+                <div className="flex h-24 w-24 items-center justify-center">
+                  <img
+                    src={s.icon}
+                    alt={s.title}
+                    width={96}
+                    height={96}
+                    loading="lazy"
+                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
-                <h3 className="mt-5 text-base font-bold text-brand-navy">{s.title}</h3>
+                <h3 className="mt-6 text-lg font-bold text-brand-navy">{s.title}</h3>
                 <p className="mt-2 text-sm text-slate-500">{s.desc}</p>
                 <a
                   href="#"
-                  className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand-teal-deep hover:underline"
+                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2DD4BF] hover:text-[#14b8a6]"
                 >
-                  Agendar <ArrowRight className="h-3.5 w-3.5" />
+                  Agendar
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
             ))}
