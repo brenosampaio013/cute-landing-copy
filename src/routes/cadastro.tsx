@@ -1,7 +1,10 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
 import { AuthShell, GoogleButton } from "@/components/auth-shell";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
+import { friendlyAuthError } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/cadastro")({
   head: () => ({
@@ -48,6 +51,8 @@ function Cadastro() {
   const [showPwd2, setShowPwd2] = useState(false);
   const [accept, setAccept] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const strength = passwordStrength(pwd);
 
@@ -66,16 +71,51 @@ function Cadastro() {
       phone.replace(/\D/g, "").length >= 10 &&
       pwd.length >= 6 &&
       pwd2 === pwd &&
-      accept,
-    [name, email, phone, pwd, pwd2, accept]
+      accept &&
+      !loading,
+    [name, email, phone, pwd, pwd2, accept, loading]
   );
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    setFormError(null);
     if (!canSubmit) {
       setTouched({ name: true, email: true, phone: true, pwd: true, pwd2: true });
       return;
     }
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password: pwd,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+        data: {
+          nome: name.trim(),
+          telefone: phone,
+          tipo_usuario: tab,
+        },
+      },
+    });
+    setLoading(false);
+    if (error) {
+      setFormError(friendlyAuthError(error.message));
+      return;
+    }
+    navigate({ to: "/dashboard" });
+  }
+
+  async function onGoogle() {
+    setFormError(null);
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setLoading(false);
+      setFormError(friendlyAuthError(result.error.message ?? "Falha ao entrar com Google."));
+      return;
+    }
+    if (result.redirected) return;
     navigate({ to: "/dashboard" });
   }
 
@@ -97,7 +137,6 @@ function Cadastro() {
         Encontre os melhores profissionais para o seu lar
       </p>
 
-      {/* Tabs */}
       <div className="mt-6 inline-flex w-full rounded-lg bg-slate-100 p-1 text-sm font-semibold">
         <button
           type="button"
@@ -124,7 +163,6 @@ function Cadastro() {
       </div>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
-        {/* Name */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             Nome completo
@@ -137,6 +175,7 @@ function Cadastro() {
               onChange={(e) => setName(e.target.value)}
               onBlur={() => setTouched((t) => ({ ...t, name: true }))}
               placeholder="Seu nome"
+              autoComplete="name"
               className={inputBase}
             />
           </div>
@@ -145,7 +184,6 @@ function Cadastro() {
           )}
         </div>
 
-        {/* Email */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             E-mail
@@ -158,6 +196,7 @@ function Cadastro() {
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => setTouched((t) => ({ ...t, email: true }))}
               placeholder="voce@exemplo.com"
+              autoComplete="email"
               className={inputBase}
             />
           </div>
@@ -166,7 +205,6 @@ function Cadastro() {
           )}
         </div>
 
-        {/* Phone */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             Telefone / WhatsApp
@@ -180,6 +218,7 @@ function Cadastro() {
               onChange={(e) => setPhone(maskPhone(e.target.value))}
               onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
               placeholder="(00) 00000-0000"
+              autoComplete="tel"
               className={inputBase}
             />
           </div>
@@ -188,7 +227,6 @@ function Cadastro() {
           )}
         </div>
 
-        {/* Password */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             Senha
@@ -201,6 +239,7 @@ function Cadastro() {
               onChange={(e) => setPwd(e.target.value)}
               onBlur={() => setTouched((t) => ({ ...t, pwd: true }))}
               placeholder="Mínimo 6 caracteres"
+              autoComplete="new-password"
               className={`${inputBase} pr-10`}
             />
             <button
@@ -236,7 +275,6 @@ function Cadastro() {
           )}
         </div>
 
-        {/* Confirm password */}
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             Confirmar senha
@@ -249,6 +287,7 @@ function Cadastro() {
               onChange={(e) => setPwd2(e.target.value)}
               onBlur={() => setTouched((t) => ({ ...t, pwd2: true }))}
               placeholder="Repita sua senha"
+              autoComplete="new-password"
               className={`${inputBase} pr-10`}
             />
             <button
@@ -265,7 +304,6 @@ function Cadastro() {
           )}
         </div>
 
-        {/* Terms */}
         <label className="flex cursor-pointer items-start gap-2 text-sm text-slate-600">
           <input
             type="checkbox"
@@ -285,11 +323,18 @@ function Cadastro() {
           </span>
         </label>
 
+        {formError && (
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-100">
+            {formError}
+          </p>
+        )}
+
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-2 w-full rounded-lg bg-[#2DD4BF] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#2DD4BF] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
         >
+          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
           Criar conta
         </button>
 
@@ -304,7 +349,9 @@ function Cadastro() {
           </div>
         </div>
 
-        <GoogleButton label="Continuar com Google" />
+        <div onClick={onGoogle}>
+          <GoogleButton label="Continuar com Google" />
+        </div>
 
         <p className="pt-4 text-center text-sm text-slate-500">
           Já tem uma conta?{" "}
