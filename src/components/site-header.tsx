@@ -2,14 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import logo from "@/assets/logo.png";
 
-const navLinks = [
+const navLinks: { label: string; to: string; exact?: boolean }[] = [
   { label: "Início", to: "/", exact: true },
   { label: "Serviços", to: "/servicos" },
   { label: "Como funciona", to: "/como-funciona" },
   { label: "Profissionais", to: "/profissionais" },
   { label: "Avaliações", to: "/avaliacoes" },
   { label: "Contato", to: "/contato" },
-] as const;
+];
 
 export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   const base =
