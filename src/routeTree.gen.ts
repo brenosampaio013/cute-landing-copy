@@ -11,6 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardServicosRouteImport } from './routes/dashboard.servicos'
+import { Route as DashboardPerfilRouteImport } from './routes/dashboard.perfil'
+import { Route as DashboardPagamentosRouteImport } from './routes/dashboard.pagamentos'
+import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
+import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -22,31 +28,102 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardServicosRoute = DashboardServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPerfilRoute = DashboardPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPagamentosRoute = DashboardPagamentosRouteImport.update({
+  id: '/pagamentos',
+  path: '/pagamentos',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAjudaRoute = DashboardAjudaRouteImport.update({
+  id: '/ajuda',
+  path: '/ajuda',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAgendamentosRoute = DashboardAgendamentosRouteImport.update({
+  id: '/agendamentos',
+  path: '/agendamentos',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
+  '/dashboard/ajuda': typeof DashboardAjudaRoute
+  '/dashboard/pagamentos': typeof DashboardPagamentosRoute
+  '/dashboard/perfil': typeof DashboardPerfilRoute
+  '/dashboard/servicos': typeof DashboardServicosRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
+  '/dashboard/ajuda': typeof DashboardAjudaRoute
+  '/dashboard/pagamentos': typeof DashboardPagamentosRoute
+  '/dashboard/perfil': typeof DashboardPerfilRoute
+  '/dashboard/servicos': typeof DashboardServicosRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
+  '/dashboard/ajuda': typeof DashboardAjudaRoute
+  '/dashboard/pagamentos': typeof DashboardPagamentosRoute
+  '/dashboard/perfil': typeof DashboardPerfilRoute
+  '/dashboard/servicos': typeof DashboardServicosRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/agendamentos'
+    | '/dashboard/ajuda'
+    | '/dashboard/pagamentos'
+    | '/dashboard/perfil'
+    | '/dashboard/servicos'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard'
-  id: '__root__' | '/' | '/dashboard'
+  to:
+    | '/'
+    | '/dashboard/agendamentos'
+    | '/dashboard/ajuda'
+    | '/dashboard/pagamentos'
+    | '/dashboard/perfil'
+    | '/dashboard/servicos'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dashboard/agendamentos'
+    | '/dashboard/ajuda'
+    | '/dashboard/pagamentos'
+    | '/dashboard/perfil'
+    | '/dashboard/servicos'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +142,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/servicos': {
+      id: '/dashboard/servicos'
+      path: '/servicos'
+      fullPath: '/dashboard/servicos'
+      preLoaderRoute: typeof DashboardServicosRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/perfil': {
+      id: '/dashboard/perfil'
+      path: '/perfil'
+      fullPath: '/dashboard/perfil'
+      preLoaderRoute: typeof DashboardPerfilRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/pagamentos': {
+      id: '/dashboard/pagamentos'
+      path: '/pagamentos'
+      fullPath: '/dashboard/pagamentos'
+      preLoaderRoute: typeof DashboardPagamentosRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/ajuda': {
+      id: '/dashboard/ajuda'
+      path: '/ajuda'
+      fullPath: '/dashboard/ajuda'
+      preLoaderRoute: typeof DashboardAjudaRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/agendamentos': {
+      id: '/dashboard/agendamentos'
+      path: '/agendamentos'
+      fullPath: '/dashboard/agendamentos'
+      preLoaderRoute: typeof DashboardAgendamentosRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardAgendamentosRoute: typeof DashboardAgendamentosRoute
+  DashboardAjudaRoute: typeof DashboardAjudaRoute
+  DashboardPagamentosRoute: typeof DashboardPagamentosRoute
+  DashboardPerfilRoute: typeof DashboardPerfilRoute
+  DashboardServicosRoute: typeof DashboardServicosRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAgendamentosRoute: DashboardAgendamentosRoute,
+  DashboardAjudaRoute: DashboardAjudaRoute,
+  DashboardPagamentosRoute: DashboardPagamentosRoute,
+  DashboardPerfilRoute: DashboardPerfilRoute,
+  DashboardServicosRoute: DashboardServicosRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
