@@ -73,9 +73,9 @@ function Index() {
             "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)",
         }}
       >
-        <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5">
+        <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6">
           <a href="#inicio" className="flex shrink-0 items-center gap-2">
-            <img src={logo} alt="Maré Nobre" className="h-12 w-auto rounded" />
+            <img src={logo} alt="Maré Nobre" className="h-16 w-auto sm:h-[70px]" />
           </a>
           <nav className="hidden items-center gap-7 lg:flex">
             {navLinks.map((l) => (
