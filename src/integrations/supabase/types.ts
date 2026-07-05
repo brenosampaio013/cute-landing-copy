@@ -435,6 +435,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      validar_cupom: {
+        Args: {
+          p_cliente_id?: string
+          p_codigo: string
+          p_valor_pedido: number
+        }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
