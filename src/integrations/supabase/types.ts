@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nome: string
+          perfil: string
+          permissoes: Json
+          status: string
+          telefone: string | null
+          ultimo_acesso: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          nome: string
+          perfil?: string
+          permissoes?: Json
+          status?: string
+          telefone?: string | null
+          ultimo_acesso?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nome?: string
+          perfil?: string
+          permissoes?: Json
+          status?: string
+          telefone?: string | null
+          ultimo_acesso?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       agendamentos: {
         Row: {
           cliente_id: string
