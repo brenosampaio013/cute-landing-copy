@@ -144,7 +144,16 @@ function UsuariosPage() {
       toast.error(e instanceof Error ? e.message : "Erro ao atualizar");
     }
   };
-  const redefinirSenha = (u: Usuario) => toast.success(`Link de redefinição enviado para ${u.email}`);
+  const redefinirSenha = async (u: Usuario) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(u.email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      toast.error(`Não foi possível enviar o link para ${u.email}.`);
+      return;
+    }
+    toast.success(`Link de redefinição enviado para ${u.email}.`);
+  };
   const excluir = async (u: Usuario) => {
     try {
       await remove.mutateAsync(u.id);
