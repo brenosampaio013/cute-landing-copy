@@ -610,7 +610,7 @@ function NovoAgendamentoDialog({
       cliente: form.cliente || "Novo cliente",
       clienteTel: "(21) 90000-0000",
       clienteEndereco: form.endereco || "—",
-      profissional: form.profissional || PROFISSIONAIS[0],
+      profissional: form.profissional || profissionais[0] || "—",
       profRating: 4.8,
       data: form.data || new Date().toISOString().slice(0, 10),
       hora: form.hora || "10:00",
