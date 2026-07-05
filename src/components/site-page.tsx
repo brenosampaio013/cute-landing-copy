@@ -100,11 +100,16 @@ export function SiteFooter() {
               simples e a confiança que você merece.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              {[Instagram, Facebook].map((Icon, i) => (
+              {[
+                { Icon: Instagram, href: "https://www.instagram.com/marenobreservicos/", label: "Instagram" },
+                { Icon: Facebook, href: "#", label: "Facebook" },
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="#"
-                  aria-label="Rede social"
+                  key={label}
+                  href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  aria-label={label}
                   className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
                 >
                   <Icon className="h-4 w-4" />
