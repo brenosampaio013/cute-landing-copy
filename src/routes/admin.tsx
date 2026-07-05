@@ -129,7 +129,6 @@ function AdminPanel() {
   }
 
 
-  }
 
   const TABS: { key: Tab; label: string; icon: typeof Calendar }[] = [
     { key: "agendamentos", label: "Agendamentos", icon: Calendar },
