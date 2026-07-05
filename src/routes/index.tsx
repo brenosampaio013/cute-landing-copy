@@ -151,7 +151,7 @@ function Index() {
               Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
             </p>
           </div>
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-8 md:grid-cols-3">
             {services.map((s) => {
               const Icon = s.icon;
               return (
