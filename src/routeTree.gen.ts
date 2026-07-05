@@ -29,6 +29,7 @@ import { Route as DashboardEnderecosRouteImport } from './routes/dashboard.ender
 import { Route as DashboardAvaliacoesRouteImport } from './routes/dashboard.avaliacoes'
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
 import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
+import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
 import { Route as AdminAgendamentosRouteImport } from './routes/admin.agendamentos'
 
 const ServicosRoute = ServicosRouteImport.update({
@@ -131,6 +132,11 @@ const DashboardAgendamentosRoute = DashboardAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AdminServicosRoute = AdminServicosRouteImport.update({
+  id: '/servicos',
+  path: '/servicos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAgendamentosRoute = AdminAgendamentosRouteImport.update({
   id: '/agendamentos',
   path: '/agendamentos',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -172,6 +179,7 @@ export interface FileRoutesByTo {
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
+  '/admin/servicos': typeof AdminServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
+    | '/admin/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
+    | '/admin/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
+    | '/admin/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -433,6 +445,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAgendamentosRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/admin/servicos': {
+      id: '/admin/servicos'
+      path: '/servicos'
+      fullPath: '/admin/servicos'
+      preLoaderRoute: typeof AdminServicosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/agendamentos': {
       id: '/admin/agendamentos'
       path: '/agendamentos'
@@ -445,10 +464,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAgendamentosRoute: typeof AdminAgendamentosRoute
+  AdminServicosRoute: typeof AdminServicosRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAgendamentosRoute: AdminAgendamentosRoute,
+  AdminServicosRoute: AdminServicosRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
