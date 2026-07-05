@@ -155,11 +155,20 @@ function Agendar() {
     </span>
   );
 
+  const trustItems = [
+    { icon: ShieldCheck, title: "Pagamento seguro", desc: "Seus dados protegidos" },
+    { icon: Clock, title: "Agendamento rápido", desc: "Confirmação em minutos" },
+    { icon: CalendarCheck, title: "Remarcação fácil", desc: "Altere quando precisar" },
+    { icon: Headphones, title: "Suporte dedicado", desc: "Atendimento humanizado" },
+  ];
+
   return (
     <SitePage
+      eyebrow="Agendamento online"
       title="Agendar serviço"
       subtitle="Escolha o serviço, a data e o horário. Confirmação em minutos."
     >
+
       <form
         onSubmit={handleSubmit}
         className="grid items-start gap-6 lg:grid-cols-12"
