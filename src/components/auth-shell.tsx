@@ -14,7 +14,7 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
               className="h-full w-full"
               style={{
                 backgroundImage: `url(${loginBg.url})`,
-                backgroundSize: "200% 100%",
+                backgroundSize: "auto 100%",
                 backgroundPosition: "left center",
                 backgroundRepeat: "no-repeat",
               }}
