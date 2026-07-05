@@ -65,32 +65,9 @@ function Agendar() {
     const horarioFim = addHour(horario);
     setSubmitting(true);
 
-    // Validação: conflito com outros agendamentos do mesmo profissional
-    if (profissionalId) {
-      const { data: conflito, error: rpcErr } = await supabase.rpc(
-        "check_agendamento_conflito",
-        {
-          p_profissional: profissionalId,
-          p_data: data,
-          p_inicio: horario,
-          p_fim: horarioFim,
-        },
-      );
-      if (rpcErr) {
-        setSubmitting(false);
-        toast.error("Não foi possível verificar disponibilidade.");
-        return;
-      }
-      if (conflito) {
-        setSubmitting(false);
-        toast.error("Este profissional já tem um agendamento neste horário.");
-        return;
-      }
-    }
-
     const { error } = await supabase.from("agendamentos").insert({
       cliente_id: user.id,
-      profissional_id: profissionalId || null,
+      profissional_id: null,
       servico,
       data,
       horario_inicio: horario,
@@ -98,6 +75,7 @@ function Agendar() {
       endereco: endereco || null,
       status: "pendente",
     });
+
     setSubmitting(false);
 
     if (error) {
