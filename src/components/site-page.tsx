@@ -64,11 +64,10 @@ export function SiteFooter() {
     {
       title: "Serviços",
       links: [
-        { label: "Limpeza Residencial", to: "/servicos" },
-        { label: "Pós-obra", to: "/servicos" },
-        { label: "Limpeza de Vidros", to: "/servicos" },
-        { label: "Limpeza de Piscinas", to: "/servicos" },
-        { label: "Jardinagem", to: "/servicos" },
+        { label: "Limpeza Padrão", to: "/servicos" },
+        { label: "Limpeza Pesada", to: "/servicos" },
+        { label: "Passadoria", to: "/servicos" },
+        { label: "Montagem de Móveis", to: "/servicos" },
       ],
     },
     {

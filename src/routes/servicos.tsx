@@ -3,8 +3,8 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-
-import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
+import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+import iconMontagem from "@/assets/icon-montagem.png";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -19,33 +19,27 @@ export const Route = createFileRoute("/servicos")({
 const services = [
   {
     icon: iconLimpeza.url,
-    title: "Limpeza Residencial",
-    desc: "Ambientes sempre limpos e aconchegantes.",
+    title: "Limpeza Padrão",
+    desc: "Limpeza na medida certa para as necessidades do dia a dia.",
     features: ["Cozinha, banheiros e áreas comuns", "Produtos inclusos", "Profissionais treinados"],
   },
   {
     icon: iconPosObra.url,
-    title: "Limpeza Pós-obra",
-    desc: "Deixamos tudo pronto para você aproveitar.",
-    features: ["Remoção de resíduos", "Vidros e pisos", "Equipe especializada"],
+    title: "Limpeza Pesada",
+    desc: "Limpeza com tudo que seu lar precisa para ficar brilhando.",
+    features: ["Detalhamento completo", "Vidros e pisos", "Equipe especializada"],
   },
   {
-    icon: iconLimpeza.url,
-    title: "Limpeza de Vidros",
-    desc: "Vidros brilhando e sem marcas.",
-    features: ["Interno e externo", "Sem escorridos", "Equipamento próprio"],
+    icon: iconPassadoria.url,
+    title: "Passadoria",
+    desc: "Suas roupas bem passadas, cuidadas e dobradas.",
+    features: ["Passar e dobrar", "Peças delicadas", "Entrega organizada"],
   },
   {
-    icon: iconLimpeza.url,
-    title: "Limpeza de Piscinas",
-    desc: "Água cristalina e piscina impecável.",
-    features: ["Aspiração e escovação", "Tratamento químico", "Manutenção periódica"],
-  },
-  {
-    icon: iconJardinagem.url,
-    title: "Jardinagem",
-    desc: "Seu jardim sempre bonito e saudável.",
-    features: ["Poda e manutenção", "Plantio", "Cuidado com plantas"],
+    icon: iconMontagem,
+    title: "Montagem de Móveis",
+    desc: "Montadores qualificados para montar todo tipo de móvel.",
+    features: ["Guarda-roupas e camas", "Ferramentas próprias", "Serviço ágil"],
   },
 ];
 
