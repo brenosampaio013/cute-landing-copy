@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Home, Sparkles, Shirt, Wrench, Zap, Leaf, ArrowRight } from "lucide-react";
+import { Home, Sparkles, GlassWater, Wrench, Zap, Leaf, Waves, ArrowRight } from "lucide-react";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/servicos")({
@@ -10,7 +10,8 @@ export const Route = createFileRoute("/dashboard/servicos")({
 const services = [
   { slug: "limpeza-residencial", icon: Home, title: "Limpeza Residencial", desc: "Diária, semanal ou mensal.", from: "R$ 120" },
   { slug: "limpeza-pos-obra", icon: Sparkles, title: "Limpeza Pós-obra", desc: "Remoção de resíduos e detalhamento.", from: "R$ 380" },
-  { slug: "passadoria", icon: Shirt, title: "Passadoria", desc: "Suas roupas passadas com cuidado.", from: "R$ 90" },
+  { slug: "limpeza-vidros", icon: GlassWater, title: "Limpeza de Vidros", desc: "Vidros brilhando e sem marcas.", from: "R$ 130" },
+  { slug: "limpeza-piscinas", icon: Waves, title: "Limpeza de Piscinas", desc: "Água cristalina e piscina impecável.", from: "R$ 180" },
   { slug: "hidraulica", icon: Wrench, title: "Hidráulica", desc: "Reparos e instalações rápidas.", from: "R$ 150" },
   { slug: "eletrica", icon: Zap, title: "Elétrica", desc: "Instalações e reparos com segurança.", from: "R$ 140" },
   { slug: "jardinagem", icon: Leaf, title: "Jardinagem", desc: "Manutenção do seu jardim.", from: "R$ 110" },

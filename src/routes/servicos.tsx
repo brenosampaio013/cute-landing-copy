@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+
 import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
 
 export const Route = createFileRoute("/servicos")({
@@ -30,10 +30,16 @@ const services = [
     features: ["Remoção de resíduos", "Vidros e pisos", "Equipe especializada"],
   },
   {
-    icon: iconPassadoria.url,
-    title: "Passadoria",
-    desc: "Suas roupas cuidadas com todo carinho.",
-    features: ["Passar e dobrar", "Peças delicadas", "Entrega organizada"],
+    icon: iconLimpeza.url,
+    title: "Limpeza de Vidros",
+    desc: "Vidros brilhando e sem marcas.",
+    features: ["Interno e externo", "Sem escorridos", "Equipamento próprio"],
+  },
+  {
+    icon: iconLimpeza.url,
+    title: "Limpeza de Piscinas",
+    desc: "Água cristalina e piscina impecável.",
+    features: ["Aspiração e escovação", "Tratamento químico", "Manutenção periódica"],
   },
   {
     icon: iconJardinagem.url,

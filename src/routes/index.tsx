@@ -10,7 +10,7 @@ import {
 import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+
 import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
@@ -39,7 +39,8 @@ export const Route = createFileRoute("/")({
 const services = [
   { icon: iconLimpeza.url, title: "Limpeza Residencial", desc: "Ambientes sempre limpos e aconchegantes." },
   { icon: iconPosObra.url, title: "Limpeza Pós-obra", desc: "Deixamos tudo pronto para você aproveitar." },
-  { icon: iconPassadoria.url, title: "Passadoria", desc: "Suas roupas cuidadas com todo carinho." },
+  { icon: iconLimpeza.url, title: "Limpeza de Vidros", desc: "Vidros brilhando e sem marcas." },
+  { icon: iconLimpeza.url, title: "Limpeza de Piscinas", desc: "Água cristalina e piscina impecável." },
   { icon: iconJardinagem.url, title: "Jardinagem", desc: "Seu jardim sempre bonito e saudável." },
 ];
 
