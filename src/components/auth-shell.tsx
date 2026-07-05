@@ -10,11 +10,14 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
         {/* Brand panel — full artwork background */}
         <aside className="relative hidden overflow-hidden bg-[#0A1A2F] lg:block">
           <Link to="/" className="absolute inset-0 z-10" aria-label="Ir para a página inicial">
-            <img
-              src={loginBg.url}
-              alt="Maré Nobre — Cuidado completo para o seu lar"
-              className="h-full w-full object-cover"
-              style={{ objectPosition: "0% center", transform: "scale(2)", transformOrigin: "left center" }}
+            <div
+              className="h-full w-full"
+              style={{
+                backgroundImage: `url(${loginBg.url})`,
+                backgroundSize: "200% 100%",
+                backgroundPosition: "left center",
+                backgroundRepeat: "no-repeat",
+              }}
             />
           </Link>
         </aside>
