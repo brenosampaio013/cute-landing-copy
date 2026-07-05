@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
 
 import { SitePage } from "@/components/site-page";
-import fotoPosObra from "@/assets/service-pos-obra.jpg";
-import fotoPassadoria from "@/assets/service-passadoria.jpg";
-import fotoLimpezaPiscina from "@/assets/service-limpeza-piscina.jpg";
+import fotoPosObraAsset from "@/assets/service-pos-obra-new.jpg.asset.json";
+import fotoPassadoriaAsset from "@/assets/service-passadoria-new.jpg.asset.json";
+import fotoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-new.jpg.asset.json";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -32,21 +32,21 @@ const services: Service[] = [
     id: "pos-obra",
     title: "PÓS OBRA",
     desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você.",
-    photo: fotoPosObra,
+    photo: fotoPosObraAsset.url,
     Icon: Sparkles,
   },
   {
     id: "passadoria",
     title: "PASSADORIA",
     desc: "Suas roupas bem passadas, cuidadas e dobradas.",
-    photo: fotoPassadoria,
+    photo: fotoPassadoriaAsset.url,
     Icon: Shirt,
   },
   {
     id: "limpeza-piscina",
     title: "LIMPEZA DE PISCINA",
     desc: "Água limpa, cristalina e sempre pronta para você aproveitar.",
-    photo: fotoLimpezaPiscina,
+    photo: fotoLimpezaPiscinaAsset.url,
     Icon: Waves,
   },
 ];
@@ -57,12 +57,12 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
       className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
       style={{ backgroundColor: NAVY }}
     >
-      <div className="relative aspect-[7/8] w-full overflow-hidden">
+      <div className="relative h-[21rem] w-full overflow-hidden">
         <img
           src={photo}
           alt={`Funcionário da Maré Nobre realizando o serviço de ${title.toLowerCase()}`}
           width={768}
-          height={876}
+          height={972}
           loading="lazy"
           className="h-full w-full object-cover object-top"
         />
