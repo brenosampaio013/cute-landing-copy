@@ -15,37 +15,51 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
               "radial-gradient(120% 80% at 20% 10%, #12406B 0%, #0A1A2F 55%, #05101F 100%)",
           }}
         >
-          {/* Logo perfeitamente centralizado */}
-          <div className="absolute inset-0 flex items-center justify-center px-8">
+          <div className="relative z-10 flex h-full flex-col justify-between px-10 py-12 xl:px-14">
             <Link to="/" aria-label="Ir para a página inicial" className="inline-block">
               <img
                 src={logoUrl}
                 alt="Maré Nobre"
-                className="h-auto w-full max-w-[380px] xl:max-w-[440px]"
+                className="h-auto w-full max-w-[300px] xl:max-w-[340px]"
               />
             </Link>
-          </div>
 
-          {/* Rodapé com destaques (não desloca o logo) */}
-          <div className="absolute inset-x-0 bottom-0 px-10 pb-10">
-            <div className="grid grid-cols-3 gap-4 text-center text-white/85">
-              <div className="flex flex-col items-center gap-2">
-                <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
-                  <Sparkles className="h-5 w-5 text-[#2DD4BF]" />
-                </div>
-                <span className="text-xs">Limpeza de qualidade</span>
+            <div className="space-y-8">
+              <div>
+                <h2
+                  className="text-3xl leading-tight text-white xl:text-4xl"
+                  style={{ fontFamily: "'Playfair Display', serif", fontWeight: 600 }}
+                >
+                  Encontre os melhores profissionais para o{" "}
+                  <span className="text-[#2DD4BF]">seu lar</span>.
+                </h2>
+                <div className="mt-4 h-0.5 w-16 rounded-full bg-[#2DD4BF]" />
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
-                  <ShieldCheck className="h-5 w-5 text-[#2DD4BF]" />
-                </div>
-                <span className="text-xs">Profissionais confiáveis</span>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
-                  <Leaf className="h-5 w-5 text-[#2DD4BF]" />
-                </div>
-                <span className="text-xs">Soluções que transformam</span>
+
+              <ul className="space-y-5">
+                {[
+                  { Icon: Sparkles, title: "Limpeza de qualidade", desc: "Ambientes sempre limpos e organizados." },
+                  { Icon: ShieldCheck, title: "Profissionais confiáveis", desc: "Profissionais verificados e qualificados." },
+                  { Icon: Leaf, title: "Soluções que transformam", desc: "Mais praticidade e bem-estar para o seu dia a dia." },
+                ].map(({ Icon, title, desc }) => (
+                  <li key={title} className="flex items-start gap-4">
+                    <div className="mt-0.5 flex h-11 w-11 flex-none items-center justify-center rounded-full bg-white/5 ring-1 ring-[#2DD4BF]/40">
+                      <Icon className="h-5 w-5 text-[#2DD4BF]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{title}</p>
+                      <p className="text-sm text-white/60">{desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex items-start gap-3 border-t border-white/10 pt-6 text-white/60">
+              <ShieldCheck className="mt-0.5 h-5 w-5 flex-none text-[#2DD4BF]" />
+              <div className="text-xs leading-relaxed">
+                <p className="font-semibold text-white/85">Seus dados estão protegidos</p>
+                <p>Não compartilhamos suas informações com terceiros.</p>
               </div>
             </div>
           </div>
