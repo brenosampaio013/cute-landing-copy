@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { SitePage } from "@/components/site-page";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,11 +16,21 @@ export const Route = createFileRoute("/agendar")({
 });
 
 const services = [
-  { icon: iconLimpeza.url, title: "Limpeza Padrão" },
-  { icon: iconPosObra.url, title: "Limpeza Pesada" },
-  { icon: iconPassadoria.url, title: "Passadoria" },
-  { icon: iconMontagem, title: "Montagem de Móveis" },
+  { icon: iconLimpeza.url, title: "Limpeza Padrão", preco: 180 },
+  { icon: iconPosObra.url, title: "Limpeza Pesada", preco: 350 },
+  { icon: iconPassadoria.url, title: "Passadoria", preco: 90 },
+  { icon: iconMontagem, title: "Montagem de Móveis", preco: 220 },
 ];
+
+const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+type CupomValidado = {
+  cupom_id: string;
+  codigo: string;
+  tipo: string;
+  desconto: number;
+  total_final: number;
+};
 
 function addHour(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
