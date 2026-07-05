@@ -53,14 +53,28 @@ function Avaliacoes() {
         ))}
       </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {reviews.map((r) => (
           <div
             key={r.name}
-            className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+            className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
           >
-            <Quote className="absolute right-6 top-6 h-10 w-10 text-[#2DD4BF]/10" aria-hidden />
-            <div className="flex gap-0.5">
+            <Quote className="absolute right-5 top-5 h-10 w-10 text-[#2DD4BF]/10" aria-hidden />
+
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF]/15 text-sm font-bold text-[#0A9E8A]">
+                  {r.name.charAt(0)}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-[#0A1A2F]">{r.name}</p>
+                  <p className="truncate text-xs text-slate-400">{r.role}</p>
+                </div>
+              </div>
+              <span className="shrink-0 text-xs text-slate-400">{r.when}</span>
+            </div>
+
+            <div className="mt-4 flex gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}
@@ -70,15 +84,12 @@ function Avaliacoes() {
                 />
               ))}
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600">"{r.text}"</p>
-            <div className="mt-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2DD4BF]/15 text-sm font-bold text-[#0A9E8A]">
-                {r.name.charAt(0)}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-[#0A1A2F]">{r.name}</p>
-                <p className="text-xs text-slate-400">{r.role}</p>
-              </div>
+
+            <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{r.text}</p>
+
+            <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-[#0A9E8A]">
+              <BadgeCheck className="h-4 w-4" />
+              Compra verificada
             </div>
           </div>
         ))}
