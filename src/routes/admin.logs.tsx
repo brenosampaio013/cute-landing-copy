@@ -11,8 +11,8 @@ export const Route = createFileRoute("/admin/logs")({
 
 function Page() {
   const { user, loading } = useAuth();
-  const { data: isAdmin, isLoading } = useIsAdmin(user);
-  if (loading || isLoading) return <FullPageLoader />;
+  const isAdmin = useIsAdmin(user);
+  if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
     <AdminShell active="logs" title="Logs do sistema" subtitle="Auditoria e eventos do sistema.">

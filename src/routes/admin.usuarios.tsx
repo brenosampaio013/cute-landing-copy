@@ -11,8 +11,8 @@ export const Route = createFileRoute("/admin/usuarios")({
 
 function Page() {
   const { user, loading } = useAuth();
-  const { data: isAdmin, isLoading } = useIsAdmin(user);
-  if (loading || isLoading) return <FullPageLoader />;
+  const isAdmin = useIsAdmin(user);
+  if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
     <AdminShell active="usuarios" title="Usuários" subtitle="Gerencie acessos e permissões.">
