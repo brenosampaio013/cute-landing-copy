@@ -117,7 +117,7 @@ function AdminPanel() {
     return { receita, pendentes, porStatus };
   }, [pagamentos, agendamentos]);
 
-  async function updateStatus(id: string, status: string) {
+  async function updateStatus(id: string, status: "pendente" | "confirmado" | "concluido" | "cancelado") {
     const { error } = await supabase.from("agendamentos").update({ status }).eq("id", id);
     if (!error) {
       setAgendamentos((prev) => prev.map((a) => (a.id === id ? { ...a, status } : a)));
