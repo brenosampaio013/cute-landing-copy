@@ -55,7 +55,7 @@ const PRINCIPAL: NavItem[] = [
   { key: "clientes", label: "Clientes", icon: UserCircle, to: "/admin/clientes" },
   { key: "pagamentos", label: "Pagamentos", icon: CreditCard, to: "/admin/pagamentos" },
   { key: "avaliacoes", label: "Avaliações", icon: Star },
-  { key: "mensagens", label: "Mensagens", icon: MessageSquare },
+  { key: "mensagens", label: "Mensagens", icon: MessageSquare, to: "/admin/mensagens" },
   { key: "cupons", label: "Cupons", icon: Ticket },
   { key: "relatorios", label: "Relatórios", icon: FileBarChart },
 ];
