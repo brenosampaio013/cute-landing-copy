@@ -240,7 +240,7 @@ function AdminPanel() {
                     <td className="px-4 py-3">
                       <select
                         value={a.status}
-                        onChange={(e) => updateStatus(a.id, e.target.value)}
+                        onChange={(e) => updateStatus(a.id, e.target.value as "pendente" | "confirmado" | "concluido" | "cancelado")}
                         className={`rounded-full px-3 py-1 text-xs font-medium ${
                           STATUS_COLORS[a.status] ?? "bg-slate-100 text-slate-700"
                         }`}
