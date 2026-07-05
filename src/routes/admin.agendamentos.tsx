@@ -427,7 +427,22 @@ function AgendamentosPage() {
       {/* DETAIL DRAWER */}
       <Sheet open={!!detail} onOpenChange={(o) => !o && setDetail(null)}>
         <SheetContent className="w-full overflow-y-auto sm:max-w-md">
-          {detail && <AgendamentoDetail ag={detail} onChange={(a) => { setRows((rs) => rs.map((r) => r.id === a.id ? a : r)); setDetail(a); }} />}
+          {detail && (
+            <AgendamentoDetail
+              ag={detail}
+              onStatus={(status) => {
+                if (!detail.rawId) return;
+                updateStatusMut.mutate({ rawId: detail.rawId, status });
+                setDetail({ ...detail, status });
+              }}
+              onReagendar={(data, hora) => {
+                if (!detail.rawId) return;
+                reagendarMut.mutate({ rawId: detail.rawId, data, hora, duracao: detail.duracao });
+                setDetail({ ...detail, data, hora });
+              }}
+              pending={updateStatusMut.isPending || reagendarMut.isPending}
+            />
+          )}
         </SheetContent>
       </Sheet>
     </AdminShell>
