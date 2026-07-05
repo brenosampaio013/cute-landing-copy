@@ -60,8 +60,8 @@ function Ajuda() {
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           { icon: MessageCircle, label: "Chat ao vivo", value: "Seg a Sáb · 8h — 20h" },
-          { icon: Mail, label: "E-mail", value: "ajuda@marenobre.com" },
-          { icon: Phone, label: "Telefone", value: "0800 123 4567" },
+          { icon: Mail, label: "E-mail", value: "atendimentomarenobre@gmail.com" },
+          { icon: Phone, label: "Telefone", value: "(13) 99806-8265" },
         ].map((c) => (
           <div
             key={c.label}
