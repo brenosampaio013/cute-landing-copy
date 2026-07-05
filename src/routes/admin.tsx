@@ -3,6 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Loader2, Calendar, Users, Wallet, BarChart3, Shield, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useIsAdmin } from "@/hooks/queries/use-is-admin";
+import { useLogout } from "@/hooks/use-logout";
+import { FullPageLoader } from "@/components/full-page-loader";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -48,7 +51,8 @@ const STATUS_COLORS: Record<string, string> = {
 function AdminPanel() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const isAdmin = useIsAdmin(user);
+  const handleLogout = useLogout("/");
   const [tab, setTab] = useState<Tab>("agendamentos");
 
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
@@ -56,22 +60,10 @@ function AdminPanel() {
   const [pagamentos, setPagamentos] = useState<Pagamento[]>([]);
   const [busy, setBusy] = useState(true);
 
+  // Redireciona quando termina de carregar sem sessão
   useEffect(() => {
-    if (loading) return;
-    if (!user) {
-      navigate({ to: "/login" });
-      return;
-    }
-    (async () => {
-      const { data } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-      setIsAdmin(!!data);
-    })();
-  }, [user, loading, navigate]);
+    if (!loading && !user) navigate({ to: "/login" });
+  }, [loading, user, navigate]);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -93,6 +85,7 @@ function AdminPanel() {
       cancelled = true;
     };
   }, [isAdmin]);
+
 
   const clientes = useMemo(() => profiles.filter((p) => p.tipo_usuario === "cliente"), [profiles]);
   const profissionais = useMemo(
@@ -124,18 +117,10 @@ function AdminPanel() {
     }
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    navigate({ to: "/" });
+  if (loading || (user && isAdmin === null)) {
+    return <FullPageLoader />;
   }
 
-  if (loading || isAdmin === null) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F5F7FA]">
-        <Loader2 className="h-6 w-6 animate-spin text-slate-500" />
-      </div>
-    );
-  }
 
   if (!isAdmin) {
     return (

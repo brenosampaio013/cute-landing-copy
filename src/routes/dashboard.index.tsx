@@ -3,6 +3,8 @@ import { Calendar, Clock, Home, Star, ChevronRight, CheckCircle2, Loader2, Inbox
 import { useEffect, useState, type ComponentType, type SVGProps } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useProfile } from "@/hooks/queries/use-profile";
+
 
 export const Route = createFileRoute("/dashboard/")({
   head: () => ({ meta: [{ title: "Dashboard — Maré Nobre" }] }),
@@ -51,8 +53,9 @@ function statusBadge(s: Agendamento["status"]) {
 
 function DashboardHome() {
   const { user } = useAuth();
+  const { profile } = useProfile();
+  const nome = profile?.nome ?? "";
   const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState<string>("");
   const [proximo, setProximo] = useState<Agendamento | null>(null);
   const [pagamento, setPagamento] = useState<Pagamento | null>(null);
   const [bookings, setBookings] = useState<Agendamento[]>([]);
@@ -60,14 +63,14 @@ function DashboardHome() {
   const [rating, setRating] = useState(0);
   const [saving, setSaving] = useState(false);
 
+
   useEffect(() => {
     if (!user) return;
     let cancelled = false;
     (async () => {
       setLoading(true);
       const today = new Date().toISOString().slice(0, 10);
-      const [profileRes, proxRes, listRes, avalRes] = await Promise.all([
-        supabase.from("profiles").select("nome").eq("id", user.id).maybeSingle(),
+      const [proxRes, listRes, avalRes] = await Promise.all([
         supabase
           .from("agendamentos")
           .select("*")
@@ -92,9 +95,9 @@ function DashboardHome() {
           .order("data", { ascending: false }),
       ]);
       if (cancelled) return;
-      setNome(profileRes.data?.nome ?? "");
       setProximo((proxRes.data as Agendamento | null) ?? null);
       setBookings((listRes.data as Agendamento[] | null) ?? []);
+
 
       if (proxRes.data) {
         const { data: p } = await supabase

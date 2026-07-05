@@ -15,10 +15,11 @@ import {
   Leaf,
   Menu,
   X,
-  Loader2,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useProfile } from "@/hooks/queries/use-profile";
+import { useLogout } from "@/hooks/use-logout";
+import { FullPageLoader } from "@/components/full-page-loader";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -48,47 +49,19 @@ const NAV: NavItem[] = [
 function DashboardLayout() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const { profile, displayName, initial } = useProfile();
+  const handleLogout = useLogout("/");
   const [open, setOpen] = useState(false);
-  const [profile, setProfile] = useState<{ nome: string | null; foto_url: string | null } | null>(null);
 
   // Client-side auth guard
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
   }, [loading, user, navigate]);
 
-  // Load profile display data
-  useEffect(() => {
-    if (!user) return;
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("nome, foto_url")
-        .eq("id", user.id)
-        .maybeSingle();
-      if (!cancelled) setProfile(data ?? { nome: null, foto_url: null });
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user]);
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    navigate({ to: "/" });
-  }
-
   if (loading || !user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F5F7FA] text-slate-500">
-        <Loader2 className="h-6 w-6 animate-spin" />
-      </div>
-    );
+    return <FullPageLoader />;
   }
 
-  const displayName =
-    profile?.nome || (user.user_metadata as { nome?: string })?.nome || user.email || "Cliente";
-  const initial = displayName.trim().charAt(0).toUpperCase() || "C";
 
   return (
     <div className="min-h-screen bg-[#F5F7FA]">
