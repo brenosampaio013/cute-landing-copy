@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.validar_agendamento() FROM PUBLIC, anon, authenticated;
