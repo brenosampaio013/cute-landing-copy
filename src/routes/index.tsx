@@ -151,30 +151,45 @@ function Index() {
             </p>
           </div>
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map((s) => (
-              <Link
-                key={s.title}
-                to="/agendar"
-                className="group flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2DD4BF]/40 hover:shadow-2xl hover:shadow-slate-200/70"
-              >
-                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#2DD4BF]/5 transition group-hover:bg-[#2DD4BF]/10">
-                  <img
-                    src={s.icon}
-                    alt=""
-                    width={72}
-                    height={72}
-                    loading="lazy"
-                    className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-                <h3 className="mt-6 text-lg font-bold text-[#0A1A2F]">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.desc}</p>
-                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2DD4BF] transition group-hover:text-[#0A9E8A]">
-                  Agendar
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-              </Link>
-            ))}
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
+                <article
+                  key={s.title}
+                  className="group flex flex-col overflow-hidden rounded-3xl bg-[#0A1A2F] text-white shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
+                >
+                  <div className="relative aspect-[3/4] w-full overflow-hidden">
+                    <img
+                      src={s.photo}
+                      alt={s.title}
+                      width={768}
+                      height={1024}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A1A2F]" />
+                  </div>
+                  <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-6 -mt-10 text-center">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#2DD4BF] bg-[#0A1A2F]">
+                      <Icon className="h-7 w-7 text-[#2DD4BF]" strokeWidth={1.75} />
+                    </div>
+                    <h3 className="mt-5 text-lg font-bold tracking-wide">{s.title}</h3>
+                    <span className="mt-2 block h-px w-10 bg-[#2DD4BF]/50" />
+                    <p className="mt-4 text-sm leading-relaxed text-slate-300">{s.desc}</p>
+                    <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-4 py-1.5 text-xs font-medium text-[#2DD4BF]">
+                      <Clock className="h-3.5 w-3.5" />
+                      Disponível para hoje
+                    </div>
+                    <Link
+                      to="/agendar"
+                      className="mt-6 w-full rounded-xl bg-[#2DD4BF] px-5 py-3 text-sm font-bold tracking-wide text-[#0A1A2F] transition hover:bg-[#26bfa9]"
+                    >
+                      AGENDAR SERVIÇO
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
