@@ -89,12 +89,20 @@ function Index() {
             <p className="mt-6 text-lg text-white/75">
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 to="/agendar"
-                className="inline-flex items-center gap-2 rounded-full bg-[#2DD4BF] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-black/25 transition hover:brightness-110"
+                className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
+                style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
               >
-                Agendar agora <ArrowRight className="h-4 w-4" />
+                Agendar agora
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                to="/como-funciona"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-4 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10"
+              >
+                Como funciona
               </Link>
             </div>
             <div className="mt-8 flex items-center gap-3 text-sm">
