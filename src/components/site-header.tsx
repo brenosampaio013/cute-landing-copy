@@ -16,6 +16,7 @@ const navLinks: { label: string; to: string; exact?: boolean }[] = [
 export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (!transparent) return;
