@@ -53,7 +53,8 @@ function Contato() {
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
         {/* Left: channels */}
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
+
           {channels.map((c) => (
             <a
               key={c.label}
