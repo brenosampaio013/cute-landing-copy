@@ -25,6 +25,7 @@ type Service = {
   desc: string;
   photo: string;
   Icon: LucideIcon;
+  objectPosition?: string;
 };
 
 const services: Service[] = [
@@ -34,6 +35,7 @@ const services: Service[] = [
     desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você.",
     photo: fotoPosObra,
     Icon: Sparkles,
+    objectPosition: "center top",
   },
   {
     id: "passadoria",
@@ -41,6 +43,7 @@ const services: Service[] = [
     desc: "Suas roupas bem passadas, cuidadas e dobradas.",
     photo: fotoPassadoria,
     Icon: Shirt,
+    objectPosition: "center top",
   },
   {
     id: "limpeza-piscina",
@@ -48,23 +51,32 @@ const services: Service[] = [
     desc: "Água limpa, cristalina e sempre pronta para você aproveitar.",
     photo: fotoLimpezaPiscina,
     Icon: Waves,
+    objectPosition: "center top",
   },
 ];
 
-function ServiceCard({ title, desc, photo, Icon }: Service) {
+function ServiceCard({ title, desc, photo, Icon, objectPosition = "center top" }: Service) {
   return (
     <article
       className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
       style={{ backgroundColor: NAVY }}
     >
-      <div className="relative h-80 w-full overflow-hidden">
+      <div className="relative h-[26rem] w-full overflow-hidden sm:h-[28rem] md:h-[26rem] lg:h-[28rem]">
+        <img
+          src={photo}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-45 blur-lg"
+          style={{ objectPosition }}
+        />
         <img
           src={photo}
           alt={`Funcionário da Maré Nobre realizando o serviço de ${title.toLowerCase()}`}
           width={768}
           height={1024}
           loading="lazy"
-          className="h-full w-full object-cover"
+          className="relative z-10 h-full w-full object-contain"
+          style={{ objectPosition }}
         />
 
         {/* Top brand overlay */}
