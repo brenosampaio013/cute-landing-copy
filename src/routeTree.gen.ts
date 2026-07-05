@@ -30,11 +30,19 @@ import { Route as DashboardEnderecosRouteImport } from './routes/dashboard.ender
 import { Route as DashboardAvaliacoesRouteImport } from './routes/dashboard.avaliacoes'
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
 import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
+import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
+import { Route as AdminRelatoriosRouteImport } from './routes/admin.relatorios'
 import { Route as AdminProfissionaisRouteImport } from './routes/admin.profissionais'
 import { Route as AdminPagamentosRouteImport } from './routes/admin.pagamentos'
+import { Route as AdminNotificacoesRouteImport } from './routes/admin.notificacoes'
 import { Route as AdminMensagensRouteImport } from './routes/admin.mensagens'
+import { Route as AdminLogsRouteImport } from './routes/admin.logs'
+import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminClientesRouteImport } from './routes/admin.clientes'
+import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
+import { Route as AdminAvaliacoesRouteImport } from './routes/admin.avaliacoes'
 import { Route as AdminAgendamentosRouteImport } from './routes/admin.agendamentos'
 
 const ServicosRoute = ServicosRouteImport.update({
@@ -142,9 +150,19 @@ const DashboardAgendamentosRoute = DashboardAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
+  id: '/admin/usuarios',
+  path: '/admin/usuarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminServicosRoute = AdminServicosRouteImport.update({
   id: '/admin/servicos',
   path: '/admin/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRelatoriosRoute = AdminRelatoriosRouteImport.update({
+  id: '/admin/relatorios',
+  path: '/admin/relatorios',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminProfissionaisRoute = AdminProfissionaisRouteImport.update({
@@ -157,14 +175,44 @@ const AdminPagamentosRoute = AdminPagamentosRouteImport.update({
   path: '/admin/pagamentos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNotificacoesRoute = AdminNotificacoesRouteImport.update({
+  id: '/admin/notificacoes',
+  path: '/admin/notificacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminMensagensRoute = AdminMensagensRouteImport.update({
   id: '/admin/mensagens',
   path: '/admin/mensagens',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLogsRoute = AdminLogsRouteImport.update({
+  id: '/admin/logs',
+  path: '/admin/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCuponsRoute = AdminCuponsRouteImport.update({
+  id: '/admin/cupons',
+  path: '/admin/cupons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/admin/configuracoes',
+  path: '/admin/configuracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminClientesRoute = AdminClientesRouteImport.update({
   id: '/admin/clientes',
   path: '/admin/clientes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
+  id: '/admin/categorias',
+  path: '/admin/categorias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAvaliacoesRoute = AdminAvaliacoesRouteImport.update({
+  id: '/admin/avaliacoes',
+  path: '/admin/avaliacoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAgendamentosRoute = AdminAgendamentosRouteImport.update({
@@ -185,11 +233,19 @@ export interface FileRoutesByFullPath {
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
+  '/admin/avaliacoes': typeof AdminAvaliacoesRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
+  '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/profissionais': typeof AdminProfissionaisRoute
+  '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/servicos': typeof AdminServicosRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -213,11 +269,19 @@ export interface FileRoutesByTo {
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
+  '/admin/avaliacoes': typeof AdminAvaliacoesRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
+  '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/profissionais': typeof AdminProfissionaisRoute
+  '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/servicos': typeof AdminServicosRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -243,11 +307,19 @@ export interface FileRoutesById {
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
+  '/admin/avaliacoes': typeof AdminAvaliacoesRoute
+  '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
+  '/admin/notificacoes': typeof AdminNotificacoesRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/profissionais': typeof AdminProfissionaisRoute
+  '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/servicos': typeof AdminServicosRoute
+  '/admin/usuarios': typeof AdminUsuariosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -274,11 +346,19 @@ export interface FileRouteTypes {
     | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
+    | '/admin/avaliacoes'
+    | '/admin/categorias'
     | '/admin/clientes'
+    | '/admin/configuracoes'
+    | '/admin/cupons'
+    | '/admin/logs'
     | '/admin/mensagens'
+    | '/admin/notificacoes'
     | '/admin/pagamentos'
     | '/admin/profissionais'
+    | '/admin/relatorios'
     | '/admin/servicos'
+    | '/admin/usuarios'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -302,11 +382,19 @@ export interface FileRouteTypes {
     | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
+    | '/admin/avaliacoes'
+    | '/admin/categorias'
     | '/admin/clientes'
+    | '/admin/configuracoes'
+    | '/admin/cupons'
+    | '/admin/logs'
     | '/admin/mensagens'
+    | '/admin/notificacoes'
     | '/admin/pagamentos'
     | '/admin/profissionais'
+    | '/admin/relatorios'
     | '/admin/servicos'
+    | '/admin/usuarios'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -331,11 +419,19 @@ export interface FileRouteTypes {
     | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
+    | '/admin/avaliacoes'
+    | '/admin/categorias'
     | '/admin/clientes'
+    | '/admin/configuracoes'
+    | '/admin/cupons'
+    | '/admin/logs'
     | '/admin/mensagens'
+    | '/admin/notificacoes'
     | '/admin/pagamentos'
     | '/admin/profissionais'
+    | '/admin/relatorios'
     | '/admin/servicos'
+    | '/admin/usuarios'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -361,11 +457,19 @@ export interface RootRouteChildren {
   ProfissionaisRoute: typeof ProfissionaisRoute
   ServicosRoute: typeof ServicosRoute
   AdminAgendamentosRoute: typeof AdminAgendamentosRoute
+  AdminAvaliacoesRoute: typeof AdminAvaliacoesRoute
+  AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminClientesRoute: typeof AdminClientesRoute
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminCuponsRoute: typeof AdminCuponsRoute
+  AdminLogsRoute: typeof AdminLogsRoute
   AdminMensagensRoute: typeof AdminMensagensRoute
+  AdminNotificacoesRoute: typeof AdminNotificacoesRoute
   AdminPagamentosRoute: typeof AdminPagamentosRoute
   AdminProfissionaisRoute: typeof AdminProfissionaisRoute
+  AdminRelatoriosRoute: typeof AdminRelatoriosRoute
   AdminServicosRoute: typeof AdminServicosRoute
+  AdminUsuariosRoute: typeof AdminUsuariosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -518,11 +622,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAgendamentosRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/admin/usuarios': {
+      id: '/admin/usuarios'
+      path: '/admin/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AdminUsuariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/servicos': {
       id: '/admin/servicos'
       path: '/admin/servicos'
       fullPath: '/admin/servicos'
       preLoaderRoute: typeof AdminServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/relatorios': {
+      id: '/admin/relatorios'
+      path: '/admin/relatorios'
+      fullPath: '/admin/relatorios'
+      preLoaderRoute: typeof AdminRelatoriosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/profissionais': {
@@ -539,6 +657,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagamentosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/notificacoes': {
+      id: '/admin/notificacoes'
+      path: '/admin/notificacoes'
+      fullPath: '/admin/notificacoes'
+      preLoaderRoute: typeof AdminNotificacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/mensagens': {
       id: '/admin/mensagens'
       path: '/admin/mensagens'
@@ -546,11 +671,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMensagensRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/logs': {
+      id: '/admin/logs'
+      path: '/admin/logs'
+      fullPath: '/admin/logs'
+      preLoaderRoute: typeof AdminLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/cupons': {
+      id: '/admin/cupons'
+      path: '/admin/cupons'
+      fullPath: '/admin/cupons'
+      preLoaderRoute: typeof AdminCuponsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/admin/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/clientes': {
       id: '/admin/clientes'
       path: '/admin/clientes'
       fullPath: '/admin/clientes'
       preLoaderRoute: typeof AdminClientesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/categorias': {
+      id: '/admin/categorias'
+      path: '/admin/categorias'
+      fullPath: '/admin/categorias'
+      preLoaderRoute: typeof AdminCategoriasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/avaliacoes': {
+      id: '/admin/avaliacoes'
+      path: '/admin/avaliacoes'
+      fullPath: '/admin/avaliacoes'
+      preLoaderRoute: typeof AdminAvaliacoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/agendamentos': {
@@ -605,11 +765,19 @@ const rootRouteChildren: RootRouteChildren = {
   ProfissionaisRoute: ProfissionaisRoute,
   ServicosRoute: ServicosRoute,
   AdminAgendamentosRoute: AdminAgendamentosRoute,
+  AdminAvaliacoesRoute: AdminAvaliacoesRoute,
+  AdminCategoriasRoute: AdminCategoriasRoute,
   AdminClientesRoute: AdminClientesRoute,
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminCuponsRoute: AdminCuponsRoute,
+  AdminLogsRoute: AdminLogsRoute,
   AdminMensagensRoute: AdminMensagensRoute,
+  AdminNotificacoesRoute: AdminNotificacoesRoute,
   AdminPagamentosRoute: AdminPagamentosRoute,
   AdminProfissionaisRoute: AdminProfissionaisRoute,
+  AdminRelatoriosRoute: AdminRelatoriosRoute,
   AdminServicosRoute: AdminServicosRoute,
+  AdminUsuariosRoute: AdminUsuariosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
