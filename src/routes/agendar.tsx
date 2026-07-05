@@ -181,7 +181,7 @@ function Agendar() {
 
             <div>
               <div className="mb-3 flex items-center gap-3">
-                <StepBadge n={4} />
+                <StepBadge n={3} />
                 <label className={stepLabelCls}>Endereço</label>
               </div>
               <input
