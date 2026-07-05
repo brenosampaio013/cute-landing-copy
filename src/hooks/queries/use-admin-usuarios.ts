@@ -60,6 +60,7 @@ export function useUpsertAdminUsuario() {
         telefone: input.telefone?.trim() || null,
         perfil: input.perfil,
         status: input.status,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         permissoes: input.permissoes as unknown as Record<string, unknown>,
       };
       if (input.id) {
