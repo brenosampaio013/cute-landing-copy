@@ -6,7 +6,7 @@ import {
   UserCheck,
   Star,
   ArrowRight,
-  Home,
+  
   Sparkles,
   Shirt,
   Waves,
