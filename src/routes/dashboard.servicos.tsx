@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Home, Sparkles, Shirt, Wrench, Zap, Leaf, ArrowRight } from "lucide-react";
+import { Home, Sparkles, GlassWater, Wrench, Zap, Leaf, Waves, ArrowRight } from "lucide-react";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 
 export const Route = createFileRoute("/dashboard/servicos")({
