@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, MapPin, Plus, Star, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
