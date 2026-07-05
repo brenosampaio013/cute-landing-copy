@@ -104,7 +104,7 @@ function Agendar() {
   return (
     <SitePage
       title="Agendar serviço"
-      subtitle="Escolha o serviço, o profissional, a data e o horário. Confirmação em minutos."
+      subtitle="Escolha o serviço, a data e o horário. Confirmação em minutos."
     >
       <form
         onSubmit={handleSubmit}
