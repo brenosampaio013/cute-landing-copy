@@ -49,7 +49,7 @@ type NavKey =
 
 type NavItem = { key: NavKey; label: string; icon: LucideIcon; to?: string };
 
-const PRINCIPAL: NavItem[] = [
+export const PRINCIPAL: NavItem[] = [
   { key: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/admin" },
   { key: "agendamentos", label: "Agendamentos", icon: Calendar, to: "/admin/agendamentos" },
   { key: "servicos", label: "Serviços", icon: LayoutGrid, to: "/admin/servicos" },
@@ -62,13 +62,17 @@ const PRINCIPAL: NavItem[] = [
   { key: "relatorios", label: "Relatórios", icon: FileBarChart },
 ];
 
-const GERENCIAMENTO: NavItem[] = [
+export const GERENCIAMENTO: NavItem[] = [
   { key: "usuarios", label: "Usuários", icon: UserCog },
   { key: "categorias", label: "Categorias", icon: Tag },
   { key: "configuracoes", label: "Configurações", icon: Settings },
   { key: "notificacoes", label: "Notificações", icon: Bell },
   { key: "logs", label: "Logs do sistema", icon: ScrollText },
 ];
+
+export const SIDEBAR_SECTIONS = { PRINCIPAL: "PRINCIPAL", GERENCIAMENTO: "GERENCIAMENTO" } as const;
+export const SIDEBAR_HELP_TITLE = "Precisa de ajuda?";
+export const SIDEBAR_HELP_SUBTITLE = "Central de ajuda";
 
 export function AdminShell({
   active,
