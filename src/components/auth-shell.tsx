@@ -8,15 +8,16 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
     <div className="min-h-screen bg-slate-50 p-0 sm:p-4 lg:p-8">
       <div className="mx-auto grid min-h-screen max-w-7xl overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/60 sm:min-h-[calc(100vh-2rem)] sm:rounded-3xl lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
         {/* Brand panel — full artwork background */}
-        <aside className="relative hidden overflow-hidden lg:block">
+        <aside className="relative hidden overflow-hidden bg-[#0A1A2F] lg:block">
           <Link to="/" className="absolute inset-0 z-10" aria-label="Ir para a página inicial">
             <img
               src={loginBg.url}
               alt="Maré Nobre — Cuidado completo para o seu lar"
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-left"
             />
           </Link>
         </aside>
+
 
         {/* Mobile compact header */}
         <div
@@ -24,7 +25,8 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           style={{
             backgroundImage: `linear-gradient(180deg, rgba(5,19,41,0.55) 0%, rgba(10,26,47,0.85) 100%), url(${loginBg.url})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "left center",
+
           }}
         >
           <Link to="/" className="inline-block">
