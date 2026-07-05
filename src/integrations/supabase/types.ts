@@ -170,7 +170,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_agendamento_conflito: {
+        Args: {
+          p_data: string
+          p_fim: string
+          p_ignorar?: string
+          p_inicio: string
+          p_profissional: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       booking_status: "confirmado" | "concluido" | "cancelado" | "pendente"
