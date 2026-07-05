@@ -89,10 +89,10 @@ function Index() {
             <p className="mt-6 text-base text-white/75 sm:text-lg">
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start">
               <Link
                 to="/agendar"
-                className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
                 style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
               >
                 Agendar agora
@@ -100,7 +100,7 @@ function Index() {
               </Link>
               <Link
                 to="/como-funciona"
-                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-4 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/25 px-8 text-base font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10"
               >
                 Como funciona
               </Link>
