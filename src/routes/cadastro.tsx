@@ -107,17 +107,20 @@ function Cadastro() {
   async function onGoogle() {
     setFormError(null);
     setLoading(true);
+    sessionStorage.setItem("post_auth_redirect", "/dashboard");
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
     if (result.error) {
       setLoading(false);
+      sessionStorage.removeItem("post_auth_redirect");
       setFormError(friendlyAuthError(result.error.message ?? "Falha ao entrar com Google."));
       return;
     }
     if (result.redirected) return;
     navigate({ to: "/dashboard" });
   }
+
 
   const inputBase =
     "w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-800 outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20";

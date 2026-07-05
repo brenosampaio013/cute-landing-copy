@@ -56,17 +56,20 @@ function Login() {
   async function onGoogle() {
     setFormError(null);
     setLoading(true);
+    sessionStorage.setItem("post_auth_redirect", "/dashboard");
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
     if (result.error) {
       setLoading(false);
+      sessionStorage.removeItem("post_auth_redirect");
       setFormError(friendlyAuthError(result.error.message ?? "Falha ao entrar com Google."));
       return;
     }
     if (result.redirected) return;
     navigate({ to: "/dashboard" });
   }
+
 
   return (
     <AuthShell

@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -12,6 +13,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { WhatsappFab } from "../components/whatsapp-fab";
+import { supabase } from "../integrations/supabase/client";
+
 
 function NotFoundComponent() {
   return (
@@ -122,9 +125,32 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <PostAuthRedirector />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <WhatsappFab />
     </QueryClientProvider>
   );
 }
+
+function PostAuthRedirector() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const go = () => {
+      const dest = sessionStorage.getItem("post_auth_redirect");
+      if (!dest) return;
+      sessionStorage.removeItem("post_auth_redirect");
+      navigate({ to: dest });
+    };
+    // Handle case where session is already restored on mount (post-OAuth reload)
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) go();
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") go();
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [navigate]);
+  return null;
+}
+
