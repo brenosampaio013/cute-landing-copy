@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, BadgeCheck } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 
 export const Route = createFileRoute("/avaliacoes")({
@@ -13,10 +13,12 @@ export const Route = createFileRoute("/avaliacoes")({
 });
 
 const reviews = [
-  { name: "Fernanda M.", role: "São Paulo, SP", text: "Serviço impecável, profissional pontual e muito atenciosa. Recomendo!", rating: 5 },
-  { name: "Carlos A.", role: "Rio de Janeiro, RJ", text: "Contratei limpeza pós-obra e ficou perfeito. Vou usar sempre.", rating: 5 },
-  { name: "Patrícia L.", role: "Campinas, SP", text: "Plataforma prática e preço justo. A Camila foi ótima!", rating: 5 },
-  { name: "Rodrigo S.", role: "Curitiba, PR", text: "Rapidez no agendamento e ótimo atendimento. Nota 10.", rating: 4 },
+  { name: "Juliana Andrade", role: "Riviera de São Lourenço", when: "Há 2 dias", rating: 5, text: "Limpeza impecável! A equipe foi muito pontual, organizada e cuidadosa com cada detalhe da minha casa. Super recomendo!" },
+  { name: "Carlos Eduardo", role: "Santos", when: "Há 5 dias", rating: 5, text: "Excelente serviço de limpeza pesada. Meu apartamento ficou renovado! Profissionais educados e muito eficientes." },
+  { name: "Fernanda Souza", role: "Guarujá", when: "Há 1 semana", rating: 5, text: "Adorei a limpeza de sofá e colchão. Tudo muito bem feito e com produtos de qualidade. Nota 10!" },
+  { name: "Patrícia Lima", role: "Riviera de São Lourenço", when: "Há 1 semana", rating: 5, text: "Montagem de móveis perfeita! Rápidos, experientes e muito profissionais. Excelente atendimento." },
+  { name: "Ricardo Martins", role: "Santos", when: "Há 2 semanas", rating: 5, text: "Pós-obra impecável! Tiraram toda a sujeira e deixaram tudo pronto para usar. Serviço de altíssima qualidade." },
+  { name: "Ana Beatriz", role: "Juquehy", when: "Há 2 semanas", rating: 5, text: "Limpeza residencial completa. Equipe atenciosa e detalhista. Já virei cliente fiel!" },
 ];
 
 const stats = [
