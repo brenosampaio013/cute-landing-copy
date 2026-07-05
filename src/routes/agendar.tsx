@@ -123,8 +123,18 @@ function Agendar() {
 
   const today = new Date().toISOString().slice(0, 10);
   const inputCls =
-    "mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20";
-  const labelCls = "text-xs font-semibold uppercase tracking-wide text-slate-500";
+    "w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20";
+  const stepLabelCls =
+    "text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400";
+  const StepBadge = ({ n, active = false }: { n: number; active?: boolean }) => (
+    <span
+      className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+        active ? "bg-[#2DD4BF]/15 text-[#0A9E8A]" : "bg-slate-100 text-slate-500"
+      }`}
+    >
+      {n}
+    </span>
+  );
 
   return (
     <SitePage
@@ -133,11 +143,15 @@ function Agendar() {
     >
       <form
         onSubmit={handleSubmit}
-        className="grid gap-8 lg:grid-cols-[1fr_1.2fr]"
+        className="grid items-start gap-6 lg:grid-cols-12"
       >
-        <div>
-          <p className={labelCls}>1. Escolha o serviço</p>
-          <div className="mt-3 grid grid-cols-2 gap-3">
+        {/* Card esquerdo: serviços */}
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8 lg:col-span-7">
+          <div className="mb-6 flex items-center gap-3">
+            <StepBadge n={1} active />
+            <h2 className={stepLabelCls}>Escolha o serviço</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {services.map((s) => {
               const active = servico === s.title;
               return (
@@ -145,85 +159,111 @@ function Agendar() {
                   key={s.title}
                   type="button"
                   onClick={() => setServico(s.title)}
-                  className={`flex flex-col items-center rounded-xl border bg-white p-4 text-center transition ${
+                  className={`group relative flex flex-col items-center rounded-2xl border-2 p-5 text-center transition ${
                     active
-                      ? "border-[#2DD4BF] ring-2 ring-[#2DD4BF]/20 shadow-md"
-                      : "border-slate-200 hover:border-[#2DD4BF] hover:shadow-md"
+                      ? "border-[#2DD4BF] bg-white shadow-md"
+                      : "border-slate-100 bg-white hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-lg"
                   }`}
                 >
-                  <img src={s.icon} alt={s.title} className="h-14 w-14 object-contain" />
-                  <span className="mt-2 text-sm font-semibold text-brand-navy">{s.title}</span>
+                  <div
+                    className={`mb-3 flex h-14 w-14 items-center justify-center rounded-xl transition ${
+                      active ? "bg-[#2DD4BF]/10" : "bg-slate-50 group-hover:bg-[#2DD4BF]/5"
+                    }`}
+                  >
+                    <img src={s.icon} alt="" className="h-9 w-9 object-contain" />
+                  </div>
+                  <span className="text-sm font-semibold text-[#0A1A2F]">{s.title}</span>
+                  {active && (
+                    <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#2DD4BF] text-white">
+                      <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
+                  )}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-          <p className={labelCls}>2. Profissional</p>
-          <select
-            value={profissionalId}
-            onChange={(e) => setProfissionalId(e.target.value)}
-            className={inputCls}
-          >
-            <option value="">Sem preferência</option>
-            {pros.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.nome || "Profissional"}
-              </option>
-            ))}
-          </select>
+        {/* Card direito: formulário */}
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl ring-1 ring-slate-200/40 sm:p-8 lg:col-span-5">
+          <div className="space-y-6">
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <StepBadge n={2} />
+                <label className={stepLabelCls}>Profissional</label>
+              </div>
+              <select
+                value={profissionalId}
+                onChange={(e) => setProfissionalId(e.target.value)}
+                className={`${inputCls} appearance-none cursor-pointer`}
+              >
+                <option value="">Sem preferência</option>
+                {pros.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nome || "Profissional"}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <p className={`${labelCls} pt-2`}>3. Data e horário</p>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
-              <span className={labelCls}>Data</span>
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <StepBadge n={3} />
+                <label className={stepLabelCls}>Data e horário</label>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  type="date"
+                  required
+                  min={today}
+                  value={data}
+                  onChange={(e) => setData(e.target.value)}
+                  className={inputCls}
+                />
+                <input
+                  type="time"
+                  required
+                  value={horario}
+                  onChange={(e) => setHorario(e.target.value)}
+                  className={inputCls}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <StepBadge n={4} />
+                <label className={stepLabelCls}>Endereço</label>
+              </div>
               <input
-                type="date"
-                required
-                min={today}
-                value={data}
-                onChange={(e) => setData(e.target.value)}
+                value={endereco}
+                onChange={(e) => setEndereco(e.target.value)}
                 className={inputCls}
+                placeholder="Rua, número, bairro e cidade"
               />
-            </label>
-            <label className="block">
-              <span className={labelCls}>Horário</span>
-              <input
-                type="time"
-                required
-                value={horario}
-                onChange={(e) => setHorario(e.target.value)}
-                className={inputCls}
-              />
-            </label>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={submitting || authLoading}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2DD4BF] px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-[#2DD4BF]/20 transition hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+              >
+                {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                Confirmar agendamento
+              </button>
+              {!user && !authLoading && (
+                <p className="mt-4 text-center text-xs text-slate-400">
+                  Você precisa estar logado para concluir o agendamento.
+                </p>
+              )}
+            </div>
           </div>
-
-          <label className="block">
-            <span className={labelCls}>Endereço</span>
-            <input
-              value={endereco}
-              onChange={(e) => setEndereco(e.target.value)}
-              className={inputCls}
-              placeholder="Rua, número, bairro"
-            />
-          </label>
-
-          <button
-            type="submit"
-            disabled={submitting || authLoading}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#2DD4BF] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
-          >
-            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            Confirmar agendamento
-          </button>
-          {!user && !authLoading && (
-            <p className="text-center text-xs text-slate-500">
-              Você precisa estar logado para concluir o agendamento.
-            </p>
-          )}
         </div>
       </form>
     </SitePage>
   );
 }
+
