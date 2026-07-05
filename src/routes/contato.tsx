@@ -116,7 +116,7 @@ function Contato() {
         </div>
 
         {/* Right: form */}
-        <form className="space-y-5 rounded-3xl border border-slate-100 bg-white p-8 shadow-xl ring-1 ring-slate-200/40">
+        <form className="space-y-5 rounded-3xl border border-slate-100 bg-white p-8 shadow-xl ring-1 ring-slate-200/40" aria-label="Formulário de contato">
           <div className="mb-2">
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#0A9E8A]">
               Envie uma mensagem
@@ -126,22 +126,22 @@ function Contato() {
             </h3>
           </div>
           <div>
-            <label className={labelCls}>Nome</label>
-            <input className={`${inputCls} mt-2`} placeholder="Seu nome completo" />
+            <label htmlFor="contato-nome" className={labelCls}>Nome</label>
+            <input id="contato-nome" name="nome" autoComplete="name" required className={`${inputCls} mt-2`} placeholder="Seu nome completo" />
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label className={labelCls}>E-mail</label>
-              <input type="email" className={`${inputCls} mt-2`} placeholder="voce@email.com" />
+              <label htmlFor="contato-email" className={labelCls}>E-mail</label>
+              <input id="contato-email" name="email" type="email" autoComplete="email" required className={`${inputCls} mt-2`} placeholder="voce@email.com" />
             </div>
             <div>
-              <label className={labelCls}>Telefone</label>
-              <input className={`${inputCls} mt-2`} placeholder="(13) 99999-9999" />
+              <label htmlFor="contato-telefone" className={labelCls}>Telefone</label>
+              <input id="contato-telefone" name="telefone" type="tel" autoComplete="tel" inputMode="tel" className={`${inputCls} mt-2`} placeholder="(13) 99999-9999" />
             </div>
           </div>
           <div>
-            <label className={labelCls}>Mensagem</label>
-            <textarea rows={5} className={`${inputCls} mt-2 resize-none`} placeholder="Como podemos ajudar?" />
+            <label htmlFor="contato-mensagem" className={labelCls}>Mensagem</label>
+            <textarea id="contato-mensagem" name="mensagem" rows={5} required className={`${inputCls} mt-2 resize-none`} placeholder="Como podemos ajudar?" />
           </div>
           <button
             type="button"
@@ -155,6 +155,7 @@ function Contato() {
             Ao enviar, você concorda em receber contato da Maré Nobre.
           </p>
         </form>
+
       </div>
     </SitePage>
   );

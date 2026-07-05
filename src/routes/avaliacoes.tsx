@@ -58,10 +58,10 @@ function Avaliacoes() {
         {reviews.map((r) => (
           <div
             key={r.name}
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-6"
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#2DD4BF]/40 hover:shadow-[0_20px_50px_-20px_rgba(45,212,191,0.35)] sm:p-6"
             style={{ backgroundColor: "#0B1E3D" }}
           >
-            <Quote className="pointer-events-none absolute right-4 top-4 h-9 w-9 text-[#2DD4BF]/20" aria-hidden />
+            <Quote className="pointer-events-none absolute right-4 top-4 h-9 w-9 text-[#2DD4BF]/20 transition group-hover:text-[#2DD4BF]/40" aria-hidden />
 
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
@@ -78,7 +78,7 @@ function Avaliacoes() {
               </span>
             </div>
 
-            <div className="mt-4 flex gap-0.5">
+            <div className="mt-4 flex gap-0.5" aria-label={`Avaliação ${r.rating} de 5`}>
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}
@@ -100,6 +100,7 @@ function Avaliacoes() {
           </div>
         ))}
       </div>
+
 
     </SitePage>
   );

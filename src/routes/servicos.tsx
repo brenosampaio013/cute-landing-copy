@@ -54,10 +54,10 @@ const services: Service[] = [
 function ServiceCard({ title, desc, photo, Icon }: Service) {
   return (
     <article
-      className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
+      className="group relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:ring-[#2DD4BF]/30"
       style={{ backgroundColor: NAVY }}
     >
-      <div className="relative h-[21rem] w-full overflow-hidden">
+      <div className="hover-zoom relative h-[21rem] w-full">
         <img
           src={photo}
           alt={`Funcionário da Maré Nobre realizando o serviço de ${title.toLowerCase()}`}
@@ -66,18 +66,15 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
           loading="lazy"
           className="h-full w-full object-cover object-top"
         />
-
-        {/* Bottom fade into card */}
         <div
-          className="absolute inset-x-0 bottom-0 h-20"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
           style={{ background: `linear-gradient(to top, ${NAVY}, transparent)` }}
         />
-
       </div>
 
       <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-0 text-center">
         <div
-          className="relative z-10 -mt-8 flex h-16 w-16 items-center justify-center rounded-full border-2"
+          className="relative z-10 -mt-8 flex h-16 w-16 items-center justify-center rounded-full border-2 transition group-hover:scale-105"
           style={{ backgroundColor: NAVY, borderColor: TEAL }}
         >
           <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: TEAL }} />
@@ -95,8 +92,9 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
 
         <Link
           to="/agendar"
-          className="mt-1 w-full rounded-xl py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
-          style={{ backgroundColor: TEAL }}
+          aria-label={`Agendar serviço de ${title.toLowerCase()}`}
+          className="mt-1 inline-flex w-full items-center justify-center rounded-full py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition hover:brightness-110 active:scale-[0.98]"
+          style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
         >
           Agendar serviço
         </Link>
@@ -104,6 +102,7 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
     </article>
   );
 }
+
 
 function ServicosPage() {
   return (
