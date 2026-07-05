@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, BadgeCheck } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 
 export const Route = createFileRoute("/avaliacoes")({
@@ -13,10 +13,12 @@ export const Route = createFileRoute("/avaliacoes")({
 });
 
 const reviews = [
-  { name: "Fernanda M.", role: "São Paulo, SP", text: "Serviço impecável, profissional pontual e muito atenciosa. Recomendo!", rating: 5 },
-  { name: "Carlos A.", role: "Rio de Janeiro, RJ", text: "Contratei limpeza pós-obra e ficou perfeito. Vou usar sempre.", rating: 5 },
-  { name: "Patrícia L.", role: "Campinas, SP", text: "Plataforma prática e preço justo. A Camila foi ótima!", rating: 5 },
-  { name: "Rodrigo S.", role: "Curitiba, PR", text: "Rapidez no agendamento e ótimo atendimento. Nota 10.", rating: 4 },
+  { name: "Juliana Andrade", role: "Riviera de São Lourenço", when: "Há 2 dias", rating: 5, text: "Limpeza impecável! A equipe foi muito pontual, organizada e cuidadosa com cada detalhe da minha casa. Super recomendo!" },
+  { name: "Carlos Eduardo", role: "Santos", when: "Há 5 dias", rating: 5, text: "Excelente serviço de limpeza pesada. Meu apartamento ficou renovado! Profissionais educados e muito eficientes." },
+  { name: "Fernanda Souza", role: "Guarujá", when: "Há 1 semana", rating: 5, text: "Adorei a limpeza de sofá e colchão. Tudo muito bem feito e com produtos de qualidade. Nota 10!" },
+  { name: "Patrícia Lima", role: "Riviera de São Lourenço", when: "Há 1 semana", rating: 5, text: "Montagem de móveis perfeita! Rápidos, experientes e muito profissionais. Excelente atendimento." },
+  { name: "Ricardo Martins", role: "Santos", when: "Há 2 semanas", rating: 5, text: "Pós-obra impecável! Tiraram toda a sujeira e deixaram tudo pronto para usar. Serviço de altíssima qualidade." },
+  { name: "Ana Beatriz", role: "Juquehy", when: "Há 2 semanas", rating: 5, text: "Limpeza residencial completa. Equipe atenciosa e detalhista. Já virei cliente fiel!" },
 ];
 
 const stats = [
@@ -51,14 +53,28 @@ function Avaliacoes() {
         ))}
       </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {reviews.map((r) => (
           <div
             key={r.name}
-            className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+            className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
           >
-            <Quote className="absolute right-6 top-6 h-10 w-10 text-[#2DD4BF]/10" aria-hidden />
-            <div className="flex gap-0.5">
+            <Quote className="absolute right-5 top-5 h-10 w-10 text-[#2DD4BF]/10" aria-hidden />
+
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF]/15 text-sm font-bold text-[#0A9E8A]">
+                  {r.name.charAt(0)}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-[#0A1A2F]">{r.name}</p>
+                  <p className="truncate text-xs text-slate-400">{r.role}</p>
+                </div>
+              </div>
+              <span className="shrink-0 text-xs text-slate-400">{r.when}</span>
+            </div>
+
+            <div className="mt-4 flex gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}
@@ -68,15 +84,12 @@ function Avaliacoes() {
                 />
               ))}
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600">"{r.text}"</p>
-            <div className="mt-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2DD4BF]/15 text-sm font-bold text-[#0A9E8A]">
-                {r.name.charAt(0)}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-[#0A1A2F]">{r.name}</p>
-                <p className="text-xs text-slate-400">{r.role}</p>
-              </div>
+
+            <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{r.text}</p>
+
+            <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-[#0A9E8A]">
+              <BadgeCheck className="h-4 w-4" />
+              Compra verificada
             </div>
           </div>
         ))}
