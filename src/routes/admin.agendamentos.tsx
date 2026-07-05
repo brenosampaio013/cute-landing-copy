@@ -387,6 +387,7 @@ function AgendamentosPage() {
         open={openNew}
         onOpenChange={setOpenNew}
         onSave={(a) => { setRows((rs) => [a, ...rs]); setOpenNew(false); }}
+        profissionais={profissionaisList}
       />
 
       {/* DETAIL DRAWER */}
