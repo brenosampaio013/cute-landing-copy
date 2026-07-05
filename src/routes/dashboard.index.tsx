@@ -53,14 +53,16 @@ function statusBadge(s: Agendamento["status"]) {
 
 function DashboardHome() {
   const { user } = useAuth();
+  const { profile } = useProfile();
+  const nome = profile?.nome ?? "";
   const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState<string>("");
   const [proximo, setProximo] = useState<Agendamento | null>(null);
   const [pagamento, setPagamento] = useState<Pagamento | null>(null);
   const [bookings, setBookings] = useState<Agendamento[]>([]);
   const [avaliar, setAvaliar] = useState<Agendamento | null>(null);
   const [rating, setRating] = useState(0);
   const [saving, setSaving] = useState(false);
+
 
   useEffect(() => {
     if (!user) return;
