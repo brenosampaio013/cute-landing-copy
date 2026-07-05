@@ -106,6 +106,13 @@ function AgendamentosPage() {
     if (isAdmin === false) navigate({ to: "/dashboard", replace: true });
   }, [loading, user, isAdmin, navigate]);
 
+  const profissionaisList = useMemo(
+    () => Array.from(new Set(rows.map((r) => r.profissional).filter((n) => n && n !== "—"))).sort(),
+    [rows],
+  );
+
+
+
   const filtered = useMemo(() => {
     return rows.filter((r) => {
       if (tab !== "Todos") {
