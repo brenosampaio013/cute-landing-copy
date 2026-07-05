@@ -10,8 +10,8 @@ import {
 import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-
-import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
+import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+import iconMontagem from "@/assets/icon-montagem.png";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 
@@ -22,13 +22,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Cuidados premium para o seu lar. Profissionais qualificados em limpeza, passadoria, hidráulica, elétrica e jardinagem.",
+          "Cuidados premium para o seu lar. Limpeza padrão, limpeza pesada, passadoria e montagem de móveis.",
       },
       { property: "og:title", content: "Maré Nobre — Soluções para o seu lar" },
       {
         property: "og:description",
         content:
-          "Cuidados premium para o seu lar. Profissionais qualificados em limpeza, hidráulica, elétrica e jardinagem.",
+          "Cuidados premium para o seu lar. Limpeza padrão, limpeza pesada, passadoria e montagem de móveis.",
       },
     ],
   }),
@@ -37,11 +37,10 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { icon: iconLimpeza.url, title: "Limpeza Residencial", desc: "Ambientes sempre limpos e aconchegantes." },
-  { icon: iconPosObra.url, title: "Limpeza Pós-obra", desc: "Deixamos tudo pronto para você aproveitar." },
-  { icon: iconLimpeza.url, title: "Limpeza de Vidros", desc: "Vidros brilhando e sem marcas." },
-  { icon: iconLimpeza.url, title: "Limpeza de Piscinas", desc: "Água cristalina e piscina impecável." },
-  { icon: iconJardinagem.url, title: "Jardinagem", desc: "Seu jardim sempre bonito e saudável." },
+  { icon: iconLimpeza.url, title: "Limpeza Padrão", desc: "Limpeza na medida certa para o dia a dia." },
+  { icon: iconPosObra.url, title: "Limpeza Pesada", desc: "Limpeza completa para o seu lar brilhar." },
+  { icon: iconPassadoria.url, title: "Passadoria", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
+  { icon: iconMontagem, title: "Montagem de Móveis", desc: "Montadores qualificados para todo tipo de móvel." },
 ];
 
 const steps = [
