@@ -1,5 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   Calendar as CalIcon,
   Clock,
@@ -61,6 +64,37 @@ function AgendamentosPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const isAdmin = useIsAdmin(user);
+
+  const qc = useQueryClient();
+  const STATUS_TO_DB: Record<Status, "pendente" | "confirmado" | "concluido" | "cancelado"> = {
+    Pendente: "pendente", Confirmado: "confirmado", Concluído: "concluido", Cancelado: "cancelado",
+  };
+  const invalidateAll = () => {
+    qc.invalidateQueries({ queryKey: ["admin-agendamentos"] });
+    qc.invalidateQueries({ queryKey: ["admin-dashboard"] });
+  };
+  const updateStatusMut = useMutation({
+    mutationFn: async ({ rawId, status }: { rawId: string; status: Status }) => {
+      const { error } = await supabase
+        .from("agendamentos").update({ status: STATUS_TO_DB[status] }).eq("id", rawId);
+      if (error) throw error;
+    },
+    onSuccess: (_d, v) => { invalidateAll(); toast.success(`Agendamento marcado como ${v.status}.`); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const reagendarMut = useMutation({
+    mutationFn: async ({ rawId, data, hora, duracao }: { rawId: string; data: string; hora: string; duracao: number }) => {
+      const [h, m] = hora.split(":").map(Number);
+      const endMin = h * 60 + m + duracao;
+      const horario_fim = `${String(Math.floor(endMin / 60)).padStart(2, "0")}:${String(endMin % 60).padStart(2, "0")}:00`;
+      const { error } = await supabase
+        .from("agendamentos").update({ data, horario_inicio: `${hora}:00`, horario_fim }).eq("id", rawId);
+      if (error) throw error;
+    },
+    onSuccess: () => { invalidateAll(); toast.success("Agendamento reagendado."); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
   const { data: dataRows } = useAdminAgendamentos(isAdmin === true);
   const [overrides, setOverrides] = useState<Record<string, Partial<Ag>>>({});
@@ -393,7 +427,22 @@ function AgendamentosPage() {
       {/* DETAIL DRAWER */}
       <Sheet open={!!detail} onOpenChange={(o) => !o && setDetail(null)}>
         <SheetContent className="w-full overflow-y-auto sm:max-w-md">
-          {detail && <AgendamentoDetail ag={detail} onChange={(a) => { setRows((rs) => rs.map((r) => r.id === a.id ? a : r)); setDetail(a); }} />}
+          {detail && (
+            <AgendamentoDetail
+              ag={detail}
+              onStatus={(status) => {
+                if (!detail.rawId) return;
+                updateStatusMut.mutate({ rawId: detail.rawId, status });
+                setDetail({ ...detail, status });
+              }}
+              onReagendar={(data, hora) => {
+                if (!detail.rawId) return;
+                reagendarMut.mutate({ rawId: detail.rawId, data, hora, duracao: detail.duracao });
+                setDetail({ ...detail, data, hora });
+              }}
+              pending={updateStatusMut.isPending || reagendarMut.isPending}
+            />
+          )}
         </SheetContent>
       </Sheet>
     </AdminShell>
@@ -504,7 +553,15 @@ function CalendarMonth({
 }
 
 /* ---------- Detail drawer ---------- */
-function AgendamentoDetail({ ag, onChange }: { ag: Ag; onChange: (a: Ag) => void }) {
+function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
+  ag: Ag;
+  onStatus: (s: Status) => void;
+  onReagendar: (data: string, hora: string) => void;
+  pending: boolean;
+}) {
+  const [reOpen, setReOpen] = useState(false);
+  const [rData, setRData] = useState(ag.data);
+  const [rHora, setRHora] = useState(ag.hora);
   const timeline = [
     { label: "Criado", done: true, when: "há 3 dias" },
     { label: "Confirmado", done: ag.status !== "Pendente", when: ag.status !== "Pendente" ? "há 2 dias" : "—" },
@@ -578,19 +635,40 @@ function AgendamentoDetail({ ag, onChange }: { ag: Ag; onChange: (a: Ag) => void
         </section>
 
         <div className="grid grid-cols-2 gap-2 pt-2">
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => onChange({ ...ag, status: "Confirmado" })}>
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5" onClick={() => onStatus("Confirmado")}>
             <Check className="h-4 w-4" /> Confirmar
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5">
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5" onClick={() => setReOpen(true)}>
             <RotateCcw className="h-4 w-4" /> Reagendar
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-emerald-600" onClick={() => onChange({ ...ag, status: "Concluído" })}>
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-emerald-600" onClick={() => onStatus("Concluído")}>
             <CheckCircle2 className="h-4 w-4" /> Concluir
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-rose-600" onClick={() => onChange({ ...ag, status: "Cancelado" })}>
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-rose-600" onClick={() => onStatus("Cancelado")}>
             <X className="h-4 w-4" /> Cancelar
           </Button>
         </div>
+
+        <Dialog open={reOpen} onOpenChange={setReOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader><DialogTitle>Reagendar</DialogTitle></DialogHeader>
+            <div className="grid gap-3 py-2">
+              <Field label="Data"><Input type="date" value={rData} onChange={(e) => setRData(e.target.value)} /></Field>
+              <Field label="Horário"><Input type="time" value={rHora} onChange={(e) => setRHora(e.target.value)} /></Field>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setReOpen(false)}>Cancelar</Button>
+              <Button
+                disabled={pending}
+                onClick={() => { onReagendar(rData, rHora); setReOpen(false); }}
+                className="text-white hover:opacity-90"
+                style={{ background: TEAL }}
+              >
+                Salvar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );
@@ -607,6 +685,7 @@ function NovoAgendamentoDialog({
   const submit = () => {
     onSave({
       id: `#${Math.floor(Math.random() * 9000 + 1000)}`,
+      rawId: crypto.randomUUID(),
       servico: form.servico || "Limpeza Residencial",
       cliente: form.cliente || "Novo cliente",
       clienteTel: "(21) 90000-0000",
