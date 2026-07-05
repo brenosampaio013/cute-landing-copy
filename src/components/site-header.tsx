@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
@@ -12,70 +13,123 @@ const navLinks: { label: string; to: string; exact?: boolean }[] = [
 ];
 
 export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
-  const base =
-    "text-sm font-medium transition text-white/85 hover:text-white";
-  const active = "text-[#2DD4BF] hover:text-[#2DD4BF]";
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    if (!transparent) return;
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [transparent]);
+
+  // On the homepage the header floats over the hero and becomes glassy on scroll.
+  // On other pages it uses the solid navy gradient and stays sticky.
+  const linkBase =
+    "group relative text-sm font-medium text-white/80 transition-colors hover:text-white";
+  const linkActive = "text-white";
 
   return (
     <header
       className={
         transparent
-          ? "relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-5"
+          ? `fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
+              scrolled
+                ? "border-b border-white/10 bg-[#00132a]/85 backdrop-blur-xl shadow-lg shadow-black/20"
+                : "bg-transparent"
+            }`
           : "sticky top-0 z-30 border-b border-white/5 text-white"
       }
       style={
         transparent
           ? undefined
-          : { background: "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)" }
+          : { background: "var(--gradient-hero)" }
       }
     >
-      <div
-        className={
-          transparent
-            ? "contents"
-            : "mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4"
-        }
-      >
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <Link to="/" className="flex shrink-0 items-center gap-2">
           <img
             src={logo}
             alt="Maré Nobre"
-            className="h-14 w-auto sm:h-[60px]"
+            className="h-12 w-auto sm:h-[56px]"
           />
         </Link>
 
-        <nav className="hidden flex-1 justify-center gap-5 lg:flex">
+        <nav className="hidden flex-1 justify-center gap-1 lg:flex">
           {navLinks.map((l) => (
             <Link
               key={l.to}
               to={l.to}
               activeOptions={{ exact: l.exact ?? false }}
-              className={base}
-              activeProps={{ className: active }}
+              className={`${linkBase} px-3 py-2`}
+              activeProps={{ className: `${linkBase} ${linkActive} px-3 py-2` }}
             >
               {l.label}
+              <span className="pointer-events-none absolute inset-x-3 -bottom-0.5 h-[2px] origin-left scale-x-0 rounded-full bg-[#2DD4BF] transition-transform duration-300 group-hover:scale-x-100 group-[.text-white]:scale-x-100" />
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link
             to="/login"
-            className="hidden rounded-md border border-white/30 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 sm:inline-flex"
+            className="hidden rounded-full border border-white/25 px-4 py-2 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10 hover:text-white sm:inline-flex"
           >
             Entrar
           </Link>
           <Link
             to="/cadastro"
-            className="rounded-md bg-brand-teal-deep px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:brightness-110"
+            className="rounded-full px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:brightness-110"
+            style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
           >
             Cadastrar
           </Link>
-          <button className="lg:hidden text-white" aria-label="Menu">
-            <Menu className="h-6 w-6" />
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="ml-1 rounded-lg p-2 text-white transition hover:bg-white/10 lg:hidden"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={open}
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="lg:hidden">
+          <div
+            className="border-t border-white/10 px-6 py-4"
+            style={{ background: "#00132a" }}
+          >
+            <nav className="flex flex-col gap-1">
+              {navLinks.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  activeOptions={{ exact: l.exact ?? false }}
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+                  activeProps={{
+                    className:
+                      "rounded-lg px-3 py-2.5 text-sm font-medium text-[#2DD4BF] bg-white/5",
+                  }}
+                >
+                  {l.label}
+                </Link>
+              ))}
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="mt-2 rounded-lg border border-white/25 px-3 py-2.5 text-center text-sm font-medium text-white sm:hidden"
+              >
+                Entrar
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

@@ -13,6 +13,7 @@ import iconPosObra from "@/assets/icon-posobra.png.asset.json";
 import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
 import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-page";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,15 +57,27 @@ function Index() {
       <section
         id="inicio"
         className="relative overflow-hidden text-white"
-        style={{
-          background:
-            "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)",
-        }}
+        style={{ background: "var(--gradient-hero)" }}
       >
+        {/* Decorative glows */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full opacity-30 blur-3xl"
+          style={{ background: "radial-gradient(circle, #2DD4BF 0%, transparent 70%)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-32 -bottom-20 h-96 w-96 rounded-full opacity-20 blur-3xl"
+          style={{ background: "radial-gradient(circle, #3B82F6 0%, transparent 70%)" }}
+        />
         <SiteHeader transparent />
 
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-20 pt-10 lg:grid-cols-2 lg:pb-28 lg:pt-16">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-24 pt-28 lg:grid-cols-2 lg:pb-32 lg:pt-32">
           <div className="max-w-xl">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF] backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#2DD4BF]" />
+              Cuidado premium para o seu lar
+            </span>
             <h1
               className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
@@ -76,12 +89,20 @@ function Index() {
             <p className="mt-6 text-lg text-white/75">
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 to="/agendar"
-                className="inline-flex items-center gap-2 rounded-full bg-[#2DD4BF] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-black/25 transition hover:brightness-110"
+                className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
+                style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
               >
-                Agendar agora <ArrowRight className="h-4 w-4" />
+                Agendar agora
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                to="/como-funciona"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-4 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10"
+              >
+                Como funciona
               </Link>
             </div>
             <div className="mt-8 flex items-center gap-3 text-sm">
@@ -116,43 +137,46 @@ function Index() {
       </section>
 
       {/* Services */}
-      <section id="servicos" className="bg-[#fafbfc] py-24">
+      <section id="servicos" className="bg-[#F7F8FA] py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#0A9E8A]">
+              O que oferecemos
+            </span>
             <h2
-              className="text-4xl font-bold text-brand-navy sm:text-5xl"
+              className="mt-4 text-4xl text-[#0A1A2F] sm:text-5xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
               Nossos serviços
             </h2>
-            <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-[#2DD4BF]" />
+            <p className="mx-auto mt-4 max-w-xl text-base text-slate-500">
+              Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
+            </p>
           </div>
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((s) => (
-              <div
+              <Link
                 key={s.title}
-                className="group flex flex-col items-center rounded-2xl border border-slate-200/70 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-slate-200"
+                to="/agendar"
+                className="group flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2DD4BF]/40 hover:shadow-2xl hover:shadow-slate-200/70"
               >
-                <div className="flex h-24 w-24 items-center justify-center">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#2DD4BF]/5 transition group-hover:bg-[#2DD4BF]/10">
                   <img
                     src={s.icon}
-                    alt={s.title}
-                    width={96}
-                    height={96}
+                    alt=""
+                    width={72}
+                    height={72}
                     loading="lazy"
-                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-brand-navy">{s.title}</h3>
-                <p className="mt-2 text-sm text-slate-500">{s.desc}</p>
-                <a
-                  href="#"
-                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2DD4BF] hover:text-[#14b8a6]"
-                >
+                <h3 className="mt-6 text-lg font-bold text-[#0A1A2F]">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.desc}</p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2DD4BF] transition group-hover:text-[#0A9E8A]">
                   Agendar
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              </div>
+                </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -161,11 +185,7 @@ function Index() {
       {/* How it works */}
       <HowItWorks />
 
-
-      {/* Footer */}
-      <footer id="contato" className="bg-brand-navy-deep py-10 text-center text-sm text-white/60">
-        <p>© {new Date().getFullYear()} Maré Nobre — Soluções para o seu lar.</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
