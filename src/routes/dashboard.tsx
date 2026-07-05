@@ -10,6 +10,7 @@ import {
   MapPin,
   User,
   HelpCircle,
+  MessageSquare,
   LogOut,
   Bell,
   Leaf,
