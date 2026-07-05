@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
+import { useAuth } from "@/hooks/use-auth";
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
   { label: "Início", to: "/", exact: true },
@@ -15,6 +16,7 @@ const navLinks: { label: string; to: string; exact?: boolean }[] = [
 export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (!transparent) return;
@@ -72,19 +74,33 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            to="/login"
-            className="hidden rounded-full border border-white/25 px-4 py-2 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10 hover:text-white sm:inline-flex"
-          >
-            Entrar
-          </Link>
-          <Link
-            to="/cadastro"
-            className="rounded-full px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:brightness-110"
-            style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
-          >
-            Cadastrar
-          </Link>
+          {loading ? null : user ? (
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:brightness-110"
+              style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              <span className="hidden sm:inline">Meu painel</span>
+              <span className="sm:hidden">Painel</span>
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="hidden rounded-full border border-white/25 px-4 py-2 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10 hover:text-white sm:inline-flex"
+              >
+                Entrar
+              </Link>
+              <Link
+                to="/cadastro"
+                className="rounded-full px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:brightness-110"
+                style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
+              >
+                Cadastrar
+              </Link>
+            </>
+          )}
           <button
             onClick={() => setOpen((v) => !v)}
             className="ml-1 rounded-lg p-2 text-white transition hover:bg-white/10 lg:hidden"
@@ -119,13 +135,23 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
                   {l.label}
                 </Link>
               ))}
-              <Link
-                to="/login"
-                onClick={() => setOpen(false)}
-                className="mt-2 rounded-lg border border-white/25 px-3 py-2.5 text-center text-sm font-medium text-white sm:hidden"
-              >
-                Entrar
-              </Link>
+              {user ? (
+                <Link
+                  to="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-lg bg-[#2DD4BF] px-3 py-2.5 text-center text-sm font-semibold text-white sm:hidden"
+                >
+                  Meu painel
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-lg border border-white/25 px-3 py-2.5 text-center text-sm font-medium text-white sm:hidden"
+                >
+                  Entrar
+                </Link>
+              )}
             </nav>
           </div>
         </div>

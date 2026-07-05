@@ -70,6 +70,25 @@ function Login() {
     navigate({ to: "/dashboard" });
   }
 
+  async function onForgot() {
+    setFormError(null);
+    if (!emailRegex.test(email)) {
+      setTouched((t) => ({ ...t, email: true }));
+      setFormError("Informe seu e-mail acima para receber o link de recuperação.");
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/login`,
+    });
+    setLoading(false);
+    if (error) {
+      setFormError(friendlyAuthError(error.message));
+      return;
+    }
+    setFormError("Enviamos um link de recuperação para o seu e-mail.");
+  }
+
 
   return (
     <AuthShell
@@ -148,9 +167,13 @@ function Login() {
             />
             Lembrar de mim
           </label>
-          <a href="#" className="text-sm font-semibold text-[#2DD4BF] hover:underline">
+          <button
+            type="button"
+            onClick={onForgot}
+            className="text-sm font-semibold text-[#2DD4BF] hover:underline"
+          >
             Esqueci minha senha
-          </a>
+          </button>
         </div>
 
         {formError && (
