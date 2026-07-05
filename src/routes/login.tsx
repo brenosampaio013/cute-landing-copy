@@ -148,9 +148,13 @@ function Login() {
             />
             Lembrar de mim
           </label>
-          <a href="#" className="text-sm font-semibold text-[#2DD4BF] hover:underline">
+          <button
+            type="button"
+            onClick={onForgot}
+            className="text-sm font-semibold text-[#2DD4BF] hover:underline"
+          >
             Esqueci minha senha
-          </a>
+          </button>
         </div>
 
         {formError && (
