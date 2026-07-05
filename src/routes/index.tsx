@@ -152,47 +152,61 @@ function Index() {
               Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
             </p>
           </div>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((s) => {
               const Icon = s.icon;
               return (
                 <article
                   key={s.title}
-                  className="group flex flex-col overflow-hidden rounded-3xl bg-[#0A1A2F] text-white shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
+                  className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
+                  style={{ backgroundColor: "#0B1E3D" }}
                 >
-                  <div className="relative aspect-[3/4] w-full overflow-hidden">
+                  <div className="relative h-[21rem] w-full overflow-hidden">
                     <img
                       src={s.photo}
-                      alt={s.title}
+                      alt={`Funcionário da Maré Nobre realizando o serviço de ${s.title.toLowerCase()}`}
                       width={768}
-                      height={1024}
+                      height={972}
                       loading="lazy"
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover object-top"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A1A2F]" />
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-20"
+                      style={{ background: "linear-gradient(to top, #0B1E3D, transparent)" }}
+                    />
                   </div>
-                  <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-6 -mt-10 text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#2DD4BF] bg-[#0A1A2F]">
-                      <Icon className="h-7 w-7 text-[#2DD4BF]" strokeWidth={1.75} />
+
+                  <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-0 text-center">
+                    <div
+                      className="relative z-10 -mt-8 flex h-16 w-16 items-center justify-center rounded-full border-2"
+                      style={{ backgroundColor: "#0B1E3D", borderColor: "#1CA9B5" }}
+                    >
+                      <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: "#1CA9B5" }} />
                     </div>
-                    <h3 className="mt-5 text-lg font-bold tracking-wide">{s.title}</h3>
-                    <span className="mt-2 block h-px w-10 bg-[#2DD4BF]/50" />
-                    <p className="mt-4 text-sm leading-relaxed text-slate-300">{s.desc}</p>
-                    <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-4 py-1.5 text-xs font-medium text-[#2DD4BF]">
+                    <h3 className="text-xl font-bold uppercase tracking-wide text-white">{s.title}</h3>
+                    <p className="max-w-[260px] text-sm leading-relaxed text-slate-300">{s.desc}</p>
+
+                    <div
+                      className="flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium"
+                      style={{ backgroundColor: "rgba(28,169,181,0.12)", color: "#1CA9B5" }}
+                    >
                       <Clock className="h-3.5 w-3.5" />
                       Disponível para hoje
                     </div>
+
                     <Link
                       to="/agendar"
-                      className="mt-6 w-full rounded-xl bg-[#2DD4BF] px-5 py-3 text-sm font-bold tracking-wide text-[#0A1A2F] transition hover:bg-[#26bfa9]"
+                      className="mt-1 w-full rounded-xl py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                      style={{ backgroundColor: "#1CA9B5" }}
                     >
-                      AGENDAR SERVIÇO
+                      Agendar serviço
                     </Link>
                   </div>
                 </article>
               );
             })}
           </div>
+
         </div>
       </section>
 
