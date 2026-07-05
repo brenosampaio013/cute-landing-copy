@@ -553,7 +553,15 @@ function CalendarMonth({
 }
 
 /* ---------- Detail drawer ---------- */
-function AgendamentoDetail({ ag, onChange }: { ag: Ag; onChange: (a: Ag) => void }) {
+function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
+  ag: Ag;
+  onStatus: (s: Status) => void;
+  onReagendar: (data: string, hora: string) => void;
+  pending: boolean;
+}) {
+  const [reOpen, setReOpen] = useState(false);
+  const [rData, setRData] = useState(ag.data);
+  const [rHora, setRHora] = useState(ag.hora);
   const timeline = [
     { label: "Criado", done: true, when: "há 3 dias" },
     { label: "Confirmado", done: ag.status !== "Pendente", when: ag.status !== "Pendente" ? "há 2 dias" : "—" },
