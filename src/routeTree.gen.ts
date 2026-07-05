@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContatoRouteImport } from './routes/contato'
@@ -47,6 +48,11 @@ import { Route as AdminAgendamentosRouteImport } from './routes/admin.agendament
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
   path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -224,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
@@ -259,6 +266,7 @@ export interface FileRoutesByTo {
   '/como-funciona': typeof ComoFuncionaRoute
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
@@ -334,6 +343,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/dashboard'
     | '/login'
+    | '/reset-password'
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/avaliacoes'
@@ -369,6 +379,7 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/contato'
     | '/login'
+    | '/reset-password'
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/avaliacoes'
@@ -405,6 +416,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/dashboard'
     | '/login'
+    | '/reset-password'
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/avaliacoes'
@@ -442,6 +454,7 @@ export interface RootRouteChildren {
   ContatoRoute: typeof ContatoRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicosRoute: typeof ServicosRoute
   AdminAgendamentosRoute: typeof AdminAgendamentosRoute
   AdminAvaliacoesRoute: typeof AdminAvaliacoesRoute
@@ -467,6 +480,13 @@ declare module '@tanstack/react-router' {
       path: '/servicos'
       fullPath: '/servicos'
       preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -742,6 +762,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContatoRoute: ContatoRoute,
   DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicosRoute: ServicosRoute,
   AdminAgendamentosRoute: AdminAgendamentosRoute,
   AdminAvaliacoesRoute: AdminAvaliacoesRoute,
