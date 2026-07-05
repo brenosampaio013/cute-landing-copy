@@ -7,7 +7,7 @@ import {
   Star,
   ArrowRight,
 } from "lucide-react";
-import heroCleaner from "@/assets/hero-cleaner.jpg";
+import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
 import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
@@ -118,20 +118,13 @@ function Index() {
 
           <div className="relative">
             <img
-              src={heroCleaner}
-              alt="Profissional de limpeza Maré Nobre"
-              width={1024}
-              height={1024}
-              className="mx-auto h-auto w-full max-w-md object-cover lg:max-w-lg"
-              style={{
-                WebkitMaskImage:
-                  "linear-gradient(to right, transparent 0%, black 12%, black 100%), linear-gradient(to top, transparent 0%, black 15%, black 100%)",
-                WebkitMaskComposite: "source-in",
-                maskImage:
-                  "linear-gradient(to right, transparent 0%, black 12%, black 100%), linear-gradient(to top, transparent 0%, black 15%, black 100%)",
-                maskComposite: "intersect",
-              }}
+              src={heroCleaner.url}
+              alt="Profissional Maré Nobre com kit de limpeza"
+              width={1440}
+              height={1080}
+              className="mx-auto h-auto w-full max-w-md rounded-2xl object-cover shadow-2xl ring-1 ring-white/10 lg:max-w-lg"
             />
+
           </div>
         </div>
       </section>
