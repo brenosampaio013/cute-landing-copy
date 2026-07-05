@@ -182,10 +182,16 @@ function Login() {
 
         <p className="pt-4 text-center text-sm text-slate-500">
           Não tem uma conta?{" "}
-          <Link to="/cadastro" className="font-semibold text-[#2DD4BF] hover:underline">
+          <Link to="/cadastro" className="font-semibold text-[#0A9E8A] hover:underline">
             Cadastre-se
           </Link>
         </p>
+
+        <p className="flex items-center justify-center gap-1.5 pt-6 text-center text-xs text-slate-400">
+          <Lock className="h-3 w-3" />
+          Seus dados estão protegidos conosco.
+        </p>
+
       </form>
     </AuthShell>
   );
