@@ -105,7 +105,7 @@ function DashboardLayout() {
             </div>
 
             <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
-              {NAV.map((item) => {
+              {nav.map((item) => {
                 const inactive = "text-white/70 hover:bg-white/5 hover:text-white";
                 const active = "bg-[#2DD4BF]/15 text-white ring-1 ring-inset ring-[#2DD4BF]/30";
                 const base = "flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition";
