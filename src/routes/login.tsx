@@ -71,17 +71,18 @@ function Login() {
   return (
     <AuthShell
       quote="Cuidado completo para o seu lar."
-      imageUrl="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80"
+      imageUrl=""
     >
       <h1
-        className="text-3xl text-[#0A1A2F] sm:text-4xl"
+        className="text-center text-3xl text-[#0A1A2F] sm:text-4xl"
         style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
       >
-        Bem-vindo de volta!
+        Que bom <span className="text-[#0A9E8A]">te ver por aqui!</span>
       </h1>
-      <p className="mt-2 text-sm text-slate-500">
-        Entre para gerenciar seus agendamentos
+      <p className="mt-2 text-center text-sm text-slate-500">
+        Acesse sua conta para continuar
       </p>
+
 
       <form onSubmit={onSubmit} className="mt-8 space-y-4" noValidate>
         <div>
@@ -181,10 +182,16 @@ function Login() {
 
         <p className="pt-4 text-center text-sm text-slate-500">
           Não tem uma conta?{" "}
-          <Link to="/cadastro" className="font-semibold text-[#2DD4BF] hover:underline">
+          <Link to="/cadastro" className="font-semibold text-[#0A9E8A] hover:underline">
             Cadastre-se
           </Link>
         </p>
+
+        <p className="flex items-center justify-center gap-1.5 pt-6 text-center text-xs text-slate-400">
+          <Lock className="h-3 w-3" />
+          Seus dados estão protegidos conosco.
+        </p>
+
       </form>
     </AuthShell>
   );
