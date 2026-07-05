@@ -135,7 +135,7 @@ function Index() {
       </section>
 
       {/* Services */}
-      <section id="servicos" className="py-24 sm:py-28" style={{ backgroundColor: "#0B1E3D" }}>
+      <section id="servicos" className="scroll-mt-20 py-24 sm:py-28" style={{ backgroundColor: "#0B1E3D" }}>
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF]">
@@ -158,10 +158,10 @@ function Index() {
               return (
                 <article
                   key={s.title}
-                  className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
+                  className="group relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:ring-[#2DD4BF]/30"
                   style={{ backgroundColor: "#0B1E3D" }}
                 >
-                  <div className="relative h-[21rem] w-full overflow-hidden">
+                  <div className="hover-zoom relative h-[21rem] w-full">
                     <img
                       src={s.photo}
                       alt={`Funcionário da Maré Nobre realizando o serviço de ${s.title.toLowerCase()}`}
@@ -171,14 +171,14 @@ function Index() {
                       className="h-full w-full object-cover object-top"
                     />
                     <div
-                      className="absolute inset-x-0 bottom-0 h-20"
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
                       style={{ background: "linear-gradient(to top, #0B1E3D, transparent)" }}
                     />
                   </div>
 
                   <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-0 text-center">
                     <div
-                      className="relative z-10 -mt-8 flex h-16 w-16 items-center justify-center rounded-full border-2"
+                      className="relative z-10 -mt-8 flex h-16 w-16 items-center justify-center rounded-full border-2 transition group-hover:scale-105"
                       style={{ backgroundColor: "#0B1E3D", borderColor: "#1CA9B5" }}
                     >
                       <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: "#1CA9B5" }} />
@@ -196,10 +196,12 @@ function Index() {
 
                     <Link
                       to="/agendar"
-                      className="mt-1 w-full rounded-xl py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                      style={{ backgroundColor: "#1CA9B5" }}
+                      aria-label={`Agendar serviço de ${s.title.toLowerCase()}`}
+                      className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition hover:brightness-110 active:scale-[0.98]"
+                      style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
                     >
                       Agendar serviço
+                      <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
                 </article>
@@ -207,8 +209,18 @@ function Index() {
             })}
           </div>
 
+          <div className="mt-12 flex justify-center">
+            <Link
+              to="/servicos"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white/90 transition hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+            >
+              Ver todos os serviços
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
+
 
       {/* How it works */}
       <HowItWorks />
