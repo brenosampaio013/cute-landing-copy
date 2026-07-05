@@ -420,13 +420,13 @@ function AdminPanel() {
           </ul>
         </Panel>
 
-        <div className="mt-8 flex justify-end">
-          <Link to="/dashboard" className="text-xs text-slate-400 hover:text-[#0A1128]">← Voltar ao dashboard do cliente</Link>
-        </div>
-      </main>
-    </div>
+      <div className="mt-8 flex justify-end">
+        <Link to="/dashboard" className="text-xs text-slate-400 hover:text-[#0A1128]">← Voltar ao dashboard do cliente</Link>
+      </div>
+    </AdminShell>
   );
 }
+
 
 /* ---------- primitives ---------- */
 function SidebarSection({ title, items, className = "" }: { title: string; items: NavItem[]; className?: string }) {
