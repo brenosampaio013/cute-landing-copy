@@ -57,27 +57,15 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
       className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
       style={{ backgroundColor: NAVY }}
     >
-      <div className="relative h-80 w-full overflow-hidden">
+      <div className="relative aspect-[7/8] w-full overflow-hidden">
         <img
           src={photo}
           alt={`Funcionário da Maré Nobre realizando o serviço de ${title.toLowerCase()}`}
           width={768}
-          height={1024}
+          height={876}
           loading="lazy"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover object-top"
         />
-
-        {/* Top brand overlay */}
-        <div
-          className="absolute inset-x-0 top-0 h-24"
-          style={{ background: "linear-gradient(to bottom, rgba(11,30,61,0.9), transparent)" }}
-        />
-        <div className="absolute inset-x-0 top-4 flex flex-col items-center">
-          <span className="font-serif text-lg tracking-[0.15em] text-white">MARÉ NOBRE</span>
-          <span className="mt-0.5 text-[10px] uppercase tracking-[0.25em] text-teal-200/90">
-            Soluções para o seu lar
-          </span>
-        </div>
 
         {/* Bottom fade into card */}
         <div
