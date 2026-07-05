@@ -25,6 +25,7 @@ import { Route as DashboardServicosRouteImport } from './routes/dashboard.servic
 import { Route as DashboardProfissionaisRouteImport } from './routes/dashboard.profissionais'
 import { Route as DashboardPerfilRouteImport } from './routes/dashboard.perfil'
 import { Route as DashboardPagamentosRouteImport } from './routes/dashboard.pagamentos'
+import { Route as DashboardMensagensRouteImport } from './routes/dashboard.mensagens'
 import { Route as DashboardEnderecosRouteImport } from './routes/dashboard.enderecos'
 import { Route as DashboardAvaliacoesRouteImport } from './routes/dashboard.avaliacoes'
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
@@ -116,6 +117,11 @@ const DashboardPagamentosRoute = DashboardPagamentosRouteImport.update({
   path: '/pagamentos',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardMensagensRoute = DashboardMensagensRouteImport.update({
+  id: '/mensagens',
+  path: '/mensagens',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardEnderecosRoute = DashboardEnderecosRouteImport.update({
   id: '/enderecos',
   path: '/enderecos',
@@ -188,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
   '/dashboard/enderecos': typeof DashboardEnderecosRoute
+  '/dashboard/mensagens': typeof DashboardMensagensRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
   '/dashboard/perfil': typeof DashboardPerfilRoute
   '/dashboard/profissionais': typeof DashboardProfissionaisRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
   '/dashboard/enderecos': typeof DashboardEnderecosRoute
+  '/dashboard/mensagens': typeof DashboardMensagensRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
   '/dashboard/perfil': typeof DashboardPerfilRoute
   '/dashboard/profissionais': typeof DashboardProfissionaisRoute
@@ -244,6 +252,7 @@ export interface FileRoutesById {
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
   '/dashboard/enderecos': typeof DashboardEnderecosRoute
+  '/dashboard/mensagens': typeof DashboardMensagensRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
   '/dashboard/perfil': typeof DashboardPerfilRoute
   '/dashboard/profissionais': typeof DashboardProfissionaisRoute
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
     | '/dashboard/enderecos'
+    | '/dashboard/mensagens'
     | '/dashboard/pagamentos'
     | '/dashboard/perfil'
     | '/dashboard/profissionais'
@@ -301,6 +311,7 @@ export interface FileRouteTypes {
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
     | '/dashboard/enderecos'
+    | '/dashboard/mensagens'
     | '/dashboard/pagamentos'
     | '/dashboard/perfil'
     | '/dashboard/profissionais'
@@ -329,6 +340,7 @@ export interface FileRouteTypes {
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
     | '/dashboard/enderecos'
+    | '/dashboard/mensagens'
     | '/dashboard/pagamentos'
     | '/dashboard/perfil'
     | '/dashboard/profissionais'
@@ -471,6 +483,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPagamentosRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/mensagens': {
+      id: '/dashboard/mensagens'
+      path: '/mensagens'
+      fullPath: '/dashboard/mensagens'
+      preLoaderRoute: typeof DashboardMensagensRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/enderecos': {
       id: '/dashboard/enderecos'
       path: '/enderecos'
@@ -549,6 +568,7 @@ interface DashboardRouteChildren {
   DashboardAjudaRoute: typeof DashboardAjudaRoute
   DashboardAvaliacoesRoute: typeof DashboardAvaliacoesRoute
   DashboardEnderecosRoute: typeof DashboardEnderecosRoute
+  DashboardMensagensRoute: typeof DashboardMensagensRoute
   DashboardPagamentosRoute: typeof DashboardPagamentosRoute
   DashboardPerfilRoute: typeof DashboardPerfilRoute
   DashboardProfissionaisRoute: typeof DashboardProfissionaisRoute
@@ -561,6 +581,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAjudaRoute: DashboardAjudaRoute,
   DashboardAvaliacoesRoute: DashboardAvaliacoesRoute,
   DashboardEnderecosRoute: DashboardEnderecosRoute,
+  DashboardMensagensRoute: DashboardMensagensRoute,
   DashboardPagamentosRoute: DashboardPagamentosRoute,
   DashboardPerfilRoute: DashboardPerfilRoute,
   DashboardProfissionaisRoute: DashboardProfissionaisRoute,
