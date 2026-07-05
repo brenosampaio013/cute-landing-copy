@@ -197,7 +197,7 @@ function SidebarSection({
               {it.to ? (
                 <Link to={it.to} className={cls} style={style}>{inner}</Link>
               ) : (
-                <button type="button" className={cls} style={style} disabled>{inner}</button>
+                <button type="button" className={`${cls} text-left`} style={style} disabled>{inner}</button>
               )}
             </li>
           );
