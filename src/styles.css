@@ -75,6 +75,10 @@
   --font-serif-bold: "Playfair Display", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-font-display: var(--font-display);
+  --gradient-hero: linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%);
+  --gradient-teal: linear-gradient(135deg, #2DD4BF 0%, #14B8A6 100%);
+  --shadow-elegant: 0 20px 50px -20px color-mix(in oklab, #0A1A2F 35%, transparent);
+  --shadow-teal: 0 12px 30px -10px color-mix(in oklab, #2DD4BF 45%, transparent);
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
