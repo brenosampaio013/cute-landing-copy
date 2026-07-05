@@ -6,11 +6,11 @@ import heroUrl from "@/assets/hero-cleaner.jpg";
 
 export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-slate-50 p-3 sm:p-6 lg:p-8">
-      <div className="mx-auto grid min-h-[calc(100vh-1.5rem)] max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200/60 lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
-        {/* Left panel */}
+    <div className="min-h-screen bg-slate-50 p-0 sm:p-4 lg:p-8">
+      <div className="mx-auto grid min-h-screen max-w-7xl overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/60 sm:min-h-[calc(100vh-2rem)] sm:rounded-3xl lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
+        {/* Brand panel — full hero on lg, compact banner on mobile/tablet */}
         <aside
-          className="relative hidden overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12"
+          className="relative overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12"
           style={{
             background:
               "linear-gradient(160deg, #051329 0%, #0A1A2F 45%, #0B2B4E 100%)",
@@ -38,35 +38,54 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
             />
             {/* Decorative wave */}
             <svg
-              className="absolute bottom-0 left-0 right-0 h-40 w-full text-[#2DD4BF]/25"
+              className="absolute bottom-0 left-0 right-0 h-24 w-full text-[#2DD4BF]/25 lg:h-40"
               viewBox="0 0 800 200"
               preserveAspectRatio="none"
               aria-hidden="true"
             >
-              <path
-                d="M0 120 Q 200 60 400 120 T 800 120 L 800 200 L 0 200 Z"
-                fill="currentColor"
-                opacity="0.35"
-              />
-              <path
-                d="M0 150 Q 200 100 400 150 T 800 150 L 800 200 L 0 200 Z"
-                fill="currentColor"
-                opacity="0.5"
-              />
+              <path d="M0 120 Q 200 60 400 120 T 800 120 L 800 200 L 0 200 Z" fill="currentColor" opacity="0.35" />
+              <path d="M0 150 Q 200 100 400 150 T 800 150 L 800 200 L 0 200 Z" fill="currentColor" opacity="0.5" />
             </svg>
           </div>
 
-          {/* Logo */}
-          <div className="relative z-10">
+          {/* Mobile / tablet compact banner */}
+          <div className="relative z-10 flex flex-col items-center gap-4 px-6 py-8 text-center sm:py-10 lg:hidden">
+            <Link to="/" className="inline-block">
+              <img src={logoUrl} alt="Maré Nobre" className="h-16 w-auto sm:h-20" />
+            </Link>
+            <h2
+              className="text-2xl leading-tight text-white sm:text-3xl"
+              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
+            >
+              Cuidado completo para o{" "}
+              <span className="relative inline-block text-[#2DD4BF]">
+                seu lar.
+                <span className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-[#2DD4BF]" />
+              </span>
+            </h2>
+            <div className="mt-2 grid w-full max-w-sm grid-cols-3 gap-3">
+              {[
+                { Icon: Sparkles, label: "Limpeza de qualidade" },
+                { Icon: ShieldCheck, label: "Profissionais confiáveis" },
+                { Icon: Leaf, label: "Soluções que transformam" },
+              ].map(({ Icon, label }) => (
+                <div key={label} className="flex flex-col items-center gap-1.5">
+                  <Icon className="h-5 w-5 text-[#2DD4BF]" strokeWidth={1.5} />
+                  <p className="text-[10px] leading-tight text-white/80">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop layout */}
+          <div className="relative z-10 hidden lg:block">
             <Link to="/" className="inline-block">
               <img src={logoUrl} alt="Maré Nobre" className="h-24 w-auto" />
             </Link>
           </div>
-
-          {/* Tagline */}
-          <div className="relative z-10 max-w-md">
+          <div className="relative z-10 hidden max-w-md lg:block">
             <h2
-              className="text-4xl leading-tight text-white sm:text-5xl"
+              className="text-4xl leading-tight text-white xl:text-5xl"
               style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
             >
               Cuidado completo
@@ -77,7 +96,6 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
                 <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-[#2DD4BF]" />
               </span>
             </h2>
-
             <div className="mt-10 grid grid-cols-3 gap-4 text-center">
               {[
                 { Icon: Sparkles, label: "Limpeza de qualidade" },
@@ -93,16 +111,14 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           </div>
         </aside>
 
-        {/* Right panel */}
-        <main className="flex flex-col items-center justify-center bg-white px-6 py-12 sm:px-12">
-          <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <img src={logoUrl} alt="Maré Nobre" className="h-14 w-auto" />
-          </div>
+        {/* Form panel */}
+        <main className="flex flex-col items-center justify-center bg-white px-5 py-8 sm:px-10 sm:py-12">
           <div className="w-full max-w-md">{children}</div>
         </main>
       </div>
     </div>
   );
+
 }
 
 export function GoogleButton({ label }: { label: string }) {
