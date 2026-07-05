@@ -260,50 +260,10 @@ function Agendar() {
               />
             </div>
 
-            <div>
-              <div className="mb-3 flex items-center gap-3">
-                <StepBadge n={4} />
-                <label className={stepLabelCls}>Cupom de desconto</label>
-              </div>
-              {cupom ? (
-                <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-emerald-600" />
-                    <span className="font-mono font-semibold text-emerald-700">{cupom.codigo}</span>
-                    <span className="text-emerald-700">−{brl(cupom.desconto)}</span>
-                  </div>
-                  <button type="button" onClick={removerCupom} className="text-slate-400 hover:text-slate-600" aria-label="Remover cupom">
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex gap-2">
-                  <input
-                    value={cupomInput}
-                    onChange={(e) => setCupomInput(e.target.value.toUpperCase())}
-                    className={`${inputCls} font-mono uppercase`}
-                    placeholder="EX: MARE10"
-                    maxLength={40}
-                  />
-                  <button
-                    type="button"
-                    onClick={aplicarCupom}
-                    disabled={validandoCupom || !cupomInput.trim()}
-                    className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
-                  >
-                    {validandoCupom ? <Loader2 className="h-4 w-4 animate-spin" /> : "Aplicar"}
-                  </button>
-                </div>
-              )}
+            <div className="rounded-xl border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-4 py-3 text-sm text-[#0A1A2F]">
+              Após o agendamento, enviaremos um orçamento personalizado para o serviço escolhido.
             </div>
 
-            <div className="space-y-1.5 rounded-xl bg-slate-50 px-4 py-3 text-sm">
-              <div className="flex justify-between text-slate-600"><span>Serviço</span><span>{brl(precoBase)}</span></div>
-              {desconto > 0 && (
-                <div className="flex justify-between text-emerald-600"><span>Desconto</span><span>−{brl(desconto)}</span></div>
-              )}
-              <div className="flex justify-between border-t border-slate-200 pt-1.5 font-semibold text-[#0A1A2F]"><span>Total</span><span>{brl(total)}</span></div>
-            </div>
 
 
 
