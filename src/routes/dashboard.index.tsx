@@ -70,8 +70,7 @@ function DashboardHome() {
     (async () => {
       setLoading(true);
       const today = new Date().toISOString().slice(0, 10);
-      const [profileRes, proxRes, listRes, avalRes] = await Promise.all([
-        supabase.from("profiles").select("nome").eq("id", user.id).maybeSingle(),
+      const [proxRes, listRes, avalRes] = await Promise.all([
         supabase
           .from("agendamentos")
           .select("*")
@@ -96,9 +95,9 @@ function DashboardHome() {
           .order("data", { ascending: false }),
       ]);
       if (cancelled) return;
-      setNome(profileRes.data?.nome ?? "");
       setProximo((proxRes.data as Agendamento | null) ?? null);
       setBookings((listRes.data as Agendamento[] | null) ?? []);
+
 
       if (proxRes.data) {
         const { data: p } = await supabase
