@@ -36,13 +36,21 @@ function ComoFunciona() {
           {steps.map((s) => (
             <div
               key={s.n}
-              className="relative flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              className="group relative flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#2DD4BF]/40 hover:shadow-xl"
             >
-              <div
-                className="flex h-16 w-16 items-center justify-center rounded-full text-white shadow-lg"
-                style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
-              >
-                <s.icon className="h-7 w-7" strokeWidth={1.75} />
+              <div className="relative">
+                <div
+                  className="flex h-16 w-16 items-center justify-center rounded-full text-white shadow-lg transition group-hover:scale-105"
+                  style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
+                >
+                  <s.icon className="h-7 w-7" strokeWidth={1.75} />
+                </div>
+                <span
+                  className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white text-[11px] font-bold text-[#0A9E8A] ring-2 ring-[#2DD4BF]/30"
+                  aria-hidden
+                >
+                  {s.n}
+                </span>
               </div>
               <span className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF]">
                 Passo {s.n}
@@ -53,6 +61,7 @@ function ComoFunciona() {
           ))}
         </div>
       </div>
+
 
       <div className="mt-16 flex justify-center">
         <Link
