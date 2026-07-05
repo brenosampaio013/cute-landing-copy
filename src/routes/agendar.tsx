@@ -320,7 +320,22 @@ function Agendar() {
           </div>
         </div>
       </form>
+
+      <div className="mt-10 grid gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+        {trustItems.map(({ icon: Icon, title, desc }) => (
+          <div key={title} className="flex items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#2DD4BF]/10 text-[#0A9E8A]">
+              <Icon className="h-5 w-5" strokeWidth={1.75} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-[#0A1A2F]">{title}</p>
+              <p className="text-xs text-slate-500">{desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </SitePage>
+
   );
 }
 
