@@ -213,7 +213,7 @@ function Index() {
           <div className="mt-12 flex justify-center">
             <Link
               to="/servicos"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white/90 transition hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-[#0A1A2F] transition hover:border-[#2DD4BF] hover:text-[#0A9E8A]"
             >
               Ver todos os serviços
               <ArrowRight className="h-4 w-4" />
