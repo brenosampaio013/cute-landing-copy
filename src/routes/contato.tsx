@@ -61,7 +61,7 @@ function Contato() {
               href={c.href}
               target={c.external ? "_blank" : undefined}
               rel={c.external ? "noopener noreferrer" : undefined}
-              className="group relative flex items-center gap-5 overflow-hidden rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2DD4BF]/40 hover:shadow-lg"
+              className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2DD4BF]/40 hover:shadow-lg sm:gap-5 sm:p-5"
             >
               <div
                 className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${c.accent} text-white shadow-md`}
