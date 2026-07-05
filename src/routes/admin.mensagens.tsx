@@ -110,7 +110,10 @@ function ChatPanel({ conversa, adminId }: { conversa: Conversa; adminId: string 
   const enviar = useEnviarMensagem();
   const marcar = useMarcarLidas();
   const [texto, setTexto] = useState("");
+  const [anexo, setAnexo] = useState<File | null>(null);
+  const [enviandoAnexo, setEnviandoAnexo] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -122,12 +125,24 @@ function ChatPanel({ conversa, adminId }: { conversa: Conversa; adminId: string 
   }, [conversa.id]);
 
   const nome = conversa.usuario?.nome || conversa.usuario?.email || "Usuário";
+  const anexoPreview = useMemo(() => (anexo ? URL.createObjectURL(anexo) : null), [anexo]);
+  useEffect(() => () => { if (anexoPreview) URL.revokeObjectURL(anexoPreview); }, [anexoPreview]);
 
-  const submit = () => {
+  const submit = async () => {
     const conteudo = texto.trim();
-    if (!conteudo) return;
-    enviar.mutate({ conversaId: conversa.id, autorId: adminId, autorTipo: "admin", conteudo });
-    setTexto("");
+    if (!conteudo && !anexo) return;
+    try {
+      setEnviandoAnexo(!!anexo);
+      let anexoUrl: string | null = null;
+      if (anexo) anexoUrl = await uploadAnexoChat(adminId, anexo);
+      await enviar.mutateAsync({ conversaId: conversa.id, autorId: adminId, autorTipo: "admin", conteudo, anexoUrl });
+      setTexto(""); setAnexo(null);
+      if (fileRef.current) fileRef.current.value = "";
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao enviar");
+    } finally {
+      setEnviandoAnexo(false);
+    }
   };
 
   return (
@@ -153,7 +168,8 @@ function ChatPanel({ conversa, adminId }: { conversa: Conversa; adminId: string 
                   className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm shadow-sm ${mine ? "text-white" : "bg-white text-[#0A1128]"}`}
                   style={mine ? { background: TEAL } : undefined}
                 >
-                  <p className="whitespace-pre-wrap break-words">{m.conteudo}</p>
+                  {m.anexo_url && <MessageImage path={m.anexo_url} />}
+                  {m.conteudo && <p className="whitespace-pre-wrap break-words">{m.conteudo}</p>}
                   <p className={`mt-1 text-[10px] ${mine ? "text-white/70" : "text-slate-400"}`}>
                     {new Date(m.created_at).toLocaleString("pt-BR", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" })}
                   </p>
@@ -165,7 +181,26 @@ function ChatPanel({ conversa, adminId }: { conversa: Conversa; adminId: string 
       </div>
 
       <footer className="border-t border-slate-100 bg-white p-4">
+        {anexoPreview && (
+          <div className="mb-2 flex items-center gap-2 rounded-lg bg-slate-50 p-2">
+            <img src={anexoPreview} alt="Prévia" className="h-16 w-16 rounded object-cover" />
+            <span className="flex-1 truncate text-xs text-slate-600">{anexo?.name}</span>
+            <button type="button" onClick={() => setAnexo(null)} className="rounded p-1 text-slate-500 hover:bg-slate-200">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
         <div className="flex items-end gap-2">
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => setAnexo(e.target.files?.[0] ?? null)}
+          />
+          <Button type="button" variant="outline" size="icon" onClick={() => fileRef.current?.click()} title="Anexar imagem">
+            <Paperclip className="h-4 w-4" />
+          </Button>
           <Textarea
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
@@ -174,7 +209,12 @@ function ChatPanel({ conversa, adminId }: { conversa: Conversa; adminId: string 
             rows={2}
             className="resize-none"
           />
-          <Button onClick={submit} disabled={!texto.trim() || enviar.isPending} className="text-white" style={{ background: TEAL }}>
+          <Button
+            onClick={submit}
+            disabled={(!texto.trim() && !anexo) || enviar.isPending || enviandoAnexo}
+            className="text-white"
+            style={{ background: TEAL }}
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>
