@@ -51,7 +51,7 @@ import { FullPageLoader } from "@/components/full-page-loader";
 import { AdminShell } from "@/components/admin/admin-shell";
 
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
       { title: "Painel Admin — Maré Nobre" },
