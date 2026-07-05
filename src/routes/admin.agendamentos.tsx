@@ -62,7 +62,29 @@ function AgendamentosPage() {
   const { user, loading } = useAuth();
   const isAdmin = useIsAdmin(user);
 
-  const [rows, setRows] = useState<Ag[]>(MOCK);
+  const { data: dataRows } = useAdminAgendamentos(isAdmin === true);
+  const [overrides, setOverrides] = useState<Record<string, Partial<Ag>>>({});
+  const [extra, setExtra] = useState<Ag[]>([]);
+  const rows = useMemo<Ag[]>(() => {
+    const base = [...extra, ...(dataRows ?? [])];
+    return base.map((r) => (overrides[r.id] ? { ...r, ...overrides[r.id] } : r));
+  }, [dataRows, overrides, extra]);
+  const setRows = (updater: (rs: Ag[]) => Ag[]) => {
+    // apply updater result and diff to build override map
+    const next = updater(rows);
+    const map: Record<string, Partial<Ag>> = { ...overrides };
+    const extraNext: Ag[] = [];
+    const baseIds = new Set((dataRows ?? []).map((r) => r.id));
+    for (const r of next) {
+      if (baseIds.has(r.id)) {
+        map[r.id] = { status: r.status, pagamento: r.pagamento };
+      } else {
+        extraNext.push(r);
+      }
+    }
+    setOverrides(map);
+    setExtra(extraNext);
+  };
   const [search, setSearch] = useState("");
   const [fStatus, setFStatus] = useState<string>("all");
   const [fServico, setFServico] = useState<string>("all");
