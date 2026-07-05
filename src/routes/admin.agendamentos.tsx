@@ -607,6 +607,7 @@ function NovoAgendamentoDialog({
   const submit = () => {
     onSave({
       id: `#${Math.floor(Math.random() * 9000 + 1000)}`,
+      rawId: crypto.randomUUID(),
       servico: form.servico || "Limpeza Residencial",
       cliente: form.cliente || "Novo cliente",
       clienteTel: "(21) 90000-0000",
