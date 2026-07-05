@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { SitePage } from "@/components/site-page";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,11 +16,21 @@ export const Route = createFileRoute("/agendar")({
 });
 
 const services = [
-  { icon: iconLimpeza.url, title: "Limpeza Padrão" },
-  { icon: iconPosObra.url, title: "Limpeza Pesada" },
-  { icon: iconPassadoria.url, title: "Passadoria" },
-  { icon: iconMontagem, title: "Montagem de Móveis" },
+  { icon: iconLimpeza.url, title: "Limpeza Padrão", preco: 180 },
+  { icon: iconPosObra.url, title: "Limpeza Pesada", preco: 350 },
+  { icon: iconPassadoria.url, title: "Passadoria", preco: 90 },
+  { icon: iconMontagem, title: "Montagem de Móveis", preco: 220 },
 ];
+
+const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+type CupomValidado = {
+  cupom_id: string;
+  codigo: string;
+  tipo: string;
+  desconto: number;
+  total_final: number;
+};
 
 function addHour(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
@@ -37,35 +47,62 @@ function Agendar() {
   const [horario, setHorario] = useState<string>("");
   const [endereco, setEndereco] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
+  const [cupomInput, setCupomInput] = useState("");
+  const [cupom, setCupom] = useState<CupomValidado | null>(null);
+  const [validandoCupom, setValidandoCupom] = useState(false);
 
+  const servicoSelecionado = services.find((s) => s.title === servico) ?? services[0];
+  const precoBase = servicoSelecionado.preco;
+  const desconto = cupom?.desconto ?? 0;
+  const total = Math.max(0, precoBase - desconto);
+
+  async function aplicarCupom() {
+    if (!cupomInput.trim()) return;
+    if (!user) { toast.error("Faça login para aplicar cupom."); return; }
+    setValidandoCupom(true);
+    const { data, error } = await supabase.rpc("validar_cupom", {
+      p_codigo: cupomInput.trim().toUpperCase(),
+      p_valor_pedido: precoBase,
+    });
+    setValidandoCupom(false);
+    if (error) { toast.error("Erro ao validar cupom."); return; }
+    const res = data as { valido: boolean; motivo?: string } & CupomValidado;
+    if (!res.valido) { toast.error(res.motivo ?? "Cupom inválido"); setCupom(null); return; }
+    setCupom({ cupom_id: res.cupom_id, codigo: res.codigo, tipo: res.tipo, desconto: Number(res.desconto), total_final: Number(res.total_final) });
+    toast.success(`Cupom aplicado: -${brl(Number(res.desconto))}`);
+  }
+
+  function removerCupom() { setCupom(null); setCupomInput(""); }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user) {
-      toast.error("Faça login para agendar.");
-      navigate({ to: "/login" });
-      return;
-    }
-    if (!servico || !data || !horario) {
-      toast.error("Preencha serviço, data e horário.");
-      return;
-    }
+    if (!user) { toast.error("Faça login para agendar."); navigate({ to: "/login" }); return; }
+    if (!servico || !data || !horario) { toast.error("Preencha serviço, data e horário."); return; }
 
-    // Validação: horário não pode estar no passado
     const inicio = new Date(`${data}T${horario}:00`);
-    if (Number.isNaN(inicio.getTime())) {
-      toast.error("Data ou horário inválido.");
-      return;
-    }
-    if (inicio.getTime() <= Date.now()) {
-      toast.error("Escolha uma data e horário futuros.");
-      return;
-    }
+    if (Number.isNaN(inicio.getTime())) { toast.error("Data ou horário inválido."); return; }
+    if (inicio.getTime() <= Date.now()) { toast.error("Escolha uma data e horário futuros."); return; }
 
     const horarioFim = addHour(horario);
     setSubmitting(true);
 
-    const { error } = await supabase.from("agendamentos").insert({
+    // Re-valida cupom no servidor antes de inserir (evita race)
+    let cupomFinal: CupomValidado | null = null;
+    if (cupom) {
+      const { data: rev, error: revErr } = await supabase.rpc("validar_cupom", {
+        p_codigo: cupom.codigo, p_valor_pedido: precoBase,
+      });
+      const r = rev as { valido: boolean; motivo?: string } & CupomValidado;
+      if (revErr || !r?.valido) {
+        setSubmitting(false);
+        toast.error(r?.motivo ?? "Cupom não é mais válido");
+        setCupom(null);
+        return;
+      }
+      cupomFinal = { cupom_id: r.cupom_id, codigo: r.codigo, tipo: r.tipo, desconto: Number(r.desconto), total_final: Number(r.total_final) };
+    }
+
+    const { data: novo, error } = await supabase.from("agendamentos").insert({
       cliente_id: user.id,
       profissional_id: null,
       servico,
@@ -74,17 +111,33 @@ function Agendar() {
       horario_fim: horarioFim,
       endereco: endereco || null,
       status: "pendente",
-    });
+    }).select("id").single();
 
-    setSubmitting(false);
-
-    if (error) {
+    if (error || !novo) {
+      setSubmitting(false);
       toast.error("Não foi possível agendar. Tente novamente.");
       return;
     }
+
+    if (cupomFinal) {
+      const { error: usoErr } = await supabase.from("cupom_usos").insert({
+        cupom_id: cupomFinal.cupom_id,
+        cliente_id: user.id,
+        agendamento_id: novo.id,
+        valor_pedido: precoBase,
+        valor_desconto: cupomFinal.desconto,
+      });
+      if (usoErr) {
+        // Agendamento criado, mas cupom não registrado — apenas avisa
+        toast.warning("Agendamento criado, mas o cupom não pôde ser registrado.");
+      }
+    }
+
+    setSubmitting(false);
     toast.success("Agendamento criado!");
     navigate({ to: "/dashboard/agendamentos" });
   }
+
 
   const today = new Date().toISOString().slice(0, 10);
   const inputCls =
@@ -191,6 +244,53 @@ function Agendar() {
                 placeholder="Rua, número, bairro e cidade"
               />
             </div>
+
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <StepBadge n={4} />
+                <label className={stepLabelCls}>Cupom de desconto</label>
+              </div>
+              {cupom ? (
+                <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Check className="h-4 w-4 text-emerald-600" />
+                    <span className="font-mono font-semibold text-emerald-700">{cupom.codigo}</span>
+                    <span className="text-emerald-700">−{brl(cupom.desconto)}</span>
+                  </div>
+                  <button type="button" onClick={removerCupom} className="text-slate-400 hover:text-slate-600" aria-label="Remover cupom">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    value={cupomInput}
+                    onChange={(e) => setCupomInput(e.target.value.toUpperCase())}
+                    className={`${inputCls} font-mono uppercase`}
+                    placeholder="EX: MARE10"
+                    maxLength={40}
+                  />
+                  <button
+                    type="button"
+                    onClick={aplicarCupom}
+                    disabled={validandoCupom || !cupomInput.trim()}
+                    className="rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+                  >
+                    {validandoCupom ? <Loader2 className="h-4 w-4 animate-spin" /> : "Aplicar"}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-1.5 rounded-xl bg-slate-50 px-4 py-3 text-sm">
+              <div className="flex justify-between text-slate-600"><span>Serviço</span><span>{brl(precoBase)}</span></div>
+              {desconto > 0 && (
+                <div className="flex justify-between text-emerald-600"><span>Desconto</span><span>−{brl(desconto)}</span></div>
+              )}
+              <div className="flex justify-between border-t border-slate-200 pt-1.5 font-semibold text-[#0A1A2F]"><span>Total</span><span>{brl(total)}</span></div>
+            </div>
+
+
 
             <div className="pt-2">
               <button
