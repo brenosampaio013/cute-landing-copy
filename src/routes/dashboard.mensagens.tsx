@@ -83,7 +83,8 @@ function MinhasMensagens() {
               return (
                 <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm shadow-sm ${mine ? "bg-[#0A1A2F] text-white" : "bg-white text-[#0A1A2F]"}`}>
-                    <p className="whitespace-pre-wrap break-words">{m.conteudo}</p>
+                    {m.anexo_url && <MessageImage path={m.anexo_url} />}
+                    {m.conteudo && <p className="whitespace-pre-wrap break-words">{m.conteudo}</p>}
                     <p className={`mt-1 text-[10px] ${mine ? "text-white/70" : "text-slate-400"}`}>
                       {new Date(m.created_at).toLocaleString("pt-BR", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" })}
                     </p>
@@ -95,7 +96,26 @@ function MinhasMensagens() {
         </div>
 
         <footer className="border-t border-slate-100 bg-white p-4">
+          {anexoPreview && (
+            <div className="mb-2 flex items-center gap-2 rounded-lg bg-slate-50 p-2">
+              <img src={anexoPreview} alt="Prévia" className="h-16 w-16 rounded object-cover" />
+              <span className="flex-1 truncate text-xs text-slate-600">{anexo?.name}</span>
+              <button type="button" onClick={() => setAnexo(null)} className="rounded p-1 text-slate-500 hover:bg-slate-200">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
           <div className="flex items-end gap-2">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => setAnexo(e.target.files?.[0] ?? null)}
+            />
+            <Button type="button" variant="outline" size="icon" onClick={() => fileRef.current?.click()} disabled={!conversa} title="Anexar imagem">
+              <Paperclip className="h-4 w-4" />
+            </Button>
             <Textarea
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
@@ -105,7 +125,11 @@ function MinhasMensagens() {
               className="resize-none"
               disabled={!conversa}
             />
-            <Button onClick={submit} disabled={!texto.trim() || !conversa || enviar.isPending} className="bg-[#2DD4BF] text-white hover:bg-[#2DD4BF]/90">
+            <Button
+              onClick={submit}
+              disabled={(!texto.trim() && !anexo) || !conversa || enviar.isPending || enviandoAnexo}
+              className="bg-[#2DD4BF] text-white hover:bg-[#2DD4BF]/90"
+            >
               <Send className="h-4 w-4" />
             </Button>
           </div>
