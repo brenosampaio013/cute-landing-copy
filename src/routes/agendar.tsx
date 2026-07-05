@@ -7,8 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-
-import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
+import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+import iconMontagem from "@/assets/icon-montagem.png";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({ meta: [{ title: "Agendar serviço — Maré Nobre" }] }),
@@ -16,11 +16,11 @@ export const Route = createFileRoute("/agendar")({
 });
 
 const services = [
-  { icon: iconLimpeza.url, title: "Limpeza Residencial" },
-  { icon: iconPosObra.url, title: "Limpeza Pós-obra" },
-  { icon: iconLimpeza.url, title: "Limpeza de Vidros" },
-  { icon: iconLimpeza.url, title: "Limpeza de Piscinas" },
-  { icon: iconJardinagem.url, title: "Jardinagem" },
+  { icon: iconLimpeza.url, title: "Limpeza Padrão" },
+  { icon: iconPosObra.url, title: "Limpeza Pesada" },
+  { icon: iconPassadoria.url, title: "Passadoria" },
+  { icon: iconMontagem, title: "Montagem de Móveis" },
+];
 ];
 
 function addHour(hhmm: string): string {
