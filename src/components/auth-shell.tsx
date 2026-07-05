@@ -16,11 +16,11 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           }}
         >
           <div className="relative z-10 flex h-full flex-col justify-between px-10 py-12 xl:px-14">
-            <Link to="/" aria-label="Ir para a página inicial" className="inline-block">
+            <Link to="/" aria-label="Ir para a página inicial" className="inline-block self-center">
               <img
                 src={logoUrl}
                 alt="Maré Nobre"
-                className="h-auto w-full max-w-[300px] xl:max-w-[340px]"
+                className="mx-auto h-auto w-full max-w-[300px] xl:max-w-[340px]"
               />
             </Link>
 
