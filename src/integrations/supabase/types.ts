@@ -177,6 +177,7 @@ export type Database = {
       }
       mensagens: {
         Row: {
+          anexo_url: string | null
           autor_id: string
           autor_tipo: Database["public"]["Enums"]["autor_mensagem"]
           conteudo: string
@@ -186,6 +187,7 @@ export type Database = {
           lida: boolean
         }
         Insert: {
+          anexo_url?: string | null
           autor_id: string
           autor_tipo: Database["public"]["Enums"]["autor_mensagem"]
           conteudo: string
@@ -195,6 +197,7 @@ export type Database = {
           lida?: boolean
         }
         Update: {
+          anexo_url?: string | null
           autor_id?: string
           autor_tipo?: Database["public"]["Enums"]["autor_mensagem"]
           conteudo?: string
