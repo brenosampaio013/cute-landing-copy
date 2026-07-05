@@ -29,6 +29,7 @@ import { Route as DashboardEnderecosRouteImport } from './routes/dashboard.ender
 import { Route as DashboardAvaliacoesRouteImport } from './routes/dashboard.avaliacoes'
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
 import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
+import { Route as AdminAgendamentosRouteImport } from './routes/admin.agendamentos'
 
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
@@ -130,10 +131,15 @@ const DashboardAgendamentosRoute = DashboardAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AdminAgendamentosRoute = AdminAgendamentosRouteImport.update({
+  id: '/agendamentos',
+  path: '/agendamentos',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agendar': typeof AgendarRoute
   '/avaliacoes': typeof AvaliacoesRoute
   '/cadastro': typeof CadastroRoute
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -155,7 +162,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agendar': typeof AgendarRoute
   '/avaliacoes': typeof AvaliacoesRoute
   '/cadastro': typeof CadastroRoute
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -177,7 +185,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/agendar': typeof AgendarRoute
   '/avaliacoes': typeof AvaliacoesRoute
   '/cadastro': typeof CadastroRoute
@@ -187,6 +195,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
+  '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profissionais'
     | '/servicos'
+    | '/admin/agendamentos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profissionais'
     | '/servicos'
+    | '/admin/agendamentos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profissionais'
     | '/servicos'
+    | '/admin/agendamentos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -267,7 +279,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AgendarRoute: typeof AgendarRoute
   AvaliacoesRoute: typeof AvaliacoesRoute
   CadastroRoute: typeof CadastroRoute
@@ -421,8 +433,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAgendamentosRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/admin/agendamentos': {
+      id: '/admin/agendamentos'
+      path: '/agendamentos'
+      fullPath: '/admin/agendamentos'
+      preLoaderRoute: typeof AdminAgendamentosRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAgendamentosRoute: typeof AdminAgendamentosRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAgendamentosRoute: AdminAgendamentosRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DashboardRouteChildren {
   DashboardAgendamentosRoute: typeof DashboardAgendamentosRoute
@@ -454,7 +483,7 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AgendarRoute: AgendarRoute,
   AvaliacoesRoute: AvaliacoesRoute,
   CadastroRoute: CadastroRoute,
