@@ -60,9 +60,8 @@ export function useUpsertAdminUsuario() {
         telefone: input.telefone?.trim() || null,
         perfil: input.perfil,
         status: input.status,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        permissoes: input.permissoes as unknown as Record<string, unknown>,
-      };
+        permissoes: input.permissoes as unknown as Record<string, string>,
+      } as never;
       if (input.id) {
         const { error } = await supabase.from("admin_profiles").update(payload).eq("id", input.id);
         if (error) throw error;
