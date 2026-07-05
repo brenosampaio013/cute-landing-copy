@@ -18,7 +18,8 @@ export const Route = createFileRoute("/agendar")({
 const services = [
   { icon: iconLimpeza.url, title: "Limpeza Residencial" },
   { icon: iconPosObra.url, title: "Limpeza Pós-obra" },
-  { icon: iconPassadoria.url, title: "Passadoria" },
+  { icon: iconLimpeza.url, title: "Limpeza de Vidros" },
+  { icon: iconLimpeza.url, title: "Limpeza de Piscinas" },
   { icon: iconJardinagem.url, title: "Jardinagem" },
 ];
 
