@@ -69,6 +69,8 @@ function Perfil() {
     await supabase.from("profiles").update({ foto_url: url }).eq("id", user.id);
     setFotoUrl(url);
     setUploading(false);
+    queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+    toast.success("Foto atualizada.");
   }
 
   async function onSave() {
@@ -80,11 +82,14 @@ function Perfil() {
       .update({ nome, telefone })
       .eq("id", user.id);
     setSaving(false);
-    setMsg(
-      error
-        ? { type: "err", text: "Erro ao salvar. Tente novamente." }
-        : { type: "ok", text: "Perfil atualizado com sucesso." }
-    );
+    if (error) {
+      setMsg({ type: "err", text: "Erro ao salvar. Tente novamente." });
+      toast.error("Erro ao salvar perfil.");
+    } else {
+      setMsg({ type: "ok", text: "Perfil atualizado com sucesso." });
+      toast.success("Perfil atualizado.");
+      queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+    }
   }
 
   if (loading) {
