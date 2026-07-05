@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Loader2, X, ShieldCheck, Clock, CalendarCheck, Headphones } from "lucide-react";
+import { Check, Loader2, X, ShieldCheck, Clock, CalendarCheck, Headphones, Waves } from "lucide-react";
 import { toast } from "sonner";
 
 import { SitePage } from "@/components/site-page";
@@ -9,7 +9,6 @@ import { useAuth } from "@/hooks/use-auth";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
 import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
-import iconMontagem from "@/assets/icon-montagem.png";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({ meta: [{ title: "Agendar serviço — Maré Nobre" }] }),
@@ -20,8 +19,9 @@ const services = [
   { icon: iconLimpeza.url, title: "Limpeza Padrão", preco: 180 },
   { icon: iconPosObra.url, title: "Limpeza Pesada", preco: 350 },
   { icon: iconPassadoria.url, title: "Passadoria", preco: 90 },
-  { icon: iconMontagem, title: "Montagem de Móveis", preco: 220 },
+  { icon: "waves" as const, title: "Limpeza de Piscina", preco: 220 },
 ];
+
 
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -198,7 +198,12 @@ function Agendar() {
                       active ? "bg-[#2DD4BF]/10" : "bg-slate-50 group-hover:bg-[#2DD4BF]/5"
                     }`}
                   >
-                    <img src={s.icon} alt="" className="h-9 w-9 object-contain" />
+                    {s.icon === "waves" ? (
+                      <Waves className="h-9 w-9 text-[#2DD4BF]" strokeWidth={1.75} />
+                    ) : (
+                      <img src={s.icon} alt="" className="h-9 w-9 object-contain" />
+                    )}
+
                   </div>
                   <span className="text-sm font-semibold text-[#0A1A2F]">{s.title}</span>
                   {active && (
