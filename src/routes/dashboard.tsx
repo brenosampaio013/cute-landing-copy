@@ -23,6 +23,7 @@ import { useProfile } from "@/hooks/queries/use-profile";
 import { useIsAdmin } from "@/hooks/queries/use-is-admin";
 import { useLogout } from "@/hooks/use-logout";
 import { FullPageLoader } from "@/components/full-page-loader";
+import { useUnreadTotalWithSound } from "@/hooks/queries/use-mensagens";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
