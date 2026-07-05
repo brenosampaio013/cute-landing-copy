@@ -117,18 +117,10 @@ function AdminPanel() {
     }
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    navigate({ to: "/" });
+  if (loading || (user && isAdmin === null)) {
+    return <FullPageLoader />;
   }
 
-  if (loading || isAdmin === null) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F5F7FA]">
-        <Loader2 className="h-6 w-6 animate-spin text-slate-500" />
-      </div>
-    );
-  }
 
   if (!isAdmin) {
     return (
