@@ -6,12 +6,17 @@ import {
   UserCheck,
   Star,
   ArrowRight,
+  Home,
+  Sparkles,
+  Shirt,
+  Wrench,
+  Clock,
 } from "lucide-react";
 import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
-import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
-import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
-import iconMontagem from "@/assets/icon-montagem.png";
+import photoPadrao from "@/assets/service-limpeza-padrao.jpg";
+import photoPesada from "@/assets/service-limpeza-pesada.jpg";
+import photoPassadoria from "@/assets/service-passadoria.jpg";
+import photoMontagem from "@/assets/service-montagem.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 
@@ -37,10 +42,10 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { icon: iconLimpeza.url, title: "Limpeza Padrão", desc: "Limpeza na medida certa para o dia a dia." },
-  { icon: iconPosObra.url, title: "Limpeza Pesada", desc: "Limpeza completa para o seu lar brilhar." },
-  { icon: iconPassadoria.url, title: "Passadoria", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
-  { icon: iconMontagem, title: "Montagem de Móveis", desc: "Montadores qualificados para todo tipo de móvel." },
+  { photo: photoPadrao, icon: Home, title: "LIMPEZA PADRÃO", desc: "Limpeza na medida certa para as necessidades do dia-a-dia." },
+  { photo: photoPesada, icon: Sparkles, title: "LIMPEZA PESADA", desc: "Limpeza com tudo que seu lar precisa para ficar brilhando." },
+  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
+  { photo: photoMontagem, icon: Wrench, title: "MONTAGEM DE MÓVEIS", desc: "Montadores qualificados para montar todo tipo de móvel." },
 ];
 
 const steps = [
