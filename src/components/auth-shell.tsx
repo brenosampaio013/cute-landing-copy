@@ -9,15 +9,17 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
       <div className="mx-auto grid min-h-screen max-w-7xl overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/60 sm:min-h-[calc(100vh-2rem)] sm:rounded-3xl lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
         {/* Brand panel */}
         <aside
-          className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between lg:p-12"
+          className="relative hidden overflow-hidden lg:flex lg:flex-col lg:items-center lg:justify-between lg:p-12"
           style={{
             background:
               "radial-gradient(120% 80% at 20% 10%, #12406B 0%, #0A1A2F 55%, #05101F 100%)",
           }}
         >
-          <Link to="/" aria-label="Ir para a página inicial" className="inline-block">
-            <img src={logoUrl} alt="Maré Nobre" className="h-20 w-auto" />
-          </Link>
+          <div className="flex flex-1 items-center justify-center">
+            <Link to="/" aria-label="Ir para a página inicial" className="inline-block">
+              <img src={logoUrl} alt="Maré Nobre" className="h-28 w-auto xl:h-32" />
+            </Link>
+          </div>
 
           <div className="relative z-10">
             <h2
