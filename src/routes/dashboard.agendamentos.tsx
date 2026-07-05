@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Calendar, Clock, Home, Loader2, Plus, Inbox, X } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
