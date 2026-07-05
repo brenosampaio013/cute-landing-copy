@@ -73,23 +73,23 @@ function Index() {
         <SiteHeader transparent />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-24 pt-28 lg:grid-cols-2 lg:pb-32 lg:pt-32">
-          <div className="max-w-xl">
+          <div className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
             <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF] backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-[#2DD4BF]" />
               Cuidado premium para o seu lar
             </span>
             <h1
-              className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl"
+              className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
               Mais que limpeza.
               <br />
               Cuidado completo para o seu lar.
             </h1>
-            <p className="mt-6 text-lg text-white/75">
+            <p className="mt-6 text-base text-white/75 sm:text-lg">
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               <Link
                 to="/agendar"
                 className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
@@ -105,7 +105,7 @@ function Index() {
                 Como funciona
               </Link>
             </div>
-            <div className="mt-8 flex items-center gap-3 text-sm">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm lg:justify-start">
               <div className="flex">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
@@ -116,15 +116,14 @@ function Index() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative flex justify-center lg:justify-end">
             <img
               src={heroCleaner.url}
               alt="Profissional Maré Nobre com kit de limpeza"
               width={1440}
               height={1080}
-              className="mx-auto h-auto w-full max-w-md rounded-2xl object-cover shadow-2xl ring-1 ring-white/10 lg:max-w-lg"
+              className="h-auto w-full max-w-sm rounded-2xl object-cover shadow-2xl ring-1 ring-white/10 sm:max-w-md lg:max-w-lg"
             />
-
           </div>
         </div>
       </section>
