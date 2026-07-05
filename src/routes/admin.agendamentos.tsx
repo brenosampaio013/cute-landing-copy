@@ -597,8 +597,8 @@ function AgendamentoDetail({ ag, onChange }: { ag: Ag; onChange: (a: Ag) => void
 
 /* ---------- New agendamento dialog ---------- */
 function NovoAgendamentoDialog({
-  open, onOpenChange, onSave,
-}: { open: boolean; onOpenChange: (o: boolean) => void; onSave: (a: Ag) => void }) {
+  open, onOpenChange, onSave, profissionais,
+}: { open: boolean; onOpenChange: (o: boolean) => void; onSave: (a: Ag) => void; profissionais: string[] }) {
   const [form, setForm] = useState({
     cliente: "", servico: "", profissional: "", data: "", hora: "", duracao: "60",
     endereco: "", valor: "", pagamento: "Pendente" as Pagamento, observacoes: "", cupom: "",
