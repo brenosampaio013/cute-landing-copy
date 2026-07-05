@@ -9,14 +9,13 @@ import {
   Home,
   Sparkles,
   Shirt,
-  Wrench,
+  Waves,
   Clock,
 } from "lucide-react";
 import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
-import photoPadrao from "@/assets/service-limpeza-padrao.jpg";
-import photoPesada from "@/assets/service-limpeza-pesada.jpg";
-import photoPassadoriaAsset from "@/assets/service-passadoria-new.jpg.asset.json";
-import photoMontagem from "@/assets/service-montagem.jpg";
+import photoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
+import photoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
+import photoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 import { InstallAppBanner } from "@/components/install-app-banner";
@@ -28,13 +27,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Cuidados premium para o seu lar. Limpeza padrão, limpeza pesada, passadoria e montagem de móveis.",
+          "Cuidados premium para o seu lar. Pós obra, passadoria e limpeza de piscina.",
       },
       { property: "og:title", content: "Maré Nobre — Soluções para o seu lar" },
       {
         property: "og:description",
         content:
-          "Cuidados premium para o seu lar. Limpeza padrão, limpeza pesada, passadoria e montagem de móveis.",
+          "Cuidados premium para o seu lar. Pós obra, passadoria e limpeza de piscina.",
       },
     ],
   }),
@@ -43,11 +42,11 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { photo: photoPadrao, icon: Home, title: "LIMPEZA PADRÃO", desc: "Limpeza na medida certa para as necessidades do dia-a-dia." },
-  { photo: photoPesada, icon: Sparkles, title: "LIMPEZA PESADA", desc: "Limpeza com tudo que seu lar precisa para ficar brilhando." },
+  { photo: photoPosObraAsset.url, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
   { photo: photoPassadoriaAsset.url, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
-  { photo: photoMontagem, icon: Wrench, title: "MONTAGEM DE MÓVEIS", desc: "Montadores qualificados para montar todo tipo de móvel." },
+  { photo: photoLimpezaPiscinaAsset.url, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
 ];
+
 
 const steps = [
   { n: 1, icon: Calendar, title: "Escolha o serviço", desc: "Selecione o serviço que você precisa." },
