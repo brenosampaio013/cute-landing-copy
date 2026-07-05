@@ -72,27 +72,27 @@ function Index() {
         />
         <SiteHeader transparent />
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-24 pt-28 lg:grid-cols-2 lg:pb-32 lg:pt-32">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-20 pt-24 sm:gap-10 sm:px-6 sm:pb-24 sm:pt-28 lg:grid-cols-2 lg:pb-32 lg:pt-32">
           <div className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
             <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF] backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-[#2DD4BF]" />
               Cuidado premium para o seu lar
             </span>
             <h1
-              className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
+              className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
               Mais que limpeza.
               <br />
               Cuidado completo para o seu lar.
             </h1>
-            <p className="mt-6 text-base text-white/75 sm:text-lg">
+            <p className="mt-5 text-sm text-white/75 sm:mt-6 sm:text-base md:text-lg">
               Profissionais qualificados, serviços de qualidade e a confiança que você merece.
             </p>
-            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center lg:justify-start">
+            <div className="mt-7 flex flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 lg:justify-start">
               <Link
                 to="/agendar"
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full px-8 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
+                className="group inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110 sm:px-8 sm:py-4 sm:text-base"
                 style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
               >
                 Agendar agora
@@ -100,7 +100,7 @@ function Index() {
               </Link>
               <Link
                 to="/como-funciona"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/25 px-8 text-base font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10"
+                className="inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-white/90 transition hover:border-white/60 hover:bg-white/10 sm:px-8 sm:py-4 sm:text-base"
               >
                 Como funciona
               </Link>
