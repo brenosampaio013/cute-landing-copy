@@ -135,13 +135,23 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
                   {l.label}
                 </Link>
               ))}
-              <Link
-                to="/login"
-                onClick={() => setOpen(false)}
-                className="mt-2 rounded-lg border border-white/25 px-3 py-2.5 text-center text-sm font-medium text-white sm:hidden"
-              >
-                Entrar
-              </Link>
+              {user ? (
+                <Link
+                  to="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-lg bg-[#2DD4BF] px-3 py-2.5 text-center text-sm font-semibold text-white sm:hidden"
+                >
+                  Meu painel
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 rounded-lg border border-white/25 px-3 py-2.5 text-center text-sm font-medium text-white sm:hidden"
+                >
+                  Entrar
+                </Link>
+              )}
             </nav>
           </div>
         </div>
