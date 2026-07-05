@@ -65,6 +65,37 @@ function AgendamentosPage() {
   const { user, loading } = useAuth();
   const isAdmin = useIsAdmin(user);
 
+  const qc = useQueryClient();
+  const STATUS_TO_DB: Record<Status, "pendente" | "confirmado" | "concluido" | "cancelado"> = {
+    Pendente: "pendente", Confirmado: "confirmado", Concluído: "concluido", Cancelado: "cancelado",
+  };
+  const invalidateAll = () => {
+    qc.invalidateQueries({ queryKey: ["admin-agendamentos"] });
+    qc.invalidateQueries({ queryKey: ["admin-dashboard"] });
+  };
+  const updateStatusMut = useMutation({
+    mutationFn: async ({ rawId, status }: { rawId: string; status: Status }) => {
+      const { error } = await supabase
+        .from("agendamentos").update({ status: STATUS_TO_DB[status] }).eq("id", rawId);
+      if (error) throw error;
+    },
+    onSuccess: (_d, v) => { invalidateAll(); toast.success(`Agendamento marcado como ${v.status}.`); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const reagendarMut = useMutation({
+    mutationFn: async ({ rawId, data, hora, duracao }: { rawId: string; data: string; hora: string; duracao: number }) => {
+      const [h, m] = hora.split(":").map(Number);
+      const endMin = h * 60 + m + duracao;
+      const horario_fim = `${String(Math.floor(endMin / 60)).padStart(2, "0")}:${String(endMin % 60).padStart(2, "0")}:00`;
+      const { error } = await supabase
+        .from("agendamentos").update({ data, horario_inicio: `${hora}:00`, horario_fim }).eq("id", rawId);
+      if (error) throw error;
+    },
+    onSuccess: () => { invalidateAll(); toast.success("Agendamento reagendado."); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+
   const { data: dataRows } = useAdminAgendamentos(isAdmin === true);
   const [overrides, setOverrides] = useState<Record<string, Partial<Ag>>>({});
   const [extra, setExtra] = useState<Ag[]>([]);
