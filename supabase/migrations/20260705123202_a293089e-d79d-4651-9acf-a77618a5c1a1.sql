@@ -1,0 +1,1 @@
+CREATE POLICY "Admins leem todas avaliacoes" ON public.avaliacoes FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
