@@ -36,11 +36,12 @@ const bucketKey = (d: Date, g: PeriodoRange["granularidade"]) =>
   g === "hora" ? format(d, "HH'h'") : g === "dia" ? format(d, "dd/MM") : format(d, "MMM", { locale: ptBR });
 
 export function useRelatorios(p: Periodo, custom?: { from?: Date; to?: Date }) {
-  const range = calcRange(p, custom);
+  const fromMs = custom?.from?.getTime() ?? null;
+  const toMs = custom?.to?.getTime() ?? null;
   return useQuery({
-    queryKey: ["relatorios", p, range.from.toISOString(), range.to.toISOString()],
+    queryKey: ["relatorios", p, fromMs, toMs],
     staleTime: 60_000,
-    queryFn: async () => compute(range),
+    queryFn: async () => compute(calcRange(p, custom)),
   });
 }
 
