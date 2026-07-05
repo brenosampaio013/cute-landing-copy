@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { Send, Headset } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Send, Headset, Paperclip, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useMinhaConversa, useMensagens, useEnviarMensagem, useMarcarLidas } from "@/hooks/queries/use-mensagens";
+import { useMinhaConversa, useMensagens, useEnviarMensagem, useMarcarLidas, uploadAnexoChat } from "@/hooks/queries/use-mensagens";
+import { MessageImage } from "@/components/chat/message-image";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard/mensagens")({
   head: () => ({ meta: [{ title: "Mensagens — Maré Nobre" }, { name: "robots", content: "noindex" }] }),
