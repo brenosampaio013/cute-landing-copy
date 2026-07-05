@@ -45,54 +45,14 @@ export const Route = createFileRoute("/admin/agendamentos")({
   component: AgendamentosPage,
 });
 
-/* ---------- mock data ---------- */
+/* ---------- constants ---------- */
 type Status = "Pendente" | "Confirmado" | "Concluído" | "Cancelado";
 type Pagamento = "Pago" | "Pendente" | "Estornado";
-type Ag = {
-  id: string;
-  servico: string;
-  cliente: string;
-  clienteTel: string;
-  clienteEndereco: string;
-  profissional: string;
-  profRating: number;
-  data: string; // YYYY-MM-DD
-  hora: string; // HH:mm
-  duracao: number; // minutes
-  status: Status;
-  pagamento: Pagamento;
-  valor: number;
-  observacoes?: string;
-};
+type Ag = AgendamentoRow;
 
-const CLIENTES = ["Ana Paula Santos", "Juliana Mendes", "Carlos Alberto", "Roberto Silva", "Fernanda Costa", "Beatriz Ramos", "Paulo Henrique", "Larissa Alves", "Rodrigo Nunes", "Camila Duarte"];
-const PROFISSIONAIS = ["Maria Eduarda", "Carla Oliveira", "João Pedro", "Ana Paula", "Fábio Torres", "Sônia Ribeiro"];
 const SERVICOS = ["Limpeza Residencial", "Passadoria", "Limpeza Pós-obra", "Hidráulica", "Elétrica", "Jardinagem"];
 const STATUS: Status[] = ["Pendente", "Confirmado", "Concluído", "Cancelado"];
 const PAGAMENTOS: Pagamento[] = ["Pago", "Pendente", "Estornado"];
-const ENDERECOS = ["Rua das Flores, 123 - Botafogo", "Av. Atlântica, 500 - Copacabana", "Rua Voluntários, 88 - Icaraí", "Rua da Praia, 45 - Ingá"];
-
-function seed(i: number) {
-  const day = new Date();
-  day.setDate(day.getDate() + ((i % 20) - 8));
-  return {
-    id: `#12${(80 - i).toString().padStart(2, "0")}`,
-    servico: SERVICOS[i % SERVICOS.length],
-    cliente: CLIENTES[i % CLIENTES.length],
-    clienteTel: `(21) 9${(80000000 + i * 1234).toString().slice(0, 8)}`,
-    clienteEndereco: ENDERECOS[i % ENDERECOS.length],
-    profissional: PROFISSIONAIS[i % PROFISSIONAIS.length],
-    profRating: 4 + ((i * 3) % 10) / 10,
-    data: day.toISOString().slice(0, 10),
-    hora: `${8 + (i % 10)}:${i % 2 ? "30" : "00"}`,
-    duracao: [60, 90, 120, 180][i % 4],
-    status: STATUS[i % STATUS.length],
-    pagamento: PAGAMENTOS[i % PAGAMENTOS.length],
-    valor: 80 + (i % 8) * 45,
-    observacoes: i % 3 === 0 ? "Atenção: cliente possui pet." : undefined,
-  } satisfies Ag;
-}
-const MOCK: Ag[] = Array.from({ length: 42 }, (_, i) => seed(i));
 
 const TABS = ["Todos", "Pendentes", "Confirmados", "Concluídos", "Cancelados"] as const;
 
