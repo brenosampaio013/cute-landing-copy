@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+
 import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
 
 export const Route = createFileRoute("/servicos")({
