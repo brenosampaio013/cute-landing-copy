@@ -1,35 +1,74 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import loginBg from "@/assets/login-bg.png.asset.json";
+import { ShieldCheck, Sparkles, Leaf } from "lucide-react";
 import logoUrl from "@/assets/logo.png";
 
 export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50 p-0 sm:p-4 lg:p-8">
       <div className="mx-auto grid min-h-screen max-w-7xl overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/60 sm:min-h-[calc(100vh-2rem)] sm:rounded-3xl lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
-        {/* Brand panel — full artwork background */}
-        <aside className="relative hidden overflow-hidden bg-[#0A1A2F] lg:block">
-          <Link to="/" className="absolute inset-0 z-10" aria-label="Ir para a página inicial">
-            <div
-              className="h-full w-full"
-              style={{
-                backgroundImage: `url(${loginBg.url})`,
-                backgroundSize: "auto 100%",
-                backgroundPosition: "left center",
-                backgroundRepeat: "no-repeat",
-              }}
-            />
+        {/* Brand panel */}
+        <aside
+          className="relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between lg:p-12"
+          style={{
+            background:
+              "radial-gradient(120% 80% at 20% 10%, #12406B 0%, #0A1A2F 55%, #05101F 100%)",
+          }}
+        >
+          <Link to="/" aria-label="Ir para a página inicial" className="inline-block">
+            <img src={logoUrl} alt="Maré Nobre" className="h-20 w-auto" />
           </Link>
-        </aside>
 
+          <div className="relative z-10">
+            <h2
+              className="text-4xl leading-tight text-white xl:text-5xl"
+              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
+            >
+              Cuidado completo
+              <br />
+              para o <span className="text-[#2DD4BF]">seu lar.</span>
+            </h2>
+            <div className="mt-3 h-1 w-16 rounded-full bg-[#2DD4BF]" />
+
+            <div className="mt-10 grid grid-cols-3 gap-4 text-center text-white/85">
+              <div className="flex flex-col items-center gap-2">
+                <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
+                  <Sparkles className="h-5 w-5 text-[#2DD4BF]" />
+                </div>
+                <span className="text-xs">Limpeza de qualidade</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
+                  <ShieldCheck className="h-5 w-5 text-[#2DD4BF]" />
+                </div>
+                <span className="text-xs">Profissionais confiáveis</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
+                  <Leaf className="h-5 w-5 text-[#2DD4BF]" />
+                </div>
+                <span className="text-xs">Soluções que transformam</span>
+              </div>
+            </div>
+          </div>
+
+          {/* subtle wave decoration */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 opacity-40"
+            style={{
+              background:
+                "radial-gradient(60% 100% at 50% 100%, rgba(45,212,191,0.35) 0%, transparent 70%)",
+            }}
+          />
+        </aside>
 
         {/* Mobile compact header */}
         <div
-          className="relative flex flex-col items-center justify-center overflow-hidden bg-[#0A1A2F] px-6 py-8 lg:hidden"
+          className="relative flex flex-col items-center justify-center overflow-hidden px-6 py-8 lg:hidden"
           style={{
-            backgroundImage: `linear-gradient(180deg, rgba(5,19,41,0.55) 0%, rgba(10,26,47,0.85) 100%), url(${loginBg.url})`,
-            backgroundSize: "200% auto",
-            backgroundPosition: "left center",
+            background:
+              "radial-gradient(120% 80% at 20% 10%, #12406B 0%, #0A1A2F 55%, #05101F 100%)",
           }}
         >
           <Link to="/" className="inline-block">
