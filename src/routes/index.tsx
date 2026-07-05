@@ -13,6 +13,7 @@ import iconPosObra from "@/assets/icon-posobra.png.asset.json";
 import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
 import iconJardinagem from "@/assets/icon-jardinagem.png.asset.json";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-page";
 
 export const Route = createFileRoute("/")({
   head: () => ({
