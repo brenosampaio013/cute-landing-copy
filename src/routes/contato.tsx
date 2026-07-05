@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, Send } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 
 export const Route = createFileRoute("/contato")({
@@ -27,9 +27,8 @@ function Contato() {
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <div className="space-y-3">
           {[
-            { icon: Mail, label: "E-mail", value: "contato@marenobre.com" },
-            { icon: Phone, label: "Telefone", value: "0800 123 4567" },
-            { icon: MapPin, label: "Endereço", value: "Av. Paulista, 1000 — São Paulo, SP" },
+            { icon: Phone, label: "WhatsApp", value: "(13) 99806-8265" },
+            { icon: Mail, label: "E-mail", value: "atendimentomarenobre@gmail.com" },
           ].map((c) => (
             <div
               key={c.label}
