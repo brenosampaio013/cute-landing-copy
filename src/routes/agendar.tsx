@@ -198,7 +198,12 @@ function Agendar() {
                       active ? "bg-[#2DD4BF]/10" : "bg-slate-50 group-hover:bg-[#2DD4BF]/5"
                     }`}
                   >
-                    <img src={s.icon} alt="" className="h-9 w-9 object-contain" />
+                    {s.icon === "waves" ? (
+                      <Waves className="h-9 w-9 text-[#2DD4BF]" strokeWidth={1.75} />
+                    ) : (
+                      <img src={s.icon} alt="" className="h-9 w-9 object-contain" />
+                    )}
+
                   </div>
                   <span className="text-sm font-semibold text-[#0A1A2F]">{s.title}</span>
                   {active && (
