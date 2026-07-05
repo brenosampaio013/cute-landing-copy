@@ -25,7 +25,8 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           style={{
             backgroundImage: `linear-gradient(180deg, rgba(5,19,41,0.55) 0%, rgba(10,26,47,0.85) 100%), url(${loginBg.url})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition: "left center",
+
           }}
         >
           <Link to="/" className="inline-block">
