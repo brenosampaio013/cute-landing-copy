@@ -72,7 +72,7 @@ function ServicosPage() {
               </div>
 
               {/* Body */}
-              <div className="flex flex-1 flex-col items-center px-6 pb-6 -mt-10 text-center">
+              <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-6 -mt-10 text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#2DD4BF] bg-[#0A1A2F]">
                   <Icon className="h-7 w-7 text-[#2DD4BF]" strokeWidth={1.75} />
                 </div>
