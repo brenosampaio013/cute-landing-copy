@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { WhatsappFab } from "../components/whatsapp-fab";
 import { supabase } from "../integrations/supabase/client";
+import { Toaster } from "../components/ui/sonner";
 
 
 function NotFoundComponent() {
@@ -82,14 +83,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google", content: "notranslate" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Maré Nobre — Serviços para o seu lar" },
+      { name: "description", content: "Agende serviços domésticos com profissionais verificados: limpeza, jardinagem, manutenção e mais. Rápido, seguro e sem burocracia." },
+      { name: "author", content: "Maré Nobre" },
+      { property: "og:title", content: "Maré Nobre — Serviços para o seu lar" },
+      { property: "og:description", content: "Agende serviços domésticos com profissionais verificados. Rápido, seguro e sem burocracia." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Maré Nobre — Serviços para o seu lar" },
+      { name: "twitter:description", content: "Agende serviços domésticos com profissionais verificados." },
       { name: "theme-color", content: "#0A1A2F" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
@@ -139,6 +141,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <WhatsappFab />
+      <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
 }

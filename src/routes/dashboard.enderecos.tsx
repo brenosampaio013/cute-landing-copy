@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, MapPin, Plus, Star, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -53,26 +54,43 @@ function Enderecos() {
   async function salvar() {
     if (!user) return;
     setSaving(true);
-    await supabase.from("enderecos").insert({
+    const { error } = await supabase.from("enderecos").insert({
       cliente_id: user.id,
       ...form,
       principal: items.length === 0,
     });
     setSaving(false);
+    if (error) {
+      toast.error("Não foi possível salvar o endereço.");
+      return;
+    }
+    toast.success("Endereço adicionado.");
     setForm(emptyForm);
     setOpen(false);
     load();
   }
 
   async function remover(id: string) {
-    await supabase.from("enderecos").delete().eq("id", id);
+    if (!confirm("Remover este endereço?")) return;
+    const { error } = await supabase.from("enderecos").delete().eq("id", id);
+    if (error) {
+      toast.error("Não foi possível remover.");
+      return;
+    }
+    toast.success("Endereço removido.");
     load();
   }
 
   async function tornarPrincipal(id: string) {
     if (!user) return;
-    await supabase.from("enderecos").update({ principal: false }).eq("cliente_id", user.id);
-    await supabase.from("enderecos").update({ principal: true }).eq("id", id);
+    const { error: e1 } = await supabase.from("enderecos").update({ principal: false }).eq("cliente_id", user.id);
+    const { error: e2 } = await supabase.from("enderecos").update({ principal: true }).eq("id", id);
+    if (e1 || e2) {
+      toast.error("Não foi possível definir como principal.");
+      load();
+      return;
+    }
+    toast.success("Endereço principal atualizado.");
     load();
   }
 

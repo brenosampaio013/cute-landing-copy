@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -12,6 +14,7 @@ export const Route = createFileRoute("/dashboard/perfil")({
 
 function Perfil() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -66,6 +69,8 @@ function Perfil() {
     await supabase.from("profiles").update({ foto_url: url }).eq("id", user.id);
     setFotoUrl(url);
     setUploading(false);
+    queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+    toast.success("Foto atualizada.");
   }
 
   async function onSave() {
@@ -77,11 +82,14 @@ function Perfil() {
       .update({ nome, telefone })
       .eq("id", user.id);
     setSaving(false);
-    setMsg(
-      error
-        ? { type: "err", text: "Erro ao salvar. Tente novamente." }
-        : { type: "ok", text: "Perfil atualizado com sucesso." }
-    );
+    if (error) {
+      setMsg({ type: "err", text: "Erro ao salvar. Tente novamente." });
+      toast.error("Erro ao salvar perfil.");
+    } else {
+      setMsg({ type: "ok", text: "Perfil atualizado com sucesso." });
+      toast.success("Perfil atualizado.");
+      queryClient.invalidateQueries({ queryKey: ["profile", user.id] });
+    }
   }
 
   if (loading) {
