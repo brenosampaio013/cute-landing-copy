@@ -19,39 +19,48 @@ export type Database = {
           cliente_id: string
           created_at: string
           data: string
+          desconto: number
           endereco: string | null
           horario_fim: string
           horario_inicio: string
           id: string
+          preco: number | null
           profissional_id: string | null
           servico: string
           status: Database["public"]["Enums"]["booking_status"]
+          total: number | null
           updated_at: string
         }
         Insert: {
           cliente_id: string
           created_at?: string
           data: string
+          desconto?: number
           endereco?: string | null
           horario_fim: string
           horario_inicio: string
           id?: string
+          preco?: number | null
           profissional_id?: string | null
           servico: string
           status?: Database["public"]["Enums"]["booking_status"]
+          total?: number | null
           updated_at?: string
         }
         Update: {
           cliente_id?: string
           created_at?: string
           data?: string
+          desconto?: number
           endereco?: string | null
           horario_fim?: string
           horario_inicio?: string
           id?: string
+          preco?: number | null
           profissional_id?: string | null
           servico?: string
           status?: Database["public"]["Enums"]["booking_status"]
+          total?: number | null
           updated_at?: string
         }
         Relationships: []
