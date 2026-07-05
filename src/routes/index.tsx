@@ -57,15 +57,27 @@ function Index() {
       <section
         id="inicio"
         className="relative overflow-hidden text-white"
-        style={{
-          background:
-            "linear-gradient(160deg, #00132a 0%, #001a36 55%, #022543 100%)",
-        }}
+        style={{ background: "var(--gradient-hero)" }}
       >
+        {/* Decorative glows */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full opacity-30 blur-3xl"
+          style={{ background: "radial-gradient(circle, #2DD4BF 0%, transparent 70%)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-32 -bottom-20 h-96 w-96 rounded-full opacity-20 blur-3xl"
+          style={{ background: "radial-gradient(circle, #3B82F6 0%, transparent 70%)" }}
+        />
         <SiteHeader transparent />
 
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-20 pt-10 lg:grid-cols-2 lg:pb-28 lg:pt-16">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-24 pt-28 lg:grid-cols-2 lg:pb-32 lg:pt-32">
           <div className="max-w-xl">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF] backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#2DD4BF]" />
+              Cuidado premium para o seu lar
+            </span>
             <h1
               className="text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
