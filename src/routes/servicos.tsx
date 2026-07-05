@@ -30,10 +30,16 @@ const services = [
     features: ["Remoção de resíduos", "Vidros e pisos", "Equipe especializada"],
   },
   {
-    icon: iconPassadoria.url,
-    title: "Passadoria",
-    desc: "Suas roupas cuidadas com todo carinho.",
-    features: ["Passar e dobrar", "Peças delicadas", "Entrega organizada"],
+    icon: iconLimpeza.url,
+    title: "Limpeza de Vidros",
+    desc: "Vidros brilhando e sem marcas.",
+    features: ["Interno e externo", "Sem escorridos", "Equipamento próprio"],
+  },
+  {
+    icon: iconLimpeza.url,
+    title: "Limpeza de Piscinas",
+    desc: "Água cristalina e piscina impecável.",
+    features: ["Aspiração e escovação", "Tratamento químico", "Manutenção periódica"],
   },
   {
     icon: iconJardinagem.url,
