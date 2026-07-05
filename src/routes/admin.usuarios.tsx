@@ -24,24 +24,17 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import {
+  useAdminUsuarios, useUpsertAdminUsuario, useToggleAdminUsuario, useDeleteAdminUsuario,
+  type AdminUsuario, type Perfil, type StatusU, type Modulo, type Nivel, type Permissoes,
+} from "@/hooks/queries/use-admin-usuarios";
 
 export const Route = createFileRoute("/admin/usuarios")({
   head: () => ({ meta: [{ title: "Usuários — Painel Admin | Maré Nobre" }, { name: "robots", content: "noindex" }] }),
   component: UsuariosPage,
 });
 
-// ------------------------------------------------------------------ Tipos
-type Perfil = "administrador" | "gerente" | "suporte" | "financeiro" | "operador";
-type StatusU = "ativo" | "inativo" | "pendente";
-type Modulo = "agendamentos" | "servicos" | "profissionais" | "clientes" | "pagamentos" | "cupons" | "relatorios" | "configuracoes";
-type Nivel = "nenhum" | "visualizar" | "editar";
-type Permissoes = Record<Modulo, Nivel>;
-type Atividade = { quando: string; texto: string };
-type Usuario = {
-  id: string; nome: string; email: string; telefone?: string; perfil: Perfil;
-  status: StatusU; ultimoAcesso: string | null; criadoEm: string;
-  permissoes: Permissoes; atividades: Atividade[];
-};
+type Usuario = AdminUsuario;
 
 const PERFIL_LABEL: Record<Perfil, string> = {
   administrador: "Administrador", gerente: "Gerente", suporte: "Suporte",
@@ -83,65 +76,18 @@ const PERFIL_DESC: Record<Perfil, string> = {
   operador: "Executa e atualiza agendamentos do dia a dia.",
 };
 
-const MOCK: Usuario[] = [
-  {
-    id: "u1", nome: "Ana Beatriz Costa", email: "ana.costa@marenobre.com.br", telefone: "(21) 99123-4567",
-    perfil: "administrador", status: "ativo", ultimoAcesso: "2026-07-05T09:20:00", criadoEm: "2025-11-14T10:00:00",
-    permissoes: PERM_PADRAO.administrador,
-    atividades: [
-      { quando: "2026-07-05T09:22:00", texto: "Alterou configurações de pagamento" },
-      { quando: "2026-07-04T18:11:00", texto: "Aprovou o profissional João Pedro" },
-      { quando: "2026-07-03T14:03:00", texto: "Editou o agendamento #1258" },
-    ],
-  },
-  {
-    id: "u2", nome: "Rafael Menezes", email: "rafael.menezes@marenobre.com.br", telefone: "(21) 98877-1122",
-    perfil: "gerente", status: "ativo", ultimoAcesso: "2026-07-05T08:45:00", criadoEm: "2025-12-02T09:30:00",
-    permissoes: PERM_PADRAO.gerente,
-    atividades: [
-      { quando: "2026-07-05T08:52:00", texto: "Criou o cupom BEMVINDO15" },
-      { quando: "2026-07-04T16:40:00", texto: "Reagendou 3 atendimentos" },
-    ],
-  },
-  {
-    id: "u3", nome: "Camila Ribeiro", email: "camila.ribeiro@marenobre.com.br",
-    perfil: "suporte", status: "ativo", ultimoAcesso: "2026-07-04T19:12:00", criadoEm: "2026-01-18T11:22:00",
-    permissoes: PERM_PADRAO.suporte,
-    atividades: [{ quando: "2026-07-04T19:10:00", texto: "Atualizou endereço da cliente Marta S." }],
-  },
-  {
-    id: "u4", nome: "Diego Alencar", email: "diego.alencar@marenobre.com.br", telefone: "(21) 97654-3210",
-    perfil: "financeiro", status: "ativo", ultimoAcesso: "2026-07-03T17:05:00", criadoEm: "2026-02-05T14:00:00",
-    permissoes: PERM_PADRAO.financeiro,
-    atividades: [{ quando: "2026-07-03T17:00:00", texto: "Conciliou 42 pagamentos" }],
-  },
-  {
-    id: "u5", nome: "Larissa Andrade", email: "larissa.andrade@marenobre.com.br",
-    perfil: "operador", status: "inativo", ultimoAcesso: "2026-05-20T10:00:00", criadoEm: "2026-01-30T09:00:00",
-    permissoes: PERM_PADRAO.operador, atividades: [],
-  },
-  {
-    id: "u6", nome: "Thiago Nunes", email: "thiago.nunes@marenobre.com.br",
-    perfil: "suporte", status: "pendente", ultimoAcesso: null, criadoEm: "2026-07-01T15:30:00",
-    permissoes: PERM_PADRAO.suporte, atividades: [],
-  },
-  {
-    id: "u7", nome: "Patrícia Lopes", email: "patricia.lopes@marenobre.com.br",
-    perfil: "gerente", status: "pendente", ultimoAcesso: null, criadoEm: "2026-07-04T12:10:00",
-    permissoes: PERM_PADRAO.gerente, atividades: [],
-  },
-];
-
-// ------------------------------------------------------------------ Helpers
 const initials = (n: string) => n.trim().split(/\s+/).slice(0, 2).map((s) => s[0]?.toUpperCase() ?? "").join("");
 const fmtDateTime = (iso: string | null) => iso ? format(new Date(iso), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR }) : "—";
 const fmtDate = (iso: string) => format(new Date(iso), "dd/MM/yyyy", { locale: ptBR });
 
-// ------------------------------------------------------------------ Página
 function UsuariosPage() {
   const { user, loading } = useAuth();
   const isAdmin = useIsAdmin(user);
-  const [lista, setLista] = useState<Usuario[]>(MOCK);
+  const { data: lista = [], isLoading } = useAdminUsuarios();
+  const upsert = useUpsertAdminUsuario();
+  const toggle = useToggleAdminUsuario();
+  const remove = useDeleteAdminUsuario();
+
   const [busca, setBusca] = useState("");
   const [perfilF, setPerfilF] = useState<"todos" | Perfil>("todos");
   const [statusF, setStatusF] = useState<"todos" | StatusU>("todos");
@@ -175,24 +121,37 @@ function UsuariosPage() {
   const abrirNovo = () => { setEditando(null); setModalAberto(true); };
   const abrirEdicao = (u: Usuario) => { setEditando(u); setModalAberto(true); };
 
-  const salvarUsuario = (u: Usuario, enviarConvite: boolean) => {
-    setLista((prev) => {
-      const existe = prev.some((p) => p.id === u.id);
-      return existe ? prev.map((p) => (p.id === u.id ? u : p)) : [u, ...prev];
-    });
-    setModalAberto(false);
-    toast.success(editando ? "Usuário atualizado" : `Usuário criado${enviarConvite ? " — convite enviado por e-mail" : ""}`);
+  const salvarUsuario = async (u: Usuario, enviarConvite: boolean) => {
+    try {
+      await upsert.mutateAsync({
+        id: editando ? u.id : undefined,
+        nome: u.nome, email: u.email, telefone: u.telefone,
+        perfil: u.perfil, status: u.status, permissoes: u.permissoes,
+      });
+      setModalAberto(false);
+      toast.success(editando ? "Usuário atualizado" : `Usuário criado${enviarConvite ? " — convite enviado por e-mail" : ""}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao salvar");
+    }
   };
 
-  const toggleAtivo = (u: Usuario) => {
-    setLista((prev) => prev.map((p) => p.id === u.id ? { ...p, status: p.status === "ativo" ? "inativo" : "ativo" } : p));
-    toast.success(u.status === "ativo" ? "Usuário desativado" : "Usuário ativado");
+  const toggleAtivo = async (u: Usuario) => {
+    try {
+      await toggle.mutateAsync(u);
+      toast.success(u.status === "ativo" ? "Usuário desativado" : "Usuário ativado");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao atualizar");
+    }
   };
   const redefinirSenha = (u: Usuario) => toast.success(`Link de redefinição enviado para ${u.email}`);
-  const excluir = (u: Usuario) => {
-    setLista((prev) => prev.filter((p) => p.id !== u.id));
-    setExcluindo(null);
-    toast.success("Acesso removido");
+  const excluir = async (u: Usuario) => {
+    try {
+      await remove.mutateAsync(u.id);
+      setExcluindo(null);
+      toast.success("Acesso removido");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao remover");
+    }
   };
 
   return (
@@ -206,7 +165,6 @@ function UsuariosPage() {
         </Button>
       }
     >
-      {/* KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard label="Total de usuários" value={kpis.total} icon={<UsersIcon className="h-5 w-5" />} tint="slate" />
         <KpiCard label="Usuários ativos" value={kpis.ativos} icon={<Power className="h-5 w-5" />} tint="emerald" />
@@ -214,7 +172,6 @@ function UsuariosPage() {
         <KpiCard label="Pendentes de ativação" value={kpis.pendentes} icon={<Clock3 className="h-5 w-5" />} tint="amber" highlight={kpis.pendentes > 0} />
       </div>
 
-      {/* Filtros */}
       <Panel className="mt-6">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative min-w-[240px] flex-1">
@@ -238,9 +195,7 @@ function UsuariosPage() {
         </div>
       </Panel>
 
-      {/* Tabela / cards */}
       <Panel className="mt-6 !p-0">
-        {/* Desktop */}
         <div className="hidden overflow-x-auto lg:block">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-slate-100 bg-slate-50/60">
@@ -265,9 +220,9 @@ function UsuariosPage() {
                   </td>
                   <td className="px-5 py-3 text-slate-600">{u.email}</td>
                   <td className="px-5 py-3"><Badge className={PERFIL_BADGE[u.perfil]}>{PERFIL_LABEL[u.perfil]}</Badge></td>
-                  <td className="px-5 py-3 text-slate-600">{fmtDateTime(u.ultimoAcesso)}</td>
+                  <td className="px-5 py-3 text-slate-600">{fmtDateTime(u.ultimo_acesso)}</td>
                   <td className="px-5 py-3"><Badge className={STATUS_BADGE[u.status]}>{STATUS_LABEL[u.status]}</Badge></td>
-                  <td className="px-5 py-3 text-slate-600">{fmtDate(u.criadoEm)}</td>
+                  <td className="px-5 py-3 text-slate-600">{fmtDate(u.created_at)}</td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setDetalhe(u)}><Eye className="h-4 w-4" /></Button>
@@ -277,13 +232,14 @@ function UsuariosPage() {
                 </tr>
               ))}
               {!filtrada.length && (
-                <tr><td colSpan={7} className="px-5 py-10 text-center text-sm text-slate-500">Nenhum usuário encontrado.</td></tr>
+                <tr><td colSpan={7} className="px-5 py-10 text-center text-sm text-slate-500">
+                  {isLoading ? "Carregando..." : "Nenhum usuário encontrado."}
+                </td></tr>
               )}
             </tbody>
           </table>
         </div>
 
-        {/* Mobile / tablet */}
         <div className="space-y-3 p-4 lg:hidden">
           {filtrada.map((u) => (
             <div key={u.id} className="rounded-xl border border-slate-100 p-4">
@@ -301,15 +257,18 @@ function UsuariosPage() {
                 <Badge className={PERFIL_BADGE[u.perfil]}>{PERFIL_LABEL[u.perfil]}</Badge>
                 <Badge className={STATUS_BADGE[u.status]}>{STATUS_LABEL[u.status]}</Badge>
               </div>
-              <p className="mt-2 text-xs text-slate-500">Último acesso: {fmtDateTime(u.ultimoAcesso)}</p>
+              <p className="mt-2 text-xs text-slate-500">Último acesso: {fmtDateTime(u.ultimo_acesso)}</p>
               <Button variant="outline" size="sm" className="mt-3 w-full" onClick={() => setDetalhe(u)}>Ver detalhes</Button>
             </div>
           ))}
-          {!filtrada.length && <p className="py-10 text-center text-sm text-slate-500">Nenhum usuário encontrado.</p>}
+          {!filtrada.length && (
+            <p className="py-10 text-center text-sm text-slate-500">
+              {isLoading ? "Carregando..." : "Nenhum usuário encontrado."}
+            </p>
+          )}
         </div>
       </Panel>
 
-      {/* Perfis de acesso */}
       <Panel className="mt-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
@@ -340,7 +299,6 @@ function UsuariosPage() {
         </div>
       </Panel>
 
-      {/* Modal criar/editar */}
       <UsuarioDialog
         open={modalAberto}
         onOpenChange={setModalAberto}
@@ -348,10 +306,8 @@ function UsuariosPage() {
         onSalvar={salvarUsuario}
       />
 
-      {/* Drawer detalhes */}
       <DetalheDrawer u={detalhe} onOpenChange={(o) => !o && setDetalhe(null)} onEdit={(u) => { setDetalhe(null); abrirEdicao(u); }} onReset={redefinirSenha} onToggle={toggleAtivo} />
 
-      {/* Confirmação exclusão */}
       <AlertDialog open={!!excluindo} onOpenChange={(o) => !o && setExcluindo(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -367,7 +323,6 @@ function UsuariosPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Gerenciar perfis (visual/mock) */}
       <Dialog open={perfisAberto} onOpenChange={setPerfisAberto}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
@@ -404,7 +359,6 @@ function UsuariosPage() {
   );
 }
 
-// ------------------------------------------------------------------ Componentes auxiliares
 function KpiCard({ label, value, icon, tint, highlight }: { label: string; value: number; icon: React.ReactNode; tint: "slate" | "emerald" | "violet" | "amber"; highlight?: boolean }) {
   const tintMap: Record<string, string> = {
     slate: "bg-slate-100 text-slate-700",
@@ -454,7 +408,6 @@ function RowMenu({ u, onEdit, onReset, onToggle, onDelete }: { u: Usuario; onEdi
   );
 }
 
-// ------------------------------------------------------------------ Modal criar/editar
 function UsuarioDialog({ open, onOpenChange, editando, onSalvar }: {
   open: boolean; onOpenChange: (o: boolean) => void; editando: Usuario | null;
   onSalvar: (u: Usuario, enviarConvite: boolean) => void;
@@ -462,7 +415,6 @@ function UsuarioDialog({ open, onOpenChange, editando, onSalvar }: {
   const [form, setForm] = useState<Usuario>(() => vazio());
   const [convite, setConvite] = useState(true);
 
-  // reset quando abrir
   useMemoReset(open, () => {
     setForm(editando ? { ...editando, permissoes: { ...editando.permissoes } } : vazio());
     setConvite(!editando);
@@ -544,7 +496,6 @@ function UsuarioDialog({ open, onOpenChange, editando, onSalvar }: {
   );
 }
 
-// ------------------------------------------------------------------ Drawer detalhes
 function DetalheDrawer({ u, onOpenChange, onEdit, onReset, onToggle }: {
   u: Usuario | null; onOpenChange: (o: boolean) => void;
   onEdit: (u: Usuario) => void; onReset: (u: Usuario) => void; onToggle: (u: Usuario) => void;
@@ -572,23 +523,8 @@ function DetalheDrawer({ u, onOpenChange, onEdit, onReset, onToggle }: {
             <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
               <InfoRow icon={<Mail className="h-4 w-4" />} label="E-mail" value={u.email} />
               <InfoRow icon={<Phone className="h-4 w-4" />} label="Telefone" value={u.telefone ?? "—"} />
-              <InfoRow icon={<Clock3 className="h-4 w-4" />} label="Último acesso" value={fmtDateTime(u.ultimoAcesso)} />
-              <InfoRow icon={<Clock3 className="h-4 w-4" />} label="Criado em" value={fmtDate(u.criadoEm)} />
-            </div>
-
-            <div className="mt-6">
-              <p className="mb-2 text-sm font-semibold text-[#0A1128]">Atividades recentes</p>
-              {u.atividades.length ? (
-                <ol className="relative space-y-3 border-l border-slate-200 pl-4">
-                  {u.atividades.map((a, i) => (
-                    <li key={i} className="relative">
-                      <span className="absolute -left-[22px] top-1.5 h-2.5 w-2.5 rounded-full" style={{ background: TEAL }} />
-                      <p className="text-sm text-slate-700">{a.texto}</p>
-                      <p className="text-xs text-slate-500">{fmtDateTime(a.quando)}</p>
-                    </li>
-                  ))}
-                </ol>
-              ) : <p className="text-sm text-slate-500">Sem atividades registradas.</p>}
+              <InfoRow icon={<Clock3 className="h-4 w-4" />} label="Último acesso" value={fmtDateTime(u.ultimo_acesso)} />
+              <InfoRow icon={<Clock3 className="h-4 w-4" />} label="Criado em" value={fmtDate(u.created_at)} />
             </div>
 
             <div className="mt-6">
@@ -602,7 +538,7 @@ function DetalheDrawer({ u, onOpenChange, onEdit, onReset, onToggle }: {
                     {MODULOS.map((m) => (
                       <tr key={m.id} className="border-t border-slate-100">
                         <td className="px-3 py-2 text-slate-700">{m.label}</td>
-                        <td className="px-3 py-2"><NivelPill nivel={u.permissoes[m.id]} /></td>
+                        <td className="px-3 py-2"><NivelPill nivel={u.permissoes[m.id] ?? "nenhum"} /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -632,16 +568,16 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
   );
 }
 
-// ------------------------------------------------------------------ Utils
 function vazio(): Usuario {
+  const now = new Date().toISOString();
   return {
-    id: crypto.randomUUID(), nome: "", email: "", telefone: "", perfil: "operador",
-    status: "pendente", ultimoAcesso: null, criadoEm: new Date().toISOString(),
-    permissoes: { ...PERM_PADRAO.operador }, atividades: [],
+    id: crypto.randomUUID(), user_id: null, nome: "", email: "", telefone: "",
+    perfil: "operador", status: "pendente",
+    permissoes: { ...PERM_PADRAO.operador },
+    ultimo_acesso: null, created_at: now, updated_at: now,
   };
 }
 
-// pequeno hook: roda callback quando `dep` muda para true
 function useMemoReset(dep: boolean, fn: () => void) {
   const [prev, setPrev] = useState(dep);
   if (prev !== dep) { setPrev(dep); if (dep) fn(); }
