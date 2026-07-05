@@ -86,6 +86,7 @@ async function fetchAgendamentos() {
     const prof = r.profissional_id ? profileById.get(r.profissional_id) : null;
     return {
       id: `#${r.id.slice(0, 6).toUpperCase()}`,
+      rawId: r.id,
       servico: r.servico,
       cliente: cli?.nome ?? "—",
       clienteTel: cli?.telefone ?? "—",
