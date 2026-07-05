@@ -58,6 +58,7 @@ function DashboardLayout() {
   const isAdmin = useIsAdmin(user);
   const handleLogout = useLogout("/");
   const [open, setOpen] = useState(false);
+  const unread = useUnreadTotalWithSound("usuario", !!user, user);
 
   const nav: NavItem[] = isAdmin
     ? [...NAV, { label: "Painel Admin", icon: Shield, to: "/admin" }]
