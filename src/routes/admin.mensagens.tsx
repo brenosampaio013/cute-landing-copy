@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Search, Send, MessageSquare } from "lucide-react";
+import { Search, Send, MessageSquare, Paperclip, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/queries/use-is-admin";
 import { FullPageLoader } from "@/components/full-page-loader";
@@ -8,7 +8,9 @@ import { AdminShell, TEAL } from "@/components/admin/admin-shell";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useAdminConversas, useMensagens, useEnviarMensagem, useMarcarLidas, type Conversa } from "@/hooks/queries/use-mensagens";
+import { useAdminConversas, useMensagens, useEnviarMensagem, useMarcarLidas, uploadAnexoChat, type Conversa } from "@/hooks/queries/use-mensagens";
+import { MessageImage } from "@/components/chat/message-image";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/mensagens")({
   head: () => ({ meta: [{ title: "Mensagens — Painel Admin | Maré Nobre" }, { name: "robots", content: "noindex" }] }),
