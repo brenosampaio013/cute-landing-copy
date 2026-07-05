@@ -22,8 +22,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardServicosRouteImport } from './routes/dashboard.servicos'
+import { Route as DashboardProfissionaisRouteImport } from './routes/dashboard.profissionais'
 import { Route as DashboardPerfilRouteImport } from './routes/dashboard.perfil'
 import { Route as DashboardPagamentosRouteImport } from './routes/dashboard.pagamentos'
+import { Route as DashboardEnderecosRouteImport } from './routes/dashboard.enderecos'
+import { Route as DashboardAvaliacoesRouteImport } from './routes/dashboard.avaliacoes'
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
 import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
 
@@ -92,6 +95,11 @@ const DashboardServicosRoute = DashboardServicosRouteImport.update({
   path: '/servicos',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardProfissionaisRoute = DashboardProfissionaisRouteImport.update({
+  id: '/profissionais',
+  path: '/profissionais',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardPerfilRoute = DashboardPerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
@@ -100,6 +108,16 @@ const DashboardPerfilRoute = DashboardPerfilRouteImport.update({
 const DashboardPagamentosRoute = DashboardPagamentosRouteImport.update({
   id: '/pagamentos',
   path: '/pagamentos',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEnderecosRoute = DashboardEnderecosRouteImport.update({
+  id: '/enderecos',
+  path: '/enderecos',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAvaliacoesRoute = DashboardAvaliacoesRouteImport.update({
+  id: '/avaliacoes',
+  path: '/avaliacoes',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardAjudaRoute = DashboardAjudaRouteImport.update({
@@ -127,8 +145,11 @@ export interface FileRoutesByFullPath {
   '/servicos': typeof ServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
+  '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
+  '/dashboard/enderecos': typeof DashboardEnderecosRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
   '/dashboard/perfil': typeof DashboardPerfilRoute
+  '/dashboard/profissionais': typeof DashboardProfissionaisRoute
   '/dashboard/servicos': typeof DashboardServicosRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -145,8 +166,11 @@ export interface FileRoutesByTo {
   '/servicos': typeof ServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
+  '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
+  '/dashboard/enderecos': typeof DashboardEnderecosRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
   '/dashboard/perfil': typeof DashboardPerfilRoute
+  '/dashboard/profissionais': typeof DashboardProfissionaisRoute
   '/dashboard/servicos': typeof DashboardServicosRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -165,8 +189,11 @@ export interface FileRoutesById {
   '/servicos': typeof ServicosRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
+  '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
+  '/dashboard/enderecos': typeof DashboardEnderecosRoute
   '/dashboard/pagamentos': typeof DashboardPagamentosRoute
   '/dashboard/perfil': typeof DashboardPerfilRoute
+  '/dashboard/profissionais': typeof DashboardProfissionaisRoute
   '/dashboard/servicos': typeof DashboardServicosRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -186,8 +213,11 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
+    | '/dashboard/avaliacoes'
+    | '/dashboard/enderecos'
     | '/dashboard/pagamentos'
     | '/dashboard/perfil'
+    | '/dashboard/profissionais'
     | '/dashboard/servicos'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -204,8 +234,11 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
+    | '/dashboard/avaliacoes'
+    | '/dashboard/enderecos'
     | '/dashboard/pagamentos'
     | '/dashboard/perfil'
+    | '/dashboard/profissionais'
     | '/dashboard/servicos'
     | '/dashboard'
   id:
@@ -223,8 +256,11 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
+    | '/dashboard/avaliacoes'
+    | '/dashboard/enderecos'
     | '/dashboard/pagamentos'
     | '/dashboard/perfil'
+    | '/dashboard/profissionais'
     | '/dashboard/servicos'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -336,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardServicosRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/profissionais': {
+      id: '/dashboard/profissionais'
+      path: '/profissionais'
+      fullPath: '/dashboard/profissionais'
+      preLoaderRoute: typeof DashboardProfissionaisRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/perfil': {
       id: '/dashboard/perfil'
       path: '/perfil'
@@ -348,6 +391,20 @@ declare module '@tanstack/react-router' {
       path: '/pagamentos'
       fullPath: '/dashboard/pagamentos'
       preLoaderRoute: typeof DashboardPagamentosRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/enderecos': {
+      id: '/dashboard/enderecos'
+      path: '/enderecos'
+      fullPath: '/dashboard/enderecos'
+      preLoaderRoute: typeof DashboardEnderecosRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/avaliacoes': {
+      id: '/dashboard/avaliacoes'
+      path: '/avaliacoes'
+      fullPath: '/dashboard/avaliacoes'
+      preLoaderRoute: typeof DashboardAvaliacoesRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/ajuda': {
@@ -370,8 +427,11 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteChildren {
   DashboardAgendamentosRoute: typeof DashboardAgendamentosRoute
   DashboardAjudaRoute: typeof DashboardAjudaRoute
+  DashboardAvaliacoesRoute: typeof DashboardAvaliacoesRoute
+  DashboardEnderecosRoute: typeof DashboardEnderecosRoute
   DashboardPagamentosRoute: typeof DashboardPagamentosRoute
   DashboardPerfilRoute: typeof DashboardPerfilRoute
+  DashboardProfissionaisRoute: typeof DashboardProfissionaisRoute
   DashboardServicosRoute: typeof DashboardServicosRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -379,8 +439,11 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAgendamentosRoute: DashboardAgendamentosRoute,
   DashboardAjudaRoute: DashboardAjudaRoute,
+  DashboardAvaliacoesRoute: DashboardAvaliacoesRoute,
+  DashboardEnderecosRoute: DashboardEnderecosRoute,
   DashboardPagamentosRoute: DashboardPagamentosRoute,
   DashboardPerfilRoute: DashboardPerfilRoute,
+  DashboardProfissionaisRoute: DashboardProfissionaisRoute,
   DashboardServicosRoute: DashboardServicosRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
