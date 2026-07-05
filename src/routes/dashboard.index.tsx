@@ -3,6 +3,8 @@ import { Calendar, Clock, Home, Star, ChevronRight, CheckCircle2, Loader2, Inbox
 import { useEffect, useState, type ComponentType, type SVGProps } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useProfile } from "@/hooks/queries/use-profile";
+
 
 export const Route = createFileRoute("/dashboard/")({
   head: () => ({ meta: [{ title: "Dashboard — Maré Nobre" }] }),
