@@ -14,6 +14,7 @@ export const Route = createFileRoute("/dashboard/perfil")({
 
 function Perfil() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
