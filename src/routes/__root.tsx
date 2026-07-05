@@ -141,6 +141,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <WhatsappFab />
+      <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
 }
