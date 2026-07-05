@@ -41,7 +41,7 @@ function passwordStrength(pwd: string): { score: 0 | 1 | 2 | 3; label: string; c
 
 function Cadastro() {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"cliente" | "profissional">("cliente");
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -92,7 +92,8 @@ function Cadastro() {
         data: {
           nome: name.trim(),
           telefone: phone,
-          tipo_usuario: tab,
+          tipo_usuario: "cliente",
+
         },
       },
     });
@@ -140,30 +141,6 @@ function Cadastro() {
         Encontre os melhores profissionais para o seu lar
       </p>
 
-      <div className="mt-6 inline-flex w-full rounded-lg bg-slate-100 p-1 text-sm font-semibold">
-        <button
-          type="button"
-          onClick={() => setTab("cliente")}
-          className={`flex-1 rounded-md px-3 py-2 transition ${
-            tab === "cliente"
-              ? "bg-[#2DD4BF] text-white shadow-sm"
-              : "text-slate-500 hover:text-slate-700"
-          }`}
-        >
-          Sou cliente
-        </button>
-        <button
-          type="button"
-          onClick={() => setTab("profissional")}
-          className={`flex-1 rounded-md px-3 py-2 transition ${
-            tab === "profissional"
-              ? "bg-[#2DD4BF] text-white shadow-sm"
-              : "text-slate-500 hover:text-slate-700"
-          }`}
-        >
-          Sou profissional
-        </button>
-      </div>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
         <div>
