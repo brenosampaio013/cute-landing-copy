@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
 
 import { SitePage } from "@/components/site-page";
-import fotoPosObraAsset from "@/assets/service-pos-obra-new.jpg.asset.json";
-import fotoPassadoriaAsset from "@/assets/service-passadoria-new.jpg.asset.json";
-import fotoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-new.jpg.asset.json";
+import fotoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
+import fotoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
+import fotoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -73,16 +73,15 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
           style={{ background: `linear-gradient(to top, ${NAVY}, transparent)` }}
         />
 
-        {/* Circular icon badge */}
+      </div>
+
+      <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-0 text-center">
         <div
-          className="absolute -bottom-8 left-1/2 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full border-2"
+          className="relative z-10 -mt-8 flex h-16 w-16 items-center justify-center rounded-full border-2"
           style={{ backgroundColor: NAVY, borderColor: TEAL }}
         >
           <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: TEAL }} />
         </div>
-      </div>
-
-      <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-12 text-center">
         <h3 className="text-xl font-bold uppercase tracking-wide text-white">{title}</h3>
         <p className="max-w-[260px] text-sm leading-relaxed text-slate-300">{desc}</p>
 
