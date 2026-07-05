@@ -137,43 +137,46 @@ function Index() {
       </section>
 
       {/* Services */}
-      <section id="servicos" className="bg-[#fafbfc] py-24">
+      <section id="servicos" className="bg-[#F7F8FA] py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#0A9E8A]">
+              O que oferecemos
+            </span>
             <h2
-              className="text-4xl font-bold text-brand-navy sm:text-5xl"
+              className="mt-4 text-4xl text-[#0A1A2F] sm:text-5xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
               Nossos serviços
             </h2>
-            <div className="mx-auto mt-4 h-1 w-20 rounded-full bg-[#2DD4BF]" />
+            <p className="mx-auto mt-4 max-w-xl text-base text-slate-500">
+              Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
+            </p>
           </div>
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((s) => (
-              <div
+              <Link
                 key={s.title}
-                className="group flex flex-col items-center rounded-2xl border border-slate-200/70 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-slate-200"
+                to="/agendar"
+                className="group flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#2DD4BF]/40 hover:shadow-2xl hover:shadow-slate-200/70"
               >
-                <div className="flex h-24 w-24 items-center justify-center">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#2DD4BF]/5 transition group-hover:bg-[#2DD4BF]/10">
                   <img
                     src={s.icon}
-                    alt={s.title}
-                    width={96}
-                    height={96}
+                    alt=""
+                    width={72}
+                    height={72}
                     loading="lazy"
-                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-brand-navy">{s.title}</h3>
-                <p className="mt-2 text-sm text-slate-500">{s.desc}</p>
-                <a
-                  href="#"
-                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2DD4BF] hover:text-[#14b8a6]"
-                >
+                <h3 className="mt-6 text-lg font-bold text-[#0A1A2F]">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.desc}</p>
+                <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#2DD4BF] transition group-hover:text-[#0A9E8A]">
                   Agendar
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </a>
-              </div>
+                </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -182,11 +185,7 @@ function Index() {
       {/* How it works */}
       <HowItWorks />
 
-
-      {/* Footer */}
-      <footer id="contato" className="bg-brand-navy-deep py-10 text-center text-sm text-white/60">
-        <p>© {new Date().getFullYear()} Maré Nobre — Soluções para o seu lar.</p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
