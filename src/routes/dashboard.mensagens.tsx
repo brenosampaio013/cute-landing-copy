@@ -21,7 +21,10 @@ function MinhasMensagens() {
   const enviar = useEnviarMensagem();
   const marcar = useMarcarLidas();
   const [texto, setTexto] = useState("");
+  const [anexo, setAnexo] = useState<File | null>(null);
+  const [enviandoAnexo, setEnviandoAnexo] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -34,11 +37,24 @@ function MinhasMensagens() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversa?.id]);
 
-  const submit = () => {
+  const anexoPreview = useMemo(() => (anexo ? URL.createObjectURL(anexo) : null), [anexo]);
+  useEffect(() => () => { if (anexoPreview) URL.revokeObjectURL(anexoPreview); }, [anexoPreview]);
+
+  const submit = async () => {
     const conteudo = texto.trim();
-    if (!conteudo || !user || !conversa) return;
-    enviar.mutate({ conversaId: conversa.id, autorId: user.id, autorTipo: "usuario", conteudo });
-    setTexto("");
+    if ((!conteudo && !anexo) || !user || !conversa) return;
+    try {
+      setEnviandoAnexo(!!anexo);
+      let anexoUrl: string | null = null;
+      if (anexo) anexoUrl = await uploadAnexoChat(user.id, anexo);
+      await enviar.mutateAsync({ conversaId: conversa.id, autorId: user.id, autorTipo: "usuario", conteudo, anexoUrl });
+      setTexto(""); setAnexo(null);
+      if (fileRef.current) fileRef.current.value = "";
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao enviar");
+    } finally {
+      setEnviandoAnexo(false);
+    }
   };
 
   return (
