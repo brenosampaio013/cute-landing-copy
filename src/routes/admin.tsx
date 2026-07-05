@@ -48,6 +48,8 @@ import { useIsAdmin } from "@/hooks/queries/use-is-admin";
 import { useProfile } from "@/hooks/queries/use-profile";
 import { useAdminDashboard } from "@/hooks/queries/use-admin-dashboard";
 import { FullPageLoader } from "@/components/full-page-loader";
+import { AdminShell } from "@/components/admin/admin-shell";
+
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -152,75 +154,8 @@ function AdminPanel() {
   const fin = data?.financeiro;
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
-      {/* SIDEBAR */}
-      <aside
-        className="sticky top-0 hidden h-screen w-[240px] shrink-0 flex-col text-white lg:flex"
-        style={{ background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_2} 100%)` }}
-      >
-        <div className="px-6 pb-6 pt-7">
-          <div className="flex items-center gap-2">
-            <Waves className="h-6 w-6" style={{ color: TEAL }} />
-            <span className="text-lg font-bold tracking-wide">MARÉ NOBRE</span>
-          </div>
-          <p className="mt-1 text-[10px] font-medium tracking-[0.14em] text-white/45">
-            SOLUÇÕES PARA O SEU LAR
-          </p>
-        </div>
+    <AdminShell active="dashboard" title="Dashboard">
 
-        <nav className="flex-1 overflow-y-auto px-3 pb-4">
-          <SidebarSection title="PRINCIPAL" items={PRINCIPAL} />
-          <SidebarSection title="GERENCIAMENTO" items={GERENCIAMENTO} className="mt-6" />
-        </nav>
-
-        <div className="px-3 pb-5">
-          <div className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-3 ring-1 ring-white/10">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style={{ background: TEAL_SOFT, color: TEAL }}>
-              <HelpCircle className="h-4 w-4" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-semibold">Precisa de ajuda?</p>
-              <p className="truncate text-[11px] text-white/60">Central de ajuda</p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* CONTENT */}
-      <main className="min-w-0 flex-1 px-5 py-6 sm:px-8 lg:px-10">
-        {/* HEADER */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-[#0A1128]">Dashboard</h1>
-            <p className="mt-0.5 text-sm text-slate-500">
-              Bem-vindo(a) de volta, {displayName?.split(" ")[0] ?? "Admin"}! 👋
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="relative hidden sm:block">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input
-                type="search"
-                placeholder="Buscar..."
-                className="h-10 w-64 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand)]/20"
-                style={{ ["--brand" as string]: TEAL }}
-              />
-            </div>
-            <button className="relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 hover:text-[#0A1128]">
-              <Bell className="h-5 w-5" />
-            </button>
-            <button className="flex items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-3 shadow-sm ring-1 ring-slate-200">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full font-semibold text-white" style={{ background: TEAL }}>
-                {initial}
-              </div>
-              <div className="text-left">
-                <p className="text-xs font-semibold text-[#0A1128]">Admin</p>
-                <p className="text-[10px] text-slate-500">Administrador</p>
-              </div>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
-            </button>
-          </div>
-        </div>
 
         {/* KPIs */}
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -487,13 +422,13 @@ function AdminPanel() {
           </ul>
         </Panel>
 
-        <div className="mt-8 flex justify-end">
-          <Link to="/dashboard" className="text-xs text-slate-400 hover:text-[#0A1128]">← Voltar ao dashboard do cliente</Link>
-        </div>
-      </main>
-    </div>
+      <div className="mt-8 flex justify-end">
+        <Link to="/dashboard" className="text-xs text-slate-400 hover:text-[#0A1128]">← Voltar ao dashboard do cliente</Link>
+      </div>
+    </AdminShell>
   );
 }
+
 
 /* ---------- primitives ---------- */
 function SidebarSection({ title, items, className = "" }: { title: string; items: NavItem[]; className?: string }) {
