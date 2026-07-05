@@ -47,35 +47,62 @@ function Agendar() {
   const [horario, setHorario] = useState<string>("");
   const [endereco, setEndereco] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
+  const [cupomInput, setCupomInput] = useState("");
+  const [cupom, setCupom] = useState<CupomValidado | null>(null);
+  const [validandoCupom, setValidandoCupom] = useState(false);
 
+  const servicoSelecionado = services.find((s) => s.title === servico) ?? services[0];
+  const precoBase = servicoSelecionado.preco;
+  const desconto = cupom?.desconto ?? 0;
+  const total = Math.max(0, precoBase - desconto);
+
+  async function aplicarCupom() {
+    if (!cupomInput.trim()) return;
+    if (!user) { toast.error("Faça login para aplicar cupom."); return; }
+    setValidandoCupom(true);
+    const { data, error } = await supabase.rpc("validar_cupom", {
+      p_codigo: cupomInput.trim().toUpperCase(),
+      p_valor_pedido: precoBase,
+    });
+    setValidandoCupom(false);
+    if (error) { toast.error("Erro ao validar cupom."); return; }
+    const res = data as { valido: boolean; motivo?: string } & CupomValidado;
+    if (!res.valido) { toast.error(res.motivo ?? "Cupom inválido"); setCupom(null); return; }
+    setCupom({ cupom_id: res.cupom_id, codigo: res.codigo, tipo: res.tipo, desconto: Number(res.desconto), total_final: Number(res.total_final) });
+    toast.success(`Cupom aplicado: -${brl(Number(res.desconto))}`);
+  }
+
+  function removerCupom() { setCupom(null); setCupomInput(""); }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user) {
-      toast.error("Faça login para agendar.");
-      navigate({ to: "/login" });
-      return;
-    }
-    if (!servico || !data || !horario) {
-      toast.error("Preencha serviço, data e horário.");
-      return;
-    }
+    if (!user) { toast.error("Faça login para agendar."); navigate({ to: "/login" }); return; }
+    if (!servico || !data || !horario) { toast.error("Preencha serviço, data e horário."); return; }
 
-    // Validação: horário não pode estar no passado
     const inicio = new Date(`${data}T${horario}:00`);
-    if (Number.isNaN(inicio.getTime())) {
-      toast.error("Data ou horário inválido.");
-      return;
-    }
-    if (inicio.getTime() <= Date.now()) {
-      toast.error("Escolha uma data e horário futuros.");
-      return;
-    }
+    if (Number.isNaN(inicio.getTime())) { toast.error("Data ou horário inválido."); return; }
+    if (inicio.getTime() <= Date.now()) { toast.error("Escolha uma data e horário futuros."); return; }
 
     const horarioFim = addHour(horario);
     setSubmitting(true);
 
-    const { error } = await supabase.from("agendamentos").insert({
+    // Re-valida cupom no servidor antes de inserir (evita race)
+    let cupomFinal: CupomValidado | null = null;
+    if (cupom) {
+      const { data: rev, error: revErr } = await supabase.rpc("validar_cupom", {
+        p_codigo: cupom.codigo, p_valor_pedido: precoBase,
+      });
+      const r = rev as { valido: boolean; motivo?: string } & CupomValidado;
+      if (revErr || !r?.valido) {
+        setSubmitting(false);
+        toast.error(r?.motivo ?? "Cupom não é mais válido");
+        setCupom(null);
+        return;
+      }
+      cupomFinal = { cupom_id: r.cupom_id, codigo: r.codigo, tipo: r.tipo, desconto: Number(r.desconto), total_final: Number(r.total_final) };
+    }
+
+    const { data: novo, error } = await supabase.from("agendamentos").insert({
       cliente_id: user.id,
       profissional_id: null,
       servico,
@@ -84,17 +111,33 @@ function Agendar() {
       horario_fim: horarioFim,
       endereco: endereco || null,
       status: "pendente",
-    });
+    }).select("id").single();
 
-    setSubmitting(false);
-
-    if (error) {
+    if (error || !novo) {
+      setSubmitting(false);
       toast.error("Não foi possível agendar. Tente novamente.");
       return;
     }
+
+    if (cupomFinal) {
+      const { error: usoErr } = await supabase.from("cupom_usos").insert({
+        cupom_id: cupomFinal.cupom_id,
+        cliente_id: user.id,
+        agendamento_id: novo.id,
+        valor_pedido: precoBase,
+        valor_desconto: cupomFinal.desconto,
+      });
+      if (usoErr) {
+        // Agendamento criado, mas cupom não registrado — apenas avisa
+        toast.warning("Agendamento criado, mas o cupom não pôde ser registrado.");
+      }
+    }
+
+    setSubmitting(false);
     toast.success("Agendamento criado!");
     navigate({ to: "/dashboard/agendamentos" });
   }
+
 
   const today = new Date().toISOString().slice(0, 10);
   const inputCls =
