@@ -21,7 +21,6 @@ const services = [
   { icon: iconPassadoria.url, title: "Passadoria" },
   { icon: iconMontagem, title: "Montagem de Móveis" },
 ];
-];
 
 function addHour(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
