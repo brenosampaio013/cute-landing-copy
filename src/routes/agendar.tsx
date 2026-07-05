@@ -157,27 +157,9 @@ function Agendar() {
             <div>
               <div className="mb-3 flex items-center gap-3">
                 <StepBadge n={2} />
-                <label className={stepLabelCls}>Profissional</label>
-              </div>
-              <select
-                value={profissionalId}
-                onChange={(e) => setProfissionalId(e.target.value)}
-                className={`${inputCls} appearance-none cursor-pointer`}
-              >
-                <option value="">Sem preferência</option>
-                {pros.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nome || "Profissional"}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <div className="mb-3 flex items-center gap-3">
-                <StepBadge n={3} />
                 <label className={stepLabelCls}>Data e horário</label>
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <input
                   type="date"
