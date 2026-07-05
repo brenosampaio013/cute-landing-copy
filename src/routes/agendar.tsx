@@ -9,7 +9,6 @@ import { useAuth } from "@/hooks/use-auth";
 import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
 import iconPosObra from "@/assets/icon-posobra.png.asset.json";
 import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
-import iconMontagem from "@/assets/icon-montagem.png";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({ meta: [{ title: "Agendar serviço — Maré Nobre" }] }),
@@ -20,8 +19,9 @@ const services = [
   { icon: iconLimpeza.url, title: "Limpeza Padrão", preco: 180 },
   { icon: iconPosObra.url, title: "Limpeza Pesada", preco: 350 },
   { icon: iconPassadoria.url, title: "Passadoria", preco: 90 },
-  { icon: iconMontagem, title: "Montagem de Móveis", preco: 220 },
+  { icon: "waves" as const, title: "Limpeza de Piscina", preco: 220 },
 ];
+
 
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
