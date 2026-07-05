@@ -53,13 +53,13 @@ function Avaliacoes() {
         ))}
       </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
         {reviews.map((r) => (
           <div
             key={r.name}
-            className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-6"
           >
-            <Quote className="absolute right-5 top-5 h-10 w-10 text-[#2DD4BF]/10" aria-hidden />
+            <Quote className="pointer-events-none absolute right-4 top-4 h-9 w-9 text-[#2DD4BF]/10" aria-hidden />
 
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
@@ -71,7 +71,9 @@ function Avaliacoes() {
                   <p className="truncate text-xs text-slate-400">{r.role}</p>
                 </div>
               </div>
-              <span className="shrink-0 text-xs text-slate-400">{r.when}</span>
+              <span className="shrink-0 whitespace-nowrap text-[11px] text-slate-400 sm:text-xs">
+                {r.when}
+              </span>
             </div>
 
             <div className="mt-4 flex gap-0.5">
@@ -85,9 +87,11 @@ function Avaliacoes() {
               ))}
             </div>
 
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{r.text}</p>
+            <p className="mt-3 flex-1 text-[13.5px] leading-relaxed text-slate-600 sm:text-sm">
+              {r.text}
+            </p>
 
-            <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-[#0A9E8A]">
+            <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#0A9E8A]">
               <BadgeCheck className="h-4 w-4" />
               Compra verificada
             </div>
