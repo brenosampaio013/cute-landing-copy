@@ -24,24 +24,19 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import {
+  useAdminUsuarios, useUpsertAdminUsuario, useToggleAdminUsuario, useDeleteAdminUsuario,
+  type AdminUsuario, type Perfil, type StatusU, type Modulo, type Nivel, type Permissoes,
+} from "@/hooks/queries/use-admin-usuarios";
 
 export const Route = createFileRoute("/admin/usuarios")({
   head: () => ({ meta: [{ title: "Usuários — Painel Admin | Maré Nobre" }, { name: "robots", content: "noindex" }] }),
   component: UsuariosPage,
 });
 
-// ------------------------------------------------------------------ Tipos
-type Perfil = "administrador" | "gerente" | "suporte" | "financeiro" | "operador";
-type StatusU = "ativo" | "inativo" | "pendente";
-type Modulo = "agendamentos" | "servicos" | "profissionais" | "clientes" | "pagamentos" | "cupons" | "relatorios" | "configuracoes";
-type Nivel = "nenhum" | "visualizar" | "editar";
-type Permissoes = Record<Modulo, Nivel>;
+type Usuario = AdminUsuario;
 type Atividade = { quando: string; texto: string };
-type Usuario = {
-  id: string; nome: string; email: string; telefone?: string; perfil: Perfil;
-  status: StatusU; ultimoAcesso: string | null; criadoEm: string;
-  permissoes: Permissoes; atividades: Atividade[];
-};
+
 
 const PERFIL_LABEL: Record<Perfil, string> = {
   administrador: "Administrador", gerente: "Gerente", suporte: "Suporte",
