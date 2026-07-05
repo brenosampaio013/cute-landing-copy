@@ -32,6 +32,7 @@ import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.ag
 import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
 import { Route as AdminProfissionaisRouteImport } from './routes/admin.profissionais'
 import { Route as AdminPagamentosRouteImport } from './routes/admin.pagamentos'
+import { Route as AdminMensagensRouteImport } from './routes/admin.mensagens'
 import { Route as AdminClientesRouteImport } from './routes/admin.clientes'
 import { Route as AdminAgendamentosRouteImport } from './routes/admin.agendamentos'
 
@@ -150,6 +151,11 @@ const AdminPagamentosRoute = AdminPagamentosRouteImport.update({
   path: '/admin/pagamentos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminMensagensRoute = AdminMensagensRouteImport.update({
+  id: '/admin/mensagens',
+  path: '/admin/mensagens',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminClientesRoute = AdminClientesRouteImport.update({
   id: '/admin/clientes',
   path: '/admin/clientes',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/mensagens': typeof AdminMensagensRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/profissionais': typeof AdminProfissionaisRoute
   '/admin/servicos': typeof AdminServicosRoute
@@ -200,6 +207,7 @@ export interface FileRoutesByTo {
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/mensagens': typeof AdminMensagensRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/profissionais': typeof AdminProfissionaisRoute
   '/admin/servicos': typeof AdminServicosRoute
@@ -228,6 +236,7 @@ export interface FileRoutesById {
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/mensagens': typeof AdminMensagensRoute
   '/admin/pagamentos': typeof AdminPagamentosRoute
   '/admin/profissionais': typeof AdminProfissionaisRoute
   '/admin/servicos': typeof AdminServicosRoute
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/clientes'
+    | '/admin/mensagens'
     | '/admin/pagamentos'
     | '/admin/profissionais'
     | '/admin/servicos'
@@ -283,6 +293,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/clientes'
+    | '/admin/mensagens'
     | '/admin/pagamentos'
     | '/admin/profissionais'
     | '/admin/servicos'
@@ -310,6 +321,7 @@ export interface FileRouteTypes {
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/clientes'
+    | '/admin/mensagens'
     | '/admin/pagamentos'
     | '/admin/profissionais'
     | '/admin/servicos'
@@ -338,6 +350,7 @@ export interface RootRouteChildren {
   ServicosRoute: typeof ServicosRoute
   AdminAgendamentosRoute: typeof AdminAgendamentosRoute
   AdminClientesRoute: typeof AdminClientesRoute
+  AdminMensagensRoute: typeof AdminMensagensRoute
   AdminPagamentosRoute: typeof AdminPagamentosRoute
   AdminProfissionaisRoute: typeof AdminProfissionaisRoute
   AdminServicosRoute: typeof AdminServicosRoute
@@ -507,6 +520,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagamentosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/mensagens': {
+      id: '/admin/mensagens'
+      path: '/admin/mensagens'
+      fullPath: '/admin/mensagens'
+      preLoaderRoute: typeof AdminMensagensRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/clientes': {
       id: '/admin/clientes'
       path: '/admin/clientes'
@@ -565,6 +585,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicosRoute: ServicosRoute,
   AdminAgendamentosRoute: AdminAgendamentosRoute,
   AdminClientesRoute: AdminClientesRoute,
+  AdminMensagensRoute: AdminMensagensRoute,
   AdminPagamentosRoute: AdminPagamentosRoute,
   AdminProfissionaisRoute: AdminProfissionaisRoute,
   AdminServicosRoute: AdminServicosRoute,
