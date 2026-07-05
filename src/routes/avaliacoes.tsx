@@ -38,15 +38,16 @@ function Avaliacoes() {
         {stats.map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-sm"
+            className="rounded-2xl border border-white/10 p-6 text-center shadow-sm"
+            style={{ backgroundColor: "#0B1E3D" }}
           >
             <p
-              className="text-3xl text-[#0A1A2F]"
+              className="text-3xl text-white"
               style={{ fontFamily: "var(--font-serif-bold)", fontWeight: 700 }}
             >
               {s.value}
             </p>
-            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
               {s.label}
             </p>
           </div>
@@ -57,17 +58,18 @@ function Avaliacoes() {
         {reviews.map((r) => (
           <div
             key={r.name}
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-6"
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl sm:p-6"
+            style={{ backgroundColor: "#0B1E3D" }}
           >
-            <Quote className="pointer-events-none absolute right-4 top-4 h-9 w-9 text-[#2DD4BF]/10" aria-hidden />
+            <Quote className="pointer-events-none absolute right-4 top-4 h-9 w-9 text-[#2DD4BF]/20" aria-hidden />
 
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF]/15 text-sm font-bold text-[#0A9E8A]">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF]/20 text-sm font-bold text-[#2DD4BF]">
                   {r.name.charAt(0)}
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[#0A1A2F]">{r.name}</p>
+                  <p className="truncate text-sm font-semibold text-white">{r.name}</p>
                   <p className="truncate text-xs text-slate-400">{r.role}</p>
                 </div>
               </div>
@@ -81,23 +83,24 @@ function Avaliacoes() {
                 <Star
                   key={i}
                   className={`h-4 w-4 ${
-                    i < r.rating ? "fill-amber-400 text-amber-400" : "text-slate-200"
+                    i < r.rating ? "fill-amber-400 text-amber-400" : "text-slate-600"
                   }`}
                 />
               ))}
             </div>
 
-            <p className="mt-3 flex-1 text-[13.5px] leading-relaxed text-slate-600 sm:text-sm">
+            <p className="mt-3 flex-1 text-[13.5px] leading-relaxed text-slate-300 sm:text-sm">
               {r.text}
             </p>
 
-            <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#0A9E8A]">
+            <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#2DD4BF]">
               <BadgeCheck className="h-4 w-4" />
               Compra verificada
             </div>
           </div>
         ))}
       </div>
+
     </SitePage>
   );
 }
