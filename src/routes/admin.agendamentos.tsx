@@ -234,7 +234,7 @@ function AgendamentosPage() {
             <SelectTrigger><SelectValue placeholder="Profissional" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos os profissionais</SelectItem>
-              {PROFISSIONAIS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+              {profissionaisList.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
             </SelectContent>
           </Select>
           <div className="flex gap-2">
