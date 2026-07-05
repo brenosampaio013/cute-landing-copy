@@ -25,11 +25,7 @@ import {
   ChevronDown,
   ArrowUpRight,
   DollarSign,
-  Sparkles,
-  Wrench,
-  Shirt,
   Home as HomeIcon,
-  Droplet,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -50,6 +46,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/queries/use-is-admin";
 import { useProfile } from "@/hooks/queries/use-profile";
+import { useAdminDashboard } from "@/hooks/queries/use-admin-dashboard";
 import { FullPageLoader } from "@/components/full-page-loader";
 
 export const Route = createFileRoute("/admin")({
@@ -92,69 +89,15 @@ const GERENCIAMENTO: NavItem[] = [
   { label: "Logs do sistema", icon: ScrollText },
 ];
 
-/* ---------- mock data ---------- */
-const lineData = [
-  { day: "13 Mai", concluidos: 12, confirmados: 8, cancelados: 3 },
-  { day: "14 Mai", concluidos: 22, confirmados: 14, cancelados: 4 },
-  { day: "15 Mai", concluidos: 28, confirmados: 18, cancelados: 5 },
-  { day: "16 Mai", concluidos: 30, confirmados: 20, cancelados: 6 },
-  { day: "17 Mai", concluidos: 34, confirmados: 22, cancelados: 5 },
-  { day: "18 Mai", concluidos: 32, confirmados: 21, cancelados: 7 },
-  { day: "19 Mai", concluidos: 27, confirmados: 19, cancelados: 4 },
-];
-
-const donutData = [
-  { name: "Concluídos", value: 145, color: NAVY_2 },
-  { name: "Confirmados", value: 70, color: TEAL },
-  { name: "Pendentes", value: 25, color: "#F5B841" },
-  { name: "Cancelados", value: 10, color: "#EF4444" },
-];
-
-const recentAgendamentos = [
-  { icon: HomeIcon, servico: "Limpeza Residencial", cliente: "Ana Paula Santos", status: "Confirmado", hora: "Hoje, 14:00" },
-  { icon: Shirt, servico: "Passadoria", cliente: "Maria Eduarda Lima", status: "Pendente", hora: "Hoje, 15:30" },
-  { icon: Sparkles, servico: "Limpeza Pós-obra", cliente: "Carlos Alberto", status: "Confirmado", hora: "Hoje, 16:00" },
-  { icon: Droplet, servico: "Hidráulica", cliente: "Juliana Mendes", status: "Pendente", hora: "Hoje, 17:00" },
-  { icon: Sparkles, servico: "Limpeza Pesada", cliente: "Roberto Silva", status: "Cancelado", hora: "Hoje, 18:30" },
-];
-
-type Ag = {
-  id: string;
-  servico: string;
-  cliente: string;
-  profissional: string;
-  data: string;
-  status: "Confirmado" | "Pendente" | "Concluído" | "Cancelado";
-  pagamento: "Pago" | "Pendente" | "Estornado";
-  valor: number;
+const DONUT_COLORS: Record<string, string> = {
+  concluido: NAVY_2,
+  confirmado: TEAL,
+  pendente: "#F5B841",
+  cancelado: "#EF4444",
 };
 
-const tableRows: Ag[] = [
-  { id: "#1258", servico: "Limpeza Residencial", cliente: "Ana Paula Santos", profissional: "Maria Eduarda", data: "24/05/2024 14:00", status: "Confirmado", pagamento: "Pago", valor: 150 },
-  { id: "#1257", servico: "Passadoria", cliente: "Juliana Mendes", profissional: "Carla Oliveira", data: "24/05/2024 15:30", status: "Pendente", pagamento: "Pendente", valor: 80 },
-  { id: "#1256", servico: "Limpeza Pós-obra", cliente: "Carlos Alberto", profissional: "Ana Paula", data: "24/05/2024 16:00", status: "Confirmado", pagamento: "Pago", valor: 250 },
-  { id: "#1255", servico: "Hidráulica", cliente: "Roberto Silva", profissional: "João Pedro", data: "24/05/2024 17:00", status: "Pendente", pagamento: "Pendente", valor: 120 },
-  { id: "#1254", servico: "Limpeza Pesada", cliente: "Fernanda Costa", profissional: "Maria Eduarda", data: "24/05/2024 18:30", status: "Cancelado", pagamento: "Estornado", valor: 200 },
-];
-
-const barData = Array.from({ length: 19 }, (_, i) => ({
-  d: String(i + 1).padStart(2, "0"),
-  v: 800 + Math.round(Math.sin(i / 2) * 900 + Math.random() * 2400),
-}));
-
-const topServicos = [
-  { nome: "Limpeza Residencial", qtd: 320, valor: 15680, color: "#3B82F6" },
-  { nome: "Passadoria", qtd: 180, valor: 7200, color: TEAL },
-  { nome: "Limpeza Pós-obra", qtd: 120, valor: 5400, color: "#F5B841" },
-  { nome: "Hidráulica", qtd: 80, valor: 3200, color: "#8B5CF6" },
-];
-
-const cadastros = [
-  { nome: "Maria Eduarda Lima", tipo: "Professional", data: "23/05/2024", color: "#F472B6" },
-  { nome: "João Pedro Santos", tipo: "Professional", data: "23/05/2024", color: "#60A5FA" },
-  { nome: "Fernanda Costa", tipo: "Cliente", data: "23/05/2024", color: "#FBBF24" },
-  { nome: "Roberto Silva", tipo: "Cliente", data: "22/05/2024", color: "#34D399" },
-];
+const BAR_COLORS = ["#3B82F6", TEAL, "#F5B841", "#8B5CF6"];
+const AVATAR_COLORS = ["#F472B6", "#60A5FA", "#FBBF24", "#34D399"];
 
 const TABS = ["Todos", "Pendentes", "Confirmados", "Concluídos", "Cancelados"] as const;
 
@@ -187,12 +130,26 @@ function AdminPanel() {
     if (isAdmin === false) navigate({ to: "/dashboard", replace: true });
   }, [loading, user, isAdmin, navigate]);
 
+  const { data, isLoading } = useAdminDashboard(isAdmin === true);
+
   const filteredRows = useMemo(() => {
-    if (activeTab === "Todos") return tableRows;
-    return tableRows.filter((r) => r.status === activeTab.replace(/s$/, "") || r.status + "s" === activeTab);
-  }, [activeTab]);
+    const rows = data?.tabela ?? [];
+    if (activeTab === "Todos") return rows;
+    const target = activeTab.replace(/s$/, "");
+    return rows.filter((r) => r.status === target);
+  }, [activeTab, data]);
 
   if (loading || !user || isAdmin === null || isAdmin === false) return <FullPageLoader />;
+
+  const kpi = data?.kpi;
+  const line = data?.line ?? [];
+  const donut = data?.donut ?? [];
+  const donutTotal = donut.reduce((s, d) => s + d.value, 0);
+  const recentes = data?.recentes ?? [];
+  const bar = data?.bar ?? [];
+  const topServicos = data?.topServicos ?? [];
+  const cadastros = data?.cadastros ?? [];
+  const fin = data?.financeiro;
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
@@ -251,7 +208,6 @@ function AdminPanel() {
             </div>
             <button className="relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 hover:text-[#0A1128]">
               <Bell className="h-5 w-5" />
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">5</span>
             </button>
             <button className="flex items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-3 shadow-sm ring-1 ring-slate-200">
               <div className="flex h-8 w-8 items-center justify-center rounded-full font-semibold text-white" style={{ background: TEAL }}>
@@ -268,10 +224,15 @@ function AdminPanel() {
 
         {/* KPIs */}
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          <KpiCard label="Agendamentos" sub="(hoje)" value="24" delta="12% vs ontem" icon={Calendar} tint="bg-blue-100 text-blue-600" />
-          <KpiCard label="Faturamento" sub="(mês)" value={brl(24580.5)} delta="18% vs mês anterior" icon={DollarSign} tint="bg-emerald-100 text-emerald-600" />
-          <KpiCard label="Profissionais ativos" value="156" delta="8% vs mês anterior" icon={Users} tint="bg-violet-100 text-violet-600" />
-          <KpiCard label="Avaliação média" value="4,8" delta="0,2 vs mês anterior" icon={Star} tint="bg-amber-100 text-amber-600" />
+          <KpiCard label="Agendamentos" sub="(hoje)" value={isLoading ? "…" : String(kpi?.hoje ?? 0)} icon={Calendar} tint="bg-blue-100 text-blue-600" />
+          <KpiCard label="Faturamento" sub="(mês)" value={isLoading ? "…" : brl(kpi?.faturamentoMes ?? 0)} icon={DollarSign} tint="bg-emerald-100 text-emerald-600" />
+          <KpiCard label="Profissionais ativos" value={isLoading ? "…" : String(kpi?.profissionaisAtivos ?? 0)} icon={Users} tint="bg-violet-100 text-violet-600" />
+          <KpiCard
+            label="Avaliação média"
+            value={isLoading ? "…" : kpi?.avaliacaoMedia != null ? kpi.avaliacaoMedia.toFixed(1).replace(".", ",") : "—"}
+            icon={Star}
+            tint="bg-amber-100 text-amber-600"
+          />
         </div>
 
         {/* ROW: line + donut + list */}
@@ -279,13 +240,13 @@ function AdminPanel() {
           <Panel>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold text-[#0A1128]">Agendamentos</h3>
-              <button className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600">
-                Últimos 7 dias <ChevronDown className="h-3.5 w-3.5" />
-              </button>
+              <span className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600">
+                Últimos 7 dias
+              </span>
             </div>
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={lineData} margin={{ top: 4, right: 8, left: -12, bottom: 0 }}>
+                <AreaChart data={line} margin={{ top: 4, right: 8, left: -12, bottom: 0 }}>
                   <defs>
                     <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor={NAVY_2} stopOpacity={0.25} /><stop offset="100%" stopColor={NAVY_2} stopOpacity={0} /></linearGradient>
                     <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor={TEAL} stopOpacity={0.25} /><stop offset="100%" stopColor={TEAL} stopOpacity={0} /></linearGradient>
@@ -293,7 +254,7 @@ function AdminPanel() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                   <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} allowDecimals={false} />
                   <Tooltip contentStyle={{ borderRadius: 10, border: "1px solid #E2E8F0", fontSize: 12 }} />
                   <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
                   <Area type="monotone" name="Concluídos" dataKey="concluidos" stroke={NAVY_2} strokeWidth={2} fill="url(#g1)" />
@@ -310,19 +271,18 @@ function AdminPanel() {
               <div className="h-[180px] w-[180px] shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={donutData} innerRadius={55} outerRadius={80} paddingAngle={2} dataKey="value">
-                      {donutData.map((d) => <Cell key={d.name} fill={d.color} />)}
+                    <Pie data={donut} innerRadius={55} outerRadius={80} paddingAngle={2} dataKey="value">
+                      {donut.map((d) => <Cell key={d.key} fill={DONUT_COLORS[d.key]} />)}
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
               </div>
               <ul className="flex-1 space-y-2 text-xs">
-                {donutData.map((d) => {
-                  const total = donutData.reduce((s, x) => s + x.value, 0);
-                  const pct = Math.round((d.value / total) * 100);
+                {donut.map((d) => {
+                  const pct = donutTotal ? Math.round((d.value / donutTotal) * 100) : 0;
                   return (
-                    <li key={d.name} className="flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.color }} />
+                    <li key={d.key} className="flex items-center gap-2">
+                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: DONUT_COLORS[d.key] }} />
                       <div className="min-w-0">
                         <p className="font-medium text-[#0A1128]">{d.name}</p>
                         <p className="text-slate-500">{pct}% ({d.value})</p>
@@ -337,13 +297,16 @@ function AdminPanel() {
           <Panel>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold text-[#0A1128]">Agendamentos recentes</h3>
-              <a href="#" className="text-xs font-medium" style={{ color: TEAL }}>Ver todos</a>
+              <span className="text-xs font-medium" style={{ color: TEAL }}>Ver todos</span>
             </div>
             <ul className="divide-y divide-slate-100">
-              {recentAgendamentos.map((r, i) => (
-                <li key={i} className="flex items-center gap-3 py-2.5">
+              {recentes.length === 0 && !isLoading && (
+                <li className="py-6 text-center text-xs text-slate-400">Sem agendamentos</li>
+              )}
+              {recentes.map((r) => (
+                <li key={r.id} className="flex items-center gap-3 py-2.5">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
-                    <r.icon className="h-4 w-4" />
+                    <HomeIcon className="h-4 w-4" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-[#0A1128]">{r.servico}</p>
@@ -418,7 +381,9 @@ function AdminPanel() {
                   </tr>
                 ))}
                 {filteredRows.length === 0 && (
-                  <tr><td colSpan={9} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum agendamento neste filtro.</td></tr>
+                  <tr><td colSpan={9} className="px-6 py-10 text-center text-sm text-slate-500">
+                    {isLoading ? "Carregando…" : "Nenhum agendamento neste filtro."}
+                  </td></tr>
                 )}
               </tbody>
             </table>
@@ -431,35 +396,34 @@ function AdminPanel() {
             <div className="mb-3 flex items-start justify-between">
               <div>
                 <h3 className="text-sm font-semibold text-slate-500">Faturamento</h3>
-                <p className="mt-1 text-2xl font-bold text-[#0A1128]">{brl(24580.5)}</p>
+                <p className="mt-1 text-2xl font-bold text-[#0A1128]">{brl(kpi?.faturamentoMes ?? 0)}</p>
                 <p className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-emerald-600">
-                  <ArrowUpRight className="h-3 w-3" /> 18% vs mês anterior
+                  <ArrowUpRight className="h-3 w-3" /> Mês atual
                 </p>
               </div>
-              <button className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">
-                Maio/2024 <ChevronDown className="h-3.5 w-3.5" />
-              </button>
             </div>
             <div className="h-[180px]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+                <BarChart data={bar} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
-                  <XAxis dataKey="d" tick={{ fontSize: 10, fill: "#94A3B8" }} axisLine={false} tickLine={false} interval={0} />
+                  <XAxis dataKey="d" tick={{ fontSize: 10, fill: "#94A3B8" }} axisLine={false} tickLine={false} interval={2} />
                   <YAxis tick={{ fontSize: 10, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
                   <Tooltip contentStyle={{ borderRadius: 10, border: "1px solid #E2E8F0", fontSize: 12 }} formatter={(v: number) => brl(v)} />
                   <Bar dataKey="v" fill="#3B82F6" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <a href="#" className="mt-2 inline-block text-xs font-medium" style={{ color: TEAL }}>Ver relatório completo →</a>
           </Panel>
 
           <Panel>
             <h3 className="mb-4 font-semibold text-[#0A1128]">Top serviços</h3>
             <ul className="space-y-4">
+              {topServicos.length === 0 && !isLoading && (
+                <li className="py-6 text-center text-xs text-slate-400">Sem dados ainda</li>
+              )}
               {topServicos.map((s, i) => {
-                const max = topServicos[0].valor;
-                const pct = (s.valor / max) * 100;
+                const max = topServicos[0]?.valor || 1;
+                const pct = max ? (s.valor / max) * 100 : 0;
                 return (
                   <li key={s.nome} className="flex items-center gap-3">
                     <span className="text-sm font-semibold text-slate-400">{i + 1}</span>
@@ -472,7 +436,7 @@ function AdminPanel() {
                         <p className="ml-3 text-sm font-semibold text-[#0A1128]">{brl(s.valor)}</p>
                       </div>
                       <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full rounded-full" style={{ width: `${pct}%`, background: s.color }} />
+                        <div className="h-full rounded-full" style={{ width: `${pct}%`, background: BAR_COLORS[i % BAR_COLORS.length] }} />
                       </div>
                     </div>
                   </li>
@@ -484,17 +448,15 @@ function AdminPanel() {
           <Panel>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold text-[#0A1128]">Resumo financeiro</h3>
-              <button className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">
-                Este mês <ChevronDown className="h-3.5 w-3.5" />
-              </button>
+              <span className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600">Este mês</span>
             </div>
             <ul className="space-y-3.5 text-sm">
-              <li className="flex justify-between"><span className="text-slate-500">Faturamento bruto</span><span className="font-semibold text-[#0A1128]">{brl(28940)}</span></li>
-              <li className="flex justify-between"><span className="text-slate-500">Taxas da plataforma (-)</span><span className="font-semibold text-rose-500">- {brl(2894)}</span></li>
-              <li className="flex justify-between"><span className="text-slate-500">Repasses a profissionais (-)</span><span className="font-semibold text-rose-500">- {brl(1465.5)}</span></li>
+              <li className="flex justify-between"><span className="text-slate-500">Faturamento bruto</span><span className="font-semibold text-[#0A1128]">{brl(fin?.bruto ?? 0)}</span></li>
+              <li className="flex justify-between"><span className="text-slate-500">Taxas da plataforma (-)</span><span className="font-semibold text-rose-500">- {brl(fin?.taxas ?? 0)}</span></li>
+              <li className="flex justify-between"><span className="text-slate-500">Repasses a profissionais (-)</span><span className="font-semibold text-rose-500">- {brl(fin?.repasses ?? 0)}</span></li>
               <li className="mt-2 flex justify-between border-t border-slate-100 pt-3.5">
                 <span className="font-semibold text-[#0A1128]">Faturamento líquido</span>
-                <span className="text-lg font-bold" style={{ color: TEAL }}>{brl(24580.5)}</span>
+                <span className="text-lg font-bold" style={{ color: TEAL }}>{brl(fin?.liquido ?? 0)}</span>
               </li>
             </ul>
           </Panel>
@@ -504,13 +466,16 @@ function AdminPanel() {
         <Panel className="mt-6">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold text-[#0A1128]">Cadastros recentes</h3>
-            <a href="#" className="text-xs font-medium" style={{ color: TEAL }}>Ver todos</a>
+            <span className="text-xs font-medium" style={{ color: TEAL }}>Ver todos</span>
           </div>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {cadastros.map((c) => (
-              <li key={c.nome} className="flex items-center gap-3 rounded-xl bg-slate-50/60 p-3 ring-1 ring-slate-100">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ background: c.color }}>
-                  {c.nome.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+            {cadastros.length === 0 && !isLoading && (
+              <li className="col-span-full py-6 text-center text-xs text-slate-400">Sem cadastros</li>
+            )}
+            {cadastros.map((c, i) => (
+              <li key={c.nome + i} className="flex items-center gap-3 rounded-xl bg-slate-50/60 p-3 ring-1 ring-slate-100">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold text-white" style={{ background: AVATAR_COLORS[i % AVATAR_COLORS.length] }}>
+                  {c.nome.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-[#0A1128]">{c.nome}</p>
@@ -565,9 +530,9 @@ function Panel({ children, className = "" }: { children: React.ReactNode; classN
 }
 
 function KpiCard({
-  label, sub, value, delta, icon: Icon, tint,
+  label, sub, value, icon: Icon, tint,
 }: {
-  label: string; sub?: string; value: string; delta: string; icon: LucideIcon; tint: string;
+  label: string; sub?: string; value: string; icon: LucideIcon; tint: string;
 }) {
   return (
     <div className="rounded-xl bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_4px_20px_rgba(15,23,42,0.04)] ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
@@ -577,9 +542,6 @@ function KpiCard({
             {label}{sub && <span className="ml-1 text-slate-400">{sub}</span>}
           </p>
           <p className="mt-2 text-2xl font-bold text-[#0A1128]">{value}</p>
-          <p className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-emerald-600">
-            <ArrowUpRight className="h-3 w-3" /> {delta}
-          </p>
         </div>
         <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${tint}`}>
           <Icon className="h-5 w-5" />
