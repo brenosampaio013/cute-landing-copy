@@ -9,30 +9,26 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
       <div className="mx-auto grid min-h-screen max-w-7xl overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/60 sm:min-h-[calc(100vh-2rem)] sm:rounded-3xl lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
         {/* Brand panel */}
         <aside
-          className="relative hidden overflow-hidden lg:flex lg:flex-col lg:items-center lg:justify-between lg:p-12"
+          className="relative hidden overflow-hidden lg:block"
           style={{
             background:
               "radial-gradient(120% 80% at 20% 10%, #12406B 0%, #0A1A2F 55%, #05101F 100%)",
           }}
         >
-          <div className="flex flex-1 items-center justify-center">
+          {/* Logo perfeitamente centralizado */}
+          <div className="absolute inset-0 flex items-center justify-center px-8">
             <Link to="/" aria-label="Ir para a página inicial" className="inline-block">
-              <img src={logoUrl} alt="Maré Nobre" className="h-28 w-auto xl:h-32" />
+              <img
+                src={logoUrl}
+                alt="Maré Nobre"
+                className="h-auto w-full max-w-[380px] xl:max-w-[440px]"
+              />
             </Link>
           </div>
 
-          <div className="relative z-10">
-            <h2
-              className="text-4xl leading-tight text-white xl:text-5xl"
-              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
-            >
-              Cuidado completo
-              <br />
-              para o <span className="text-[#2DD4BF]">seu lar.</span>
-            </h2>
-            <div className="mt-3 h-1 w-16 rounded-full bg-[#2DD4BF]" />
-
-            <div className="mt-10 grid grid-cols-3 gap-4 text-center text-white/85">
+          {/* Rodapé com destaques (não desloca o logo) */}
+          <div className="absolute inset-x-0 bottom-0 px-10 pb-10">
+            <div className="grid grid-cols-3 gap-4 text-center text-white/85">
               <div className="flex flex-col items-center gap-2">
                 <div className="rounded-xl bg-white/10 p-3 ring-1 ring-white/15">
                   <Sparkles className="h-5 w-5 text-[#2DD4BF]" />
