@@ -41,7 +41,7 @@ function passwordStrength(pwd: string): { score: 0 | 1 | 2 | 3; label: string; c
 
 function Cadastro() {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"cliente" | "profissional">("cliente");
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
