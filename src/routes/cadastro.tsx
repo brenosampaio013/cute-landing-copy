@@ -92,7 +92,8 @@ function Cadastro() {
         data: {
           nome: name.trim(),
           telefone: phone,
-          tipo_usuario: tab,
+          tipo_usuario: "cliente",
+
         },
       },
     });
