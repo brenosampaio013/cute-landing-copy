@@ -10,6 +10,7 @@ import {
   MapPin,
   User,
   HelpCircle,
+  MessageSquare,
   LogOut,
   Bell,
   Leaf,
@@ -45,6 +46,7 @@ const NAV: NavItem[] = [
   { label: "Pagamentos", icon: Wallet, to: "/dashboard/pagamentos" },
   { label: "Endereços", icon: MapPin, to: "/dashboard/enderecos" },
   { label: "Perfil", icon: User, to: "/dashboard/perfil" },
+  { label: "Mensagens", icon: MessageSquare, to: "/dashboard/mensagens" },
   { label: "Ajuda", icon: HelpCircle, to: "/dashboard/ajuda" },
 ];
 

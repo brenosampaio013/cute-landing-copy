@@ -94,6 +94,39 @@ export type Database = {
           },
         ]
       }
+      conversas: {
+        Row: {
+          created_at: string
+          id: string
+          nao_lidas_admin: number
+          nao_lidas_usuario: number
+          ultima_mensagem: string | null
+          ultima_mensagem_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nao_lidas_admin?: number
+          nao_lidas_usuario?: number
+          ultima_mensagem?: string | null
+          ultima_mensagem_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nao_lidas_admin?: number
+          nao_lidas_usuario?: number
+          ultima_mensagem?: string | null
+          ultima_mensagem_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       enderecos: {
         Row: {
           bairro: string
@@ -141,6 +174,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      mensagens: {
+        Row: {
+          autor_id: string
+          autor_tipo: Database["public"]["Enums"]["autor_mensagem"]
+          conteudo: string
+          conversa_id: string
+          created_at: string
+          id: string
+          lida: boolean
+        }
+        Insert: {
+          autor_id: string
+          autor_tipo: Database["public"]["Enums"]["autor_mensagem"]
+          conteudo: string
+          conversa_id: string
+          created_at?: string
+          id?: string
+          lida?: boolean
+        }
+        Update: {
+          autor_id?: string
+          autor_tipo?: Database["public"]["Enums"]["autor_mensagem"]
+          conteudo?: string
+          conversa_id?: string
+          created_at?: string
+          id?: string
+          lida?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mensagens_conversa_id_fkey"
+            columns: ["conversa_id"]
+            isOneToOne: false
+            referencedRelation: "conversas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pagamentos: {
         Row: {
@@ -259,6 +330,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      autor_mensagem: "admin" | "usuario"
       booking_status: "confirmado" | "concluido" | "cancelado" | "pendente"
       payment_status: "pago" | "pendente" | "estornado"
       user_type: "cliente" | "profissional"
@@ -390,6 +462,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      autor_mensagem: ["admin", "usuario"],
       booking_status: ["confirmado", "concluido", "cancelado", "pendente"],
       payment_status: ["pago", "pendente", "estornado"],
       user_type: ["cliente", "profissional"],
