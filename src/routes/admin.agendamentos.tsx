@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/queries/use-is-admin";
+import { useAdminAgendamentos, type AgendamentoRow } from "@/hooks/queries/use-admin-agendamentos";
 import { FullPageLoader } from "@/components/full-page-loader";
 import { AdminShell, Panel, statusBadge, pagamentoBadge, brl, TEAL } from "@/components/admin/admin-shell";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
