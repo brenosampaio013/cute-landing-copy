@@ -84,6 +84,9 @@ export function AdminShell({
   children: React.ReactNode;
 }) {
   const { displayName, initial } = useProfile();
+  const { user } = useAuth();
+  const unread = useUnreadTotalWithSound("admin", !!user, user);
+  const badges: Partial<Record<NavKey, number>> = { mensagens: unread };
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
