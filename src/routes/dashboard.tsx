@@ -113,12 +113,23 @@ function DashboardLayout() {
                 const inactive = "text-white/70 hover:bg-white/5 hover:text-white";
                 const active = "bg-[#2DD4BF]/15 text-white ring-1 ring-inset ring-[#2DD4BF]/30";
                 const base = "flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition";
+                const badge = item.label === "Mensagens" ? unread : 0;
+                const content = (
+                  <>
+                    <item.icon className="h-[18px] w-[18px]" />
+                    <span className="flex-1">{item.label}</span>
+                    {badge > 0 && (
+                      <span className="ml-auto rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                        {badge > 99 ? "99+" : badge}
+                      </span>
+                    )}
+                  </>
+                );
 
                 if (!item.to) {
                   return (
                     <a key={item.label} href="#" className={`${base} ${inactive}`}>
-                      <item.icon className="h-[18px] w-[18px]" />
-                      {item.label}
+                      {content}
                     </a>
                   );
                 }
@@ -131,8 +142,7 @@ function DashboardLayout() {
                     className={`${base} ${inactive}`}
                     activeProps={{ className: `${base} ${active}` }}
                   >
-                    <item.icon className="h-[18px] w-[18px]" />
-                    {item.label}
+                    {content}
                   </Link>
                 );
               })}
