@@ -1,0 +1,31 @@
+{
+  "name": "Maré Nobre — Soluções para o seu lar",
+  "short_name": "Maré Nobre",
+  "description": "Agende serviços de limpeza, passadoria, montagem e pós-obra com profissionais de confiança.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1A2F",
+  "theme_color": "#0A1A2F",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
