@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { SitePage } from "@/components/site-page";
@@ -22,8 +22,6 @@ const services = [
   { icon: iconJardinagem.url, title: "Jardinagem" },
 ];
 
-type Pro = { id: string; nome: string | null };
-
 function addHour(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
   const d = new Date(2000, 0, 1, h, m);
@@ -34,23 +32,12 @@ function addHour(hhmm: string): string {
 function Agendar() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [pros, setPros] = useState<Pro[]>([]);
   const [servico, setServico] = useState<string>(services[0].title);
-  const [profissionalId, setProfissionalId] = useState<string>("");
   const [data, setData] = useState<string>("");
   const [horario, setHorario] = useState<string>("");
   const [endereco, setEndereco] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("id, nome")
-        .eq("tipo_usuario", "profissional");
-      setPros(data ?? []);
-    })();
-  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
