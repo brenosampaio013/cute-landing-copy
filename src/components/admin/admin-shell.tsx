@@ -105,7 +105,7 @@ export function AdminShell({
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 pb-4">
-          <SidebarSection title="PRINCIPAL" items={PRINCIPAL} active={active} />
+          <SidebarSection title="PRINCIPAL" items={PRINCIPAL} active={active} badges={badges} />
           <SidebarSection title="GERENCIAMENTO" items={GERENCIAMENTO} active={active} className="mt-6" />
         </nav>
 
