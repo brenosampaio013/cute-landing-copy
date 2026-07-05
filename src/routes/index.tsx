@@ -135,22 +135,23 @@ function Index() {
       </section>
 
       {/* Services */}
-      <section id="servicos" className="scroll-mt-20 py-24 sm:py-28" style={{ backgroundColor: "#0B1E3D" }}>
+      <section id="servicos" className="scroll-mt-20 bg-[#F7F8FA] py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF]">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#0A9E8A]">
               O que oferecemos
             </span>
             <h2
-              className="mt-4 text-4xl text-white sm:text-5xl"
+              className="mt-4 text-4xl text-[#0A1A2F] sm:text-5xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
               Nossos serviços
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-slate-300">
+            <p className="mx-auto mt-4 max-w-xl text-base text-slate-500">
               Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
             </p>
           </div>
+
 
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {services.map((s) => {
@@ -212,7 +213,7 @@ function Index() {
           <div className="mt-12 flex justify-center">
             <Link
               to="/servicos"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white/90 transition hover:border-[#2DD4BF] hover:text-[#2DD4BF]"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-[#0A1A2F] transition hover:border-[#2DD4BF] hover:text-[#0A9E8A]"
             >
               Ver todos os serviços
               <ArrowRight className="h-4 w-4" />
