@@ -38,10 +38,10 @@ const NAV: NavItem[] = [
   { label: "Dashboard", icon: Home, to: "/dashboard", exact: true },
   { label: "Agendamentos", icon: Calendar, to: "/dashboard/agendamentos" },
   { label: "Serviços", icon: LayoutGrid, to: "/dashboard/servicos" },
-  { label: "Profissionais", icon: Users },
-  { label: "Avaliações", icon: Star },
+  { label: "Profissionais", icon: Users, to: "/dashboard/profissionais" },
+  { label: "Avaliações", icon: Star, to: "/dashboard/avaliacoes" },
   { label: "Pagamentos", icon: Wallet, to: "/dashboard/pagamentos" },
-  { label: "Endereços", icon: MapPin },
+  { label: "Endereços", icon: MapPin, to: "/dashboard/enderecos" },
   { label: "Perfil", icon: User, to: "/dashboard/perfil" },
   { label: "Ajuda", icon: HelpCircle, to: "/dashboard/ajuda" },
 ];
