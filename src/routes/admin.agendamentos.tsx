@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useIsAdmin } from "@/hooks/queries/use-is-admin";
+import { useAdminAgendamentos, type AgendamentoRow } from "@/hooks/queries/use-admin-agendamentos";
 import { FullPageLoader } from "@/components/full-page-loader";
 import { AdminShell, Panel, statusBadge, pagamentoBadge, brl, TEAL } from "@/components/admin/admin-shell";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -44,54 +45,14 @@ export const Route = createFileRoute("/admin/agendamentos")({
   component: AgendamentosPage,
 });
 
-/* ---------- mock data ---------- */
+/* ---------- constants ---------- */
 type Status = "Pendente" | "Confirmado" | "Concluído" | "Cancelado";
 type Pagamento = "Pago" | "Pendente" | "Estornado";
-type Ag = {
-  id: string;
-  servico: string;
-  cliente: string;
-  clienteTel: string;
-  clienteEndereco: string;
-  profissional: string;
-  profRating: number;
-  data: string; // YYYY-MM-DD
-  hora: string; // HH:mm
-  duracao: number; // minutes
-  status: Status;
-  pagamento: Pagamento;
-  valor: number;
-  observacoes?: string;
-};
+type Ag = AgendamentoRow;
 
-const CLIENTES = ["Ana Paula Santos", "Juliana Mendes", "Carlos Alberto", "Roberto Silva", "Fernanda Costa", "Beatriz Ramos", "Paulo Henrique", "Larissa Alves", "Rodrigo Nunes", "Camila Duarte"];
-const PROFISSIONAIS = ["Maria Eduarda", "Carla Oliveira", "João Pedro", "Ana Paula", "Fábio Torres", "Sônia Ribeiro"];
 const SERVICOS = ["Limpeza Residencial", "Passadoria", "Limpeza Pós-obra", "Hidráulica", "Elétrica", "Jardinagem"];
 const STATUS: Status[] = ["Pendente", "Confirmado", "Concluído", "Cancelado"];
 const PAGAMENTOS: Pagamento[] = ["Pago", "Pendente", "Estornado"];
-const ENDERECOS = ["Rua das Flores, 123 - Botafogo", "Av. Atlântica, 500 - Copacabana", "Rua Voluntários, 88 - Icaraí", "Rua da Praia, 45 - Ingá"];
-
-function seed(i: number) {
-  const day = new Date();
-  day.setDate(day.getDate() + ((i % 20) - 8));
-  return {
-    id: `#12${(80 - i).toString().padStart(2, "0")}`,
-    servico: SERVICOS[i % SERVICOS.length],
-    cliente: CLIENTES[i % CLIENTES.length],
-    clienteTel: `(21) 9${(80000000 + i * 1234).toString().slice(0, 8)}`,
-    clienteEndereco: ENDERECOS[i % ENDERECOS.length],
-    profissional: PROFISSIONAIS[i % PROFISSIONAIS.length],
-    profRating: 4 + ((i * 3) % 10) / 10,
-    data: day.toISOString().slice(0, 10),
-    hora: `${8 + (i % 10)}:${i % 2 ? "30" : "00"}`,
-    duracao: [60, 90, 120, 180][i % 4],
-    status: STATUS[i % STATUS.length],
-    pagamento: PAGAMENTOS[i % PAGAMENTOS.length],
-    valor: 80 + (i % 8) * 45,
-    observacoes: i % 3 === 0 ? "Atenção: cliente possui pet." : undefined,
-  } satisfies Ag;
-}
-const MOCK: Ag[] = Array.from({ length: 42 }, (_, i) => seed(i));
 
 const TABS = ["Todos", "Pendentes", "Confirmados", "Concluídos", "Cancelados"] as const;
 
@@ -101,7 +62,29 @@ function AgendamentosPage() {
   const { user, loading } = useAuth();
   const isAdmin = useIsAdmin(user);
 
-  const [rows, setRows] = useState<Ag[]>(MOCK);
+  const { data: dataRows } = useAdminAgendamentos(isAdmin === true);
+  const [overrides, setOverrides] = useState<Record<string, Partial<Ag>>>({});
+  const [extra, setExtra] = useState<Ag[]>([]);
+  const rows = useMemo<Ag[]>(() => {
+    const base = [...extra, ...(dataRows ?? [])];
+    return base.map((r) => (overrides[r.id] ? { ...r, ...overrides[r.id] } : r));
+  }, [dataRows, overrides, extra]);
+  const setRows = (updater: (rs: Ag[]) => Ag[]) => {
+    // apply updater result and diff to build override map
+    const next = updater(rows);
+    const map: Record<string, Partial<Ag>> = { ...overrides };
+    const extraNext: Ag[] = [];
+    const baseIds = new Set((dataRows ?? []).map((r) => r.id));
+    for (const r of next) {
+      if (baseIds.has(r.id)) {
+        map[r.id] = { status: r.status, pagamento: r.pagamento };
+      } else {
+        extraNext.push(r);
+      }
+    }
+    setOverrides(map);
+    setExtra(extraNext);
+  };
   const [search, setSearch] = useState("");
   const [fStatus, setFStatus] = useState<string>("all");
   const [fServico, setFServico] = useState<string>("all");
@@ -122,6 +105,13 @@ function AgendamentosPage() {
     if (!user) return void navigate({ to: "/login", replace: true });
     if (isAdmin === false) navigate({ to: "/dashboard", replace: true });
   }, [loading, user, isAdmin, navigate]);
+
+  const profissionaisList = useMemo(
+    () => Array.from(new Set(rows.map((r) => r.profissional).filter((n) => n && n !== "—"))).sort(),
+    [rows],
+  );
+
+
 
   const filtered = useMemo(() => {
     return rows.filter((r) => {
@@ -244,7 +234,7 @@ function AgendamentosPage() {
             <SelectTrigger><SelectValue placeholder="Profissional" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos os profissionais</SelectItem>
-              {PROFISSIONAIS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+              {profissionaisList.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
             </SelectContent>
           </Select>
           <div className="flex gap-2">
@@ -397,6 +387,7 @@ function AgendamentosPage() {
         open={openNew}
         onOpenChange={setOpenNew}
         onSave={(a) => { setRows((rs) => [a, ...rs]); setOpenNew(false); }}
+        profissionais={profissionaisList}
       />
 
       {/* DETAIL DRAWER */}
@@ -607,8 +598,8 @@ function AgendamentoDetail({ ag, onChange }: { ag: Ag; onChange: (a: Ag) => void
 
 /* ---------- New agendamento dialog ---------- */
 function NovoAgendamentoDialog({
-  open, onOpenChange, onSave,
-}: { open: boolean; onOpenChange: (o: boolean) => void; onSave: (a: Ag) => void }) {
+  open, onOpenChange, onSave, profissionais,
+}: { open: boolean; onOpenChange: (o: boolean) => void; onSave: (a: Ag) => void; profissionais: string[] }) {
   const [form, setForm] = useState({
     cliente: "", servico: "", profissional: "", data: "", hora: "", duracao: "60",
     endereco: "", valor: "", pagamento: "Pendente" as Pagamento, observacoes: "", cupom: "",
@@ -620,7 +611,7 @@ function NovoAgendamentoDialog({
       cliente: form.cliente || "Novo cliente",
       clienteTel: "(21) 90000-0000",
       clienteEndereco: form.endereco || "—",
-      profissional: form.profissional || PROFISSIONAIS[0],
+      profissional: form.profissional || profissionais[0] || "—",
       profRating: 4.8,
       data: form.data || new Date().toISOString().slice(0, 10),
       hora: form.hora || "10:00",
@@ -646,7 +637,7 @@ function NovoAgendamentoDialog({
           <Field label="Profissional">
             <Select value={form.profissional} onValueChange={(v) => setForm({ ...form, profissional: v })}>
               <SelectTrigger><SelectValue placeholder="Selecionar" /></SelectTrigger>
-              <SelectContent>{PROFISSIONAIS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              <SelectContent>{profissionais.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
           </Field>
           <Field label="Duração (min)"><Input type="number" value={form.duracao} onChange={(e) => setForm({ ...form, duracao: e.target.value })} /></Field>
