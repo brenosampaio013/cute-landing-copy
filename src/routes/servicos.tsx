@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Home, Sparkles, Shirt, Wrench, Clock } from "lucide-react";
 import { SitePage } from "@/components/site-page";
-import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
-import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
-import iconMontagem from "@/assets/icon-montagem.png";
+import photoPadrao from "@/assets/service-limpeza-padrao.jpg";
+import photoPesada from "@/assets/service-limpeza-pesada.jpg";
+import photoPassadoria from "@/assets/service-passadoria.jpg";
+import photoMontagem from "@/assets/service-montagem.jpg";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -18,28 +18,28 @@ export const Route = createFileRoute("/servicos")({
 
 const services = [
   {
-    icon: iconLimpeza.url,
-    title: "Limpeza Padrão",
-    desc: "Limpeza na medida certa para as necessidades do dia a dia.",
-    features: ["Cozinha, banheiros e áreas comuns", "Produtos inclusos", "Profissionais treinados"],
+    photo: photoPadrao,
+    icon: Home,
+    title: "LIMPEZA PADRÃO",
+    desc: "Limpeza na medida certa para as necessidades do dia-a-dia.",
   },
   {
-    icon: iconPosObra.url,
-    title: "Limpeza Pesada",
+    photo: photoPesada,
+    icon: Sparkles,
+    title: "LIMPEZA PESADA",
     desc: "Limpeza com tudo que seu lar precisa para ficar brilhando.",
-    features: ["Detalhamento completo", "Vidros e pisos", "Equipe especializada"],
   },
   {
-    icon: iconPassadoria.url,
-    title: "Passadoria",
+    photo: photoPassadoria,
+    icon: Shirt,
+    title: "PASSADORIA",
     desc: "Suas roupas bem passadas, cuidadas e dobradas.",
-    features: ["Passar e dobrar", "Peças delicadas", "Entrega organizada"],
   },
   {
-    icon: iconMontagem,
-    title: "Montagem de Móveis",
+    photo: photoMontagem,
+    icon: Wrench,
+    title: "MONTAGEM DE MÓVEIS",
     desc: "Montadores qualificados para montar todo tipo de móvel.",
-    features: ["Guarda-roupas e camas", "Ferramentas próprias", "Serviço ágil"],
   },
 ];
 
@@ -50,38 +50,53 @@ function ServicosPage() {
       title="Nossos serviços"
       subtitle="Profissionais qualificados prontos para cuidar do seu lar com o padrão Maré Nobre."
     >
-      <div className="grid gap-6 sm:grid-cols-2">
-        {services.map((s) => (
-          <div
-            key={s.title}
-            className="group flex flex-col rounded-3xl border border-slate-100 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-[#2DD4BF]/40 hover:shadow-2xl hover:shadow-slate-200/70"
-          >
-            <div className="flex items-start gap-5">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#2DD4BF]/10">
-                <img src={s.icon} alt="" width={56} height={56} loading="lazy" className="h-12 w-12 object-contain" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-xl font-bold text-[#0A1A2F]">{s.title}</h3>
-                <p className="mt-1 text-sm text-slate-500">{s.desc}</p>
-              </div>
-            </div>
-            <ul className="mt-6 space-y-2.5">
-              {s.features.map((f) => (
-                <li key={f} className="flex items-center gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-[#2DD4BF]" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/agendar"
-              className="mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-[#2DD4BF] transition hover:text-[#0A9E8A]"
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {services.map((s) => {
+          const Icon = s.icon;
+          return (
+            <article
+              key={s.title}
+              className="group flex flex-col overflow-hidden rounded-3xl bg-[#0A1A2F] text-white shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
             >
-              Agendar este serviço
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-            </Link>
-          </div>
-        ))}
+              {/* Photo */}
+              <div className="relative aspect-[3/4] w-full overflow-hidden">
+                <img
+                  src={s.photo}
+                  alt={s.title}
+                  width={768}
+                  height={1024}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A1A2F]" />
+              </div>
+
+              {/* Body */}
+              <div className="flex flex-1 flex-col items-center px-6 pb-6 -mt-10 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#2DD4BF] bg-[#0A1A2F]">
+                  <Icon className="h-7 w-7 text-[#2DD4BF]" strokeWidth={1.75} />
+                </div>
+
+                <h3 className="mt-5 text-lg font-bold tracking-wide">{s.title}</h3>
+                <span className="mt-2 block h-px w-10 bg-[#2DD4BF]/50" />
+
+                <p className="mt-4 text-sm leading-relaxed text-slate-300">{s.desc}</p>
+
+                <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-4 py-1.5 text-xs font-medium text-[#2DD4BF]">
+                  <Clock className="h-3.5 w-3.5" />
+                  Disponível para hoje
+                </div>
+
+                <Link
+                  to="/agendar"
+                  className="mt-6 w-full rounded-xl bg-[#2DD4BF] px-5 py-3 text-sm font-bold tracking-wide text-[#0A1A2F] transition hover:bg-[#26bfa9]"
+                >
+                  AGENDAR SERVIÇO
+                </Link>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </SitePage>
   );
