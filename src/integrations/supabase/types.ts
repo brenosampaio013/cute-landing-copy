@@ -127,6 +127,111 @@ export type Database = {
         }
         Relationships: []
       }
+      cupom_usos: {
+        Row: {
+          agendamento_id: string | null
+          cliente_id: string | null
+          created_at: string
+          cupom_id: string
+          id: string
+          valor_desconto: number
+          valor_pedido: number
+        }
+        Insert: {
+          agendamento_id?: string | null
+          cliente_id?: string | null
+          created_at?: string
+          cupom_id: string
+          id?: string
+          valor_desconto?: number
+          valor_pedido?: number
+        }
+        Update: {
+          agendamento_id?: string | null
+          cliente_id?: string | null
+          created_at?: string
+          cupom_id?: string
+          id?: string
+          valor_desconto?: number
+          valor_pedido?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cupom_usos_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cupom_usos_cupom_id_fkey"
+            columns: ["cupom_id"]
+            isOneToOne: false
+            referencedRelation: "cupons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cupons: {
+        Row: {
+          aplicavel: Database["public"]["Enums"]["cupom_aplicavel"]
+          ativo: boolean
+          codigo: string
+          created_at: string
+          created_by: string | null
+          desconto_max: number | null
+          descricao: string
+          fim: string
+          id: string
+          inicio: string
+          limite_por_cliente: number
+          limite_total: number
+          min_pedido: number | null
+          servicos: string[]
+          tipo: Database["public"]["Enums"]["cupom_tipo"]
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          aplicavel?: Database["public"]["Enums"]["cupom_aplicavel"]
+          ativo?: boolean
+          codigo: string
+          created_at?: string
+          created_by?: string | null
+          desconto_max?: number | null
+          descricao?: string
+          fim: string
+          id?: string
+          inicio?: string
+          limite_por_cliente?: number
+          limite_total?: number
+          min_pedido?: number | null
+          servicos?: string[]
+          tipo?: Database["public"]["Enums"]["cupom_tipo"]
+          updated_at?: string
+          valor?: number
+        }
+        Update: {
+          aplicavel?: Database["public"]["Enums"]["cupom_aplicavel"]
+          ativo?: boolean
+          codigo?: string
+          created_at?: string
+          created_by?: string | null
+          desconto_max?: number | null
+          descricao?: string
+          fim?: string
+          id?: string
+          inicio?: string
+          limite_por_cliente?: number
+          limite_total?: number
+          min_pedido?: number | null
+          servicos?: string[]
+          tipo?: Database["public"]["Enums"]["cupom_tipo"]
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: []
+      }
       enderecos: {
         Row: {
           bairro: string
@@ -335,6 +440,8 @@ export type Database = {
       app_role: "admin" | "moderator" | "user"
       autor_mensagem: "admin" | "usuario"
       booking_status: "confirmado" | "concluido" | "cancelado" | "pendente"
+      cupom_aplicavel: "todos" | "especificos" | "primeira"
+      cupom_tipo: "percentual" | "fixo" | "frete"
       payment_status: "pago" | "pendente" | "estornado"
       user_type: "cliente" | "profissional"
     }
@@ -467,6 +574,8 @@ export const Constants = {
       app_role: ["admin", "moderator", "user"],
       autor_mensagem: ["admin", "usuario"],
       booking_status: ["confirmado", "concluido", "cancelado", "pendente"],
+      cupom_aplicavel: ["todos", "especificos", "primeira"],
+      cupom_tipo: ["percentual", "fixo", "frete"],
       payment_status: ["pago", "pendente", "estornado"],
       user_type: ["cliente", "profissional"],
     },
