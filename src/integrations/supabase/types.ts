@@ -94,6 +94,54 @@ export type Database = {
           },
         ]
       }
+      enderecos: {
+        Row: {
+          bairro: string
+          cep: string
+          cidade: string
+          cliente_id: string
+          complemento: string | null
+          created_at: string
+          estado: string
+          id: string
+          logradouro: string
+          numero: string
+          principal: boolean
+          rotulo: string
+          updated_at: string
+        }
+        Insert: {
+          bairro: string
+          cep: string
+          cidade: string
+          cliente_id: string
+          complemento?: string | null
+          created_at?: string
+          estado: string
+          id?: string
+          logradouro: string
+          numero: string
+          principal?: boolean
+          rotulo?: string
+          updated_at?: string
+        }
+        Update: {
+          bairro?: string
+          cep?: string
+          cidade?: string
+          cliente_id?: string
+          complemento?: string | null
+          created_at?: string
+          estado?: string
+          id?: string
+          logradouro?: string
+          numero?: string
+          principal?: boolean
+          rotulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pagamentos: {
         Row: {
           agendamento_id: string
