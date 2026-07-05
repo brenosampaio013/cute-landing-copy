@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Clock } from "lucide-react";
-import type { ComponentType } from "react";
+import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
+
 import { SitePage } from "@/components/site-page";
 import fotoPosObra from "@/assets/service-pos-obra.jpg";
 import fotoPassadoria from "@/assets/service-passadoria.jpg";
@@ -19,53 +19,12 @@ export const Route = createFileRoute("/servicos")({
 const NAVY = "#0B1E3D";
 const TEAL = "#1CA9B5";
 
-function IconBroom() {
-  return (
-    <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8">
-      <path d="M30 6 L18 34" stroke={TEAL} strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M18 34 L10 42 M18 34 L22 41 M18 34 L14 41" stroke={TEAL} strokeWidth="2.2" strokeLinecap="round" />
-      <circle cx="34" cy="10" r="1.6" fill={TEAL} />
-      <circle cx="39" cy="15" r="1.2" fill={TEAL} />
-      <circle cx="36" cy="18" r="1" fill={TEAL} />
-    </svg>
-  );
-}
-
-function IconIron() {
-  return (
-    <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8">
-      <path
-        d="M8 30 h24 c4 0 8-4 8-9 0-4-3-7-7-8l-7-2H14c-3 0-6 3-6 6z"
-        stroke={TEAL}
-        strokeWidth="2.2"
-        strokeLinejoin="round"
-      />
-      <line x1="6" y1="34" x2="34" y2="34" stroke={TEAL} strokeWidth="2.2" strokeLinecap="round" />
-      <circle cx="30" cy="15" r="1.4" fill={TEAL} />
-    </svg>
-  );
-}
-
-function IconPool() {
-  return (
-    <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8">
-      <path
-        d="M6 30c3 3 6-3 9 0s6-3 9 0 6-3 9 0 6-3 9 0"
-        stroke={TEAL}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path d="M34 8v14 M34 8h6 M34 14h6" stroke={TEAL} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 type Service = {
   id: string;
   title: string;
   desc: string;
   photo: string;
-  Icon: ComponentType;
+  Icon: LucideIcon;
 };
 
 const services: Service[] = [
@@ -74,21 +33,21 @@ const services: Service[] = [
     title: "PÓS OBRA",
     desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você.",
     photo: fotoPosObra,
-    Icon: IconBroom,
+    Icon: Sparkles,
   },
   {
     id: "passadoria",
     title: "PASSADORIA",
     desc: "Suas roupas bem passadas, cuidadas e dobradas.",
     photo: fotoPassadoria,
-    Icon: IconIron,
+    Icon: Shirt,
   },
   {
     id: "limpeza-piscina",
     title: "LIMPEZA DE PISCINA",
     desc: "Água limpa, cristalina e sempre pronta para você aproveitar.",
     photo: fotoLimpezaPiscina,
-    Icon: IconPool,
+    Icon: Waves,
   },
 ];
 
@@ -131,7 +90,7 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
           className="absolute -bottom-8 left-1/2 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full border-2"
           style={{ backgroundColor: NAVY, borderColor: TEAL }}
         >
-          <Icon />
+          <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: TEAL }} />
         </div>
       </div>
 
