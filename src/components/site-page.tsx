@@ -74,7 +74,7 @@ export function SiteFooter() {
       title: "Empresa",
       links: [
         { label: "Como funciona", to: "/como-funciona" },
-        { label: "Profissionais", to: "/profissionais" },
+        
         { label: "Avaliações", to: "/avaliacoes" },
         { label: "Contato", to: "/contato" },
       ],

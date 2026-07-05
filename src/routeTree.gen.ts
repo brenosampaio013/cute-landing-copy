@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicosRouteImport } from './routes/servicos'
-import { Route as ProfissionaisRouteImport } from './routes/profissionais'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContatoRouteImport } from './routes/contato'
@@ -48,11 +47,6 @@ import { Route as AdminAgendamentosRouteImport } from './routes/admin.agendament
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
   path: '/servicos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfissionaisRoute = ProfissionaisRouteImport.update({
-  id: '/profissionais',
-  path: '/profissionais',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -230,7 +224,6 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
@@ -266,7 +259,6 @@ export interface FileRoutesByTo {
   '/como-funciona': typeof ComoFuncionaRoute
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
-  '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
@@ -304,7 +296,6 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/profissionais': typeof ProfissionaisRoute
   '/servicos': typeof ServicosRoute
   '/admin/agendamentos': typeof AdminAgendamentosRoute
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
@@ -343,7 +334,6 @@ export interface FileRouteTypes {
     | '/contato'
     | '/dashboard'
     | '/login'
-    | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/avaliacoes'
@@ -379,7 +369,6 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/contato'
     | '/login'
-    | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/avaliacoes'
@@ -416,7 +405,6 @@ export interface FileRouteTypes {
     | '/contato'
     | '/dashboard'
     | '/login'
-    | '/profissionais'
     | '/servicos'
     | '/admin/agendamentos'
     | '/admin/avaliacoes'
@@ -454,7 +442,6 @@ export interface RootRouteChildren {
   ContatoRoute: typeof ContatoRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
-  ProfissionaisRoute: typeof ProfissionaisRoute
   ServicosRoute: typeof ServicosRoute
   AdminAgendamentosRoute: typeof AdminAgendamentosRoute
   AdminAvaliacoesRoute: typeof AdminAvaliacoesRoute
@@ -480,13 +467,6 @@ declare module '@tanstack/react-router' {
       path: '/servicos'
       fullPath: '/servicos'
       preLoaderRoute: typeof ServicosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profissionais': {
-      id: '/profissionais'
-      path: '/profissionais'
-      fullPath: '/profissionais'
-      preLoaderRoute: typeof ProfissionaisRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -762,7 +742,6 @@ const rootRouteChildren: RootRouteChildren = {
   ContatoRoute: ContatoRoute,
   DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
-  ProfissionaisRoute: ProfissionaisRoute,
   ServicosRoute: ServicosRoute,
   AdminAgendamentosRoute: AdminAgendamentosRoute,
   AdminAvaliacoesRoute: AdminAvaliacoesRoute,
