@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
-import type { ComponentType } from "react";
+import type { ComponentProps } from "react";
 import { SitePage } from "@/components/site-page";
 import fotoPosObra from "@/assets/service-pos-obra.jpg";
 import fotoPassadoria from "@/assets/service-passadoria.jpg";
