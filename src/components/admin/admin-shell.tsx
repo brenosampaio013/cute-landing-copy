@@ -22,6 +22,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useProfile } from "@/hooks/queries/use-profile";
+import { useAuth } from "@/hooks/use-auth";
+import { useUnreadTotalWithSound } from "@/hooks/queries/use-mensagens";
 
 export const NAVY = "#0A1128";
 export const NAVY_2 = "#0D1B3D";
