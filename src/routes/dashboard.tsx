@@ -15,9 +15,11 @@ import {
   Leaf,
   Menu,
   X,
+  Shield,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/queries/use-profile";
+import { useIsAdmin } from "@/hooks/queries/use-is-admin";
 import { useLogout } from "@/hooks/use-logout";
 import { FullPageLoader } from "@/components/full-page-loader";
 
@@ -50,8 +52,13 @@ function DashboardLayout() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const { profile, displayName, initial } = useProfile();
+  const isAdmin = useIsAdmin(user);
   const handleLogout = useLogout("/");
   const [open, setOpen] = useState(false);
+
+  const nav: NavItem[] = isAdmin
+    ? [...NAV, { label: "Painel Admin", icon: Shield, to: "/admin" }]
+    : NAV;
 
   // Client-side auth guard
   useEffect(() => {
@@ -98,7 +105,7 @@ function DashboardLayout() {
             </div>
 
             <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-6">
-              {NAV.map((item) => {
+              {nav.map((item) => {
                 const inactive = "text-white/70 hover:bg-white/5 hover:text-white";
                 const active = "bg-[#2DD4BF]/15 text-white ring-1 ring-inset ring-[#2DD4BF]/30";
                 const base = "flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition";
