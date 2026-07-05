@@ -636,7 +636,7 @@ function NovoAgendamentoDialog({
           <Field label="Profissional">
             <Select value={form.profissional} onValueChange={(v) => setForm({ ...form, profissional: v })}>
               <SelectTrigger><SelectValue placeholder="Selecionar" /></SelectTrigger>
-              <SelectContent>{PROFISSIONAIS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              <SelectContent>{profissionais.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
             </Select>
           </Field>
           <Field label="Duração (min)"><Input type="number" value={form.duracao} onChange={(e) => setForm({ ...form, duracao: e.target.value })} /></Field>
