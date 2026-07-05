@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Loader2, X, ShieldCheck, Clock, CalendarCheck, Headphones } from "lucide-react";
+import { Check, Loader2, X, ShieldCheck, Clock, CalendarCheck, Headphones, Waves } from "lucide-react";
 import { toast } from "sonner";
 
 import { SitePage } from "@/components/site-page";
