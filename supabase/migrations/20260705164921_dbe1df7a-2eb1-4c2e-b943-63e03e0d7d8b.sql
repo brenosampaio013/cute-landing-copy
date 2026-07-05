@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.check_agendamento_conflito(uuid, date, time, time, uuid) FROM authenticated;
