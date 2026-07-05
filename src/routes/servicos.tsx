@@ -90,7 +90,7 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
           className="absolute -bottom-8 left-1/2 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full border-2"
           style={{ backgroundColor: NAVY, borderColor: TEAL }}
         >
-          <Icon />
+          <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: TEAL }} />
         </div>
       </div>
 
