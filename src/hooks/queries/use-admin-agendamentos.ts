@@ -6,6 +6,7 @@ export type AgPagamento = "Pago" | "Pendente" | "Estornado";
 
 export type AgendamentoRow = {
   id: string;
+  rawId: string;
   servico: string;
   cliente: string;
   clienteTel: string;
