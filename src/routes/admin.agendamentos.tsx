@@ -635,19 +635,40 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
         </section>
 
         <div className="grid grid-cols-2 gap-2 pt-2">
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => onChange({ ...ag, status: "Confirmado" })}>
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5" onClick={() => onStatus("Confirmado")}>
             <Check className="h-4 w-4" /> Confirmar
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5">
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5" onClick={() => setReOpen(true)}>
             <RotateCcw className="h-4 w-4" /> Reagendar
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-emerald-600" onClick={() => onChange({ ...ag, status: "Concluído" })}>
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-emerald-600" onClick={() => onStatus("Concluído")}>
             <CheckCircle2 className="h-4 w-4" /> Concluir
           </Button>
-          <Button variant="outline" size="sm" className="gap-1.5 text-rose-600" onClick={() => onChange({ ...ag, status: "Cancelado" })}>
+          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-rose-600" onClick={() => onStatus("Cancelado")}>
             <X className="h-4 w-4" /> Cancelar
           </Button>
         </div>
+
+        <Dialog open={reOpen} onOpenChange={setReOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader><DialogTitle>Reagendar</DialogTitle></DialogHeader>
+            <div className="grid gap-3 py-2">
+              <Field label="Data"><Input type="date" value={rData} onChange={(e) => setRData(e.target.value)} /></Field>
+              <Field label="Horário"><Input type="time" value={rHora} onChange={(e) => setRHora(e.target.value)} /></Field>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setReOpen(false)}>Cancelar</Button>
+              <Button
+                disabled={pending}
+                onClick={() => { onReagendar(rData, rHora); setReOpen(false); }}
+                className="text-white hover:opacity-90"
+                style={{ background: TEAL }}
+              >
+                Salvar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );
