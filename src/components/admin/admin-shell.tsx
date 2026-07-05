@@ -56,18 +56,18 @@ export const PRINCIPAL: NavItem[] = [
   { key: "profissionais", label: "Profissionais", icon: Users, to: "/admin/profissionais" },
   { key: "clientes", label: "Clientes", icon: UserCircle, to: "/admin/clientes" },
   { key: "pagamentos", label: "Pagamentos", icon: CreditCard, to: "/admin/pagamentos" },
-  { key: "avaliacoes", label: "Avaliações", icon: Star },
+  { key: "avaliacoes", label: "Avaliações", icon: Star, to: "/admin/avaliacoes" },
   { key: "mensagens", label: "Mensagens", icon: MessageSquare, to: "/admin/mensagens" },
-  { key: "cupons", label: "Cupons", icon: Ticket },
-  { key: "relatorios", label: "Relatórios", icon: FileBarChart },
+  { key: "cupons", label: "Cupons", icon: Ticket, to: "/admin/cupons" },
+  { key: "relatorios", label: "Relatórios", icon: FileBarChart, to: "/admin/relatorios" },
 ];
 
 export const GERENCIAMENTO: NavItem[] = [
-  { key: "usuarios", label: "Usuários", icon: UserCog },
-  { key: "categorias", label: "Categorias", icon: Tag },
-  { key: "configuracoes", label: "Configurações", icon: Settings },
-  { key: "notificacoes", label: "Notificações", icon: Bell },
-  { key: "logs", label: "Logs do sistema", icon: ScrollText },
+  { key: "usuarios", label: "Usuários", icon: UserCog, to: "/admin/usuarios" },
+  { key: "categorias", label: "Categorias", icon: Tag, to: "/admin/categorias" },
+  { key: "configuracoes", label: "Configurações", icon: Settings, to: "/admin/configuracoes" },
+  { key: "notificacoes", label: "Notificações", icon: Bell, to: "/admin/notificacoes" },
+  { key: "logs", label: "Logs do sistema", icon: ScrollText, to: "/admin/logs" },
 ];
 
 export const SIDEBAR_SECTIONS = { PRINCIPAL: "PRINCIPAL", GERENCIAMENTO: "GERENCIAMENTO" } as const;
