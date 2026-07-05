@@ -1,86 +1,106 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Leaf } from "lucide-react";
+import { Sparkles, ShieldCheck, Leaf } from "lucide-react";
+import logoUrl from "@/assets/logo.png";
+import heroUrl from "@/assets/hero-cleaner.jpg";
 
-export function AuthShell({
-  quote,
-  imageUrl,
-  children,
-}: {
-  quote: string;
-  imageUrl: string;
-  children: ReactNode;
-}) {
+export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-white lg:grid lg:grid-cols-2">
-      {/* Left panel */}
-      <aside
-        className="relative hidden overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12"
-        style={{
-          background:
-            "linear-gradient(160deg, #071A33 0%, #0A1A2F 50%, #0B2342 100%)",
-        }}
-      >
-        <Link to="/" className="inline-flex items-center gap-2">
-          <Leaf className="h-5 w-5 text-[#2DD4BF]" />
-          <div>
+    <div className="min-h-screen bg-slate-50 p-3 sm:p-6 lg:p-8">
+      <div className="mx-auto grid min-h-[calc(100vh-1.5rem)] max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200/60 lg:min-h-[calc(100vh-4rem)] lg:grid-cols-[1.05fr_1fr]">
+        {/* Left panel */}
+        <aside
+          className="relative hidden overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12"
+          style={{
+            background:
+              "linear-gradient(160deg, #051329 0%, #0A1A2F 45%, #0B2B4E 100%)",
+          }}
+        >
+          {/* Background photo */}
+          <div className="pointer-events-none absolute inset-0">
+            <img
+              src={heroUrl}
+              alt=""
+              className="h-full w-full object-cover opacity-40"
+              style={{
+                maskImage:
+                  "linear-gradient(180deg, black 0%, black 60%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(180deg, black 0%, black 60%, transparent 100%)",
+              }}
+            />
             <div
-              className="text-2xl leading-none tracking-wide text-white"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(5,19,41,0.55) 0%, rgba(10,26,47,0.75) 55%, rgba(11,43,78,0.95) 100%)",
+              }}
+            />
+            {/* Decorative wave */}
+            <svg
+              className="absolute bottom-0 left-0 right-0 h-40 w-full text-[#2DD4BF]/25"
+              viewBox="0 0 800 200"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M0 120 Q 200 60 400 120 T 800 120 L 800 200 L 0 200 Z"
+                fill="currentColor"
+                opacity="0.35"
+              />
+              <path
+                d="M0 150 Q 200 100 400 150 T 800 150 L 800 200 L 0 200 Z"
+                fill="currentColor"
+                opacity="0.5"
+              />
+            </svg>
+          </div>
+
+          {/* Logo */}
+          <div className="relative z-10">
+            <Link to="/" className="inline-block">
+              <img src={logoUrl} alt="Maré Nobre" className="h-24 w-auto" />
+            </Link>
+          </div>
+
+          {/* Tagline */}
+          <div className="relative z-10 max-w-md">
+            <h2
+              className="text-4xl leading-tight text-white sm:text-5xl"
               style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
             >
-              MARÉ NOBRE
-            </div>
-            <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.25em] text-white/60">
-              Soluções para o seu lar
+              Cuidado completo
+              <br />
+              para o{" "}
+              <span className="relative inline-block text-[#2DD4BF]">
+                seu lar.
+                <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-[#2DD4BF]" />
+              </span>
+            </h2>
+
+            <div className="mt-10 grid grid-cols-3 gap-4 text-center">
+              {[
+                { Icon: Sparkles, label: "Limpeza de qualidade" },
+                { Icon: ShieldCheck, label: "Profissionais confiáveis" },
+                { Icon: Leaf, label: "Soluções que transformam" },
+              ].map(({ Icon, label }) => (
+                <div key={label} className="flex flex-col items-center gap-2">
+                  <Icon className="h-7 w-7 text-[#2DD4BF]" strokeWidth={1.5} />
+                  <p className="text-xs leading-snug text-white/80">{label}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </Link>
+        </aside>
 
-        <div className="relative z-10 max-w-md">
-          <p
-            className="text-4xl leading-tight text-white"
-            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
-          >
-            {quote}
-          </p>
-          <div className="mt-6 h-[3px] w-16 rounded-full bg-[#2DD4BF]" />
-        </div>
-
-        <div className="pointer-events-none absolute inset-0">
-          <img
-            src={imageUrl}
-            alt=""
-            className="h-full w-full object-cover opacity-40"
-            style={{
-              maskImage:
-                "radial-gradient(ellipse at center, black 40%, transparent 85%)",
-              WebkitMaskImage:
-                "radial-gradient(ellipse at center, black 40%, transparent 85%)",
-            }}
-          />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(160deg, rgba(7,26,51,0.85) 0%, rgba(10,26,47,0.75) 50%, rgba(11,35,66,0.85) 100%)",
-            }}
-          />
-        </div>
-      </aside>
-
-      {/* Right panel */}
-      <main className="flex min-h-screen flex-col items-center justify-center bg-white px-6 py-12 sm:px-10">
-        <div className="mb-8 flex items-center gap-2 lg:hidden">
-          <Leaf className="h-5 w-5 text-[#2DD4BF]" />
-          <span
-            className="text-xl text-[#0A1A2F]"
-            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
-          >
-            MARÉ NOBRE
-          </span>
-        </div>
-        <div className="w-full max-w-md">{children}</div>
-      </main>
+        {/* Right panel */}
+        <main className="flex flex-col items-center justify-center bg-white px-6 py-12 sm:px-12">
+          <div className="mb-8 flex items-center gap-2 lg:hidden">
+            <img src={logoUrl} alt="Maré Nobre" className="h-14 w-auto" />
+          </div>
+          <div className="w-full max-w-md">{children}</div>
+        </main>
+      </div>
     </div>
   );
 }
@@ -89,7 +109,7 @@ export function GoogleButton({ label }: { label: string }) {
   return (
     <button
       type="button"
-      className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:shadow-sm"
     >
       <svg className="h-4 w-4" viewBox="0 0 48 48" aria-hidden="true">
         <path
