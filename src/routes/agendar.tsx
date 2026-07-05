@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { SitePage } from "@/components/site-page";
@@ -22,8 +22,6 @@ const services = [
   { icon: iconJardinagem.url, title: "Jardinagem" },
 ];
 
-type Pro = { id: string; nome: string | null };
-
 function addHour(hhmm: string): string {
   const [h, m] = hhmm.split(":").map(Number);
   const d = new Date(2000, 0, 1, h, m);
@@ -34,23 +32,12 @@ function addHour(hhmm: string): string {
 function Agendar() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [pros, setPros] = useState<Pro[]>([]);
   const [servico, setServico] = useState<string>(services[0].title);
-  const [profissionalId, setProfissionalId] = useState<string>("");
   const [data, setData] = useState<string>("");
   const [horario, setHorario] = useState<string>("");
   const [endereco, setEndereco] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("id, nome")
-        .eq("tipo_usuario", "profissional");
-      setPros(data ?? []);
-    })();
-  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -78,32 +65,9 @@ function Agendar() {
     const horarioFim = addHour(horario);
     setSubmitting(true);
 
-    // Validação: conflito com outros agendamentos do mesmo profissional
-    if (profissionalId) {
-      const { data: conflito, error: rpcErr } = await supabase.rpc(
-        "check_agendamento_conflito",
-        {
-          p_profissional: profissionalId,
-          p_data: data,
-          p_inicio: horario,
-          p_fim: horarioFim,
-        },
-      );
-      if (rpcErr) {
-        setSubmitting(false);
-        toast.error("Não foi possível verificar disponibilidade.");
-        return;
-      }
-      if (conflito) {
-        setSubmitting(false);
-        toast.error("Este profissional já tem um agendamento neste horário.");
-        return;
-      }
-    }
-
     const { error } = await supabase.from("agendamentos").insert({
       cliente_id: user.id,
-      profissional_id: profissionalId || null,
+      profissional_id: null,
       servico,
       data,
       horario_inicio: horario,
@@ -111,6 +75,7 @@ function Agendar() {
       endereco: endereco || null,
       status: "pendente",
     });
+
     setSubmitting(false);
 
     if (error) {
@@ -139,7 +104,7 @@ function Agendar() {
   return (
     <SitePage
       title="Agendar serviço"
-      subtitle="Escolha o serviço, o profissional, a data e o horário. Confirmação em minutos."
+      subtitle="Escolha o serviço, a data e o horário. Confirmação em minutos."
     >
       <form
         onSubmit={handleSubmit}
@@ -192,27 +157,9 @@ function Agendar() {
             <div>
               <div className="mb-3 flex items-center gap-3">
                 <StepBadge n={2} />
-                <label className={stepLabelCls}>Profissional</label>
-              </div>
-              <select
-                value={profissionalId}
-                onChange={(e) => setProfissionalId(e.target.value)}
-                className={`${inputCls} appearance-none cursor-pointer`}
-              >
-                <option value="">Sem preferência</option>
-                {pros.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.nome || "Profissional"}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <div className="mb-3 flex items-center gap-3">
-                <StepBadge n={3} />
                 <label className={stepLabelCls}>Data e horário</label>
               </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <input
                   type="date"
@@ -234,7 +181,7 @@ function Agendar() {
 
             <div>
               <div className="mb-3 flex items-center gap-3">
-                <StepBadge n={4} />
+                <StepBadge n={3} />
                 <label className={stepLabelCls}>Endereço</label>
               </div>
               <input
