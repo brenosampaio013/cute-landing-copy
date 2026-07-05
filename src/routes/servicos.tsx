@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Home, Sparkles, Shirt, Wrench, Clock, type LucideIcon } from "lucide-react";
+import { Clock } from "lucide-react";
+import type { ComponentType } from "react";
 import { SitePage } from "@/components/site-page";
-import photoPadrao from "@/assets/service-limpeza-padrao.jpg";
-import photoPesada from "@/assets/service-limpeza-pesada.jpg";
-import photoPassadoria from "@/assets/service-passadoria.jpg";
-import photoMontagem from "@/assets/service-montagem.jpg";
+import fotoPosObra from "@/assets/service-pos-obra.jpg";
+import fotoPassadoria from "@/assets/service-passadoria.jpg";
+import fotoLimpezaPiscina from "@/assets/service-limpeza-piscina.jpg";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -19,91 +19,125 @@ export const Route = createFileRoute("/servicos")({
 const NAVY = "#0B1E3D";
 const TEAL = "#1CA9B5";
 
+function IconBroom() {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8">
+      <path d="M30 6 L18 34" stroke={TEAL} strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M18 34 L10 42 M18 34 L22 41 M18 34 L14 41" stroke={TEAL} strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="34" cy="10" r="1.6" fill={TEAL} />
+      <circle cx="39" cy="15" r="1.2" fill={TEAL} />
+      <circle cx="36" cy="18" r="1" fill={TEAL} />
+    </svg>
+  );
+}
+
+function IconIron() {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8">
+      <path
+        d="M8 30 h24 c4 0 8-4 8-9 0-4-3-7-7-8l-7-2H14c-3 0-6 3-6 6z"
+        stroke={TEAL}
+        strokeWidth="2.2"
+        strokeLinejoin="round"
+      />
+      <line x1="6" y1="34" x2="34" y2="34" stroke={TEAL} strokeWidth="2.2" strokeLinecap="round" />
+      <circle cx="30" cy="15" r="1.4" fill={TEAL} />
+    </svg>
+  );
+}
+
+function IconPool() {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className="h-8 w-8">
+      <path
+        d="M6 30c3 3 6-3 9 0s6-3 9 0 6-3 9 0 6-3 9 0"
+        stroke={TEAL}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      <path d="M34 8v14 M34 8h6 M34 14h6" stroke={TEAL} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 type Service = {
   id: string;
-  photo: string;
-  icon: LucideIcon;
   title: string;
   desc: string;
+  photo: string;
+  Icon: ComponentType;
 };
 
 const services: Service[] = [
   {
-    id: "padrao",
-    photo: photoPadrao,
-    icon: Home,
-    title: "LIMPEZA PADRÃO",
-    desc: "Limpeza na medida certa para as necessidades do dia-a-dia.",
-  },
-  {
-    id: "pesada",
-    photo: photoPesada,
-    icon: Sparkles,
-    title: "LIMPEZA PESADA",
-    desc: "Limpeza com tudo que seu lar precisa para ficar brilhando.",
+    id: "pos-obra",
+    title: "PÓS OBRA",
+    desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você.",
+    photo: fotoPosObra,
+    Icon: IconBroom,
   },
   {
     id: "passadoria",
-    photo: photoPassadoria,
-    icon: Shirt,
     title: "PASSADORIA",
     desc: "Suas roupas bem passadas, cuidadas e dobradas.",
+    photo: fotoPassadoria,
+    Icon: IconIron,
   },
   {
-    id: "montagem",
-    photo: photoMontagem,
-    icon: Wrench,
-    title: "MONTAGEM DE MÓVEIS",
-    desc: "Montadores qualificados para montar todo tipo de móvel.",
+    id: "limpeza-piscina",
+    title: "LIMPEZA DE PISCINA",
+    desc: "Água limpa, cristalina e sempre pronta para você aproveitar.",
+    photo: fotoLimpezaPiscina,
+    Icon: IconPool,
   },
 ];
 
-function ServiceCard({ title, desc, photo, icon: Icon }: Service) {
+function ServiceCard({ title, desc, photo, Icon }: Service) {
   return (
     <article
-      className="relative flex w-full max-w-sm mx-auto flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
+      className="relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition hover:-translate-y-1 hover:shadow-2xl"
       style={{ backgroundColor: NAVY }}
     >
-      {/* Photo */}
-      <div className="relative h-72 w-full overflow-hidden">
+      <div className="relative h-80 w-full overflow-hidden">
         <img
           src={photo}
           alt={`Funcionário da Maré Nobre realizando o serviço de ${title.toLowerCase()}`}
-          className="h-full w-full object-cover"
+          width={768}
+          height={1024}
           loading="lazy"
+          className="h-full w-full object-cover"
         />
 
-        {/* Top gradient for brand overlay */}
+        {/* Top brand overlay */}
         <div
-          className="absolute inset-x-0 top-0 h-20"
-          style={{ background: "linear-gradient(to bottom, rgba(11,30,61,0.85), transparent)" }}
+          className="absolute inset-x-0 top-0 h-24"
+          style={{ background: "linear-gradient(to bottom, rgba(11,30,61,0.9), transparent)" }}
         />
-        <div className="absolute top-4 left-0 right-0 flex flex-col items-center">
-          <span className="font-serif text-lg tracking-wide text-white">MARÉ NOBRE</span>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-teal-200/90">
+        <div className="absolute inset-x-0 top-4 flex flex-col items-center">
+          <span className="font-serif text-lg tracking-[0.15em] text-white">MARÉ NOBRE</span>
+          <span className="mt-0.5 text-[10px] uppercase tracking-[0.25em] text-teal-200/90">
             Soluções para o seu lar
           </span>
         </div>
 
         {/* Bottom fade into card */}
         <div
-          className="absolute inset-x-0 bottom-0 h-16"
+          className="absolute inset-x-0 bottom-0 h-20"
           style={{ background: `linear-gradient(to top, ${NAVY}, transparent)` }}
         />
 
-        {/* Circular icon badge overlapping photo */}
+        {/* Circular icon badge */}
         <div
           className="absolute -bottom-8 left-1/2 flex h-16 w-16 -translate-x-1/2 items-center justify-center rounded-full border-2"
           style={{ backgroundColor: NAVY, borderColor: TEAL }}
         >
-          <Icon className="h-7 w-7" strokeWidth={1.75} style={{ color: TEAL }} />
+          <Icon />
         </div>
       </div>
 
-      {/* Body */}
       <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-12 text-center">
         <h3 className="text-xl font-bold uppercase tracking-wide text-white">{title}</h3>
-        <p className="max-w-[240px] text-sm leading-relaxed text-slate-300">{desc}</p>
+        <p className="max-w-[260px] text-sm leading-relaxed text-slate-300">{desc}</p>
 
         <div
           className="flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium"
@@ -132,7 +166,7 @@ function ServicosPage() {
       title="Nossos serviços"
       subtitle="Profissionais qualificados prontos para cuidar do seu lar com o padrão Maré Nobre."
     >
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-8 md:grid-cols-3">
         {services.map((s) => (
           <ServiceCard key={s.id} {...s} />
         ))}
