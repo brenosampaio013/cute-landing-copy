@@ -227,7 +227,7 @@ async function compute(r: PeriodoRange) {
   });
 
   return {
-    range, kpis, serie, status, topServicos, agendPorServico, resumo,
+    range: r, kpis, serie, status, topServicos, agendPorServico, resumo,
     financeiro: { bruto: faturamento, taxas, repasses, liquido, porMes: fatPorMes, porCategoria: topServicos, detalhe },
     agendamentosTab: { areaSerie, porServico: agendPorServico, heat, tempoConfirmacao: "2h 15min" },
     profissionaisTab: { ativos: profissionaisAtivos, novos: profissionaisNovos, notaMedia, retencao: 0, top: topProfissionais },
