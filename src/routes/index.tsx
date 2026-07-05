@@ -19,6 +19,7 @@ import photoPassadoria from "@/assets/service-passadoria.jpg";
 import photoMontagem from "@/assets/service-montagem.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
+import { InstallAppBanner } from "@/components/install-app-banner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,6 +59,7 @@ const steps = [
 function Index() {
   return (
     <div className="min-h-screen bg-white">
+      <InstallAppBanner />
       {/* Hero + Nav */}
       <section
         id="inicio"
