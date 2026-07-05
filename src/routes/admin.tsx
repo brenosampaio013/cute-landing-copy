@@ -60,10 +60,17 @@ function AdminPanel() {
   const [pagamentos, setPagamentos] = useState<Pagamento[]>([]);
   const [busy, setBusy] = useState(true);
 
-  // Redireciona quando termina de carregar sem sessão
+  // Guarda de acesso: sem sessão → /login; autenticado mas não-admin → /dashboard
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/login" });
-  }, [loading, user, navigate]);
+    if (loading) return;
+    if (!user) {
+      navigate({ to: "/login", replace: true });
+      return;
+    }
+    if (isAdmin === false) {
+      navigate({ to: "/dashboard", replace: true });
+    }
+  }, [loading, user, isAdmin, navigate]);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -117,25 +124,11 @@ function AdminPanel() {
     }
   }
 
-  if (loading || (user && isAdmin === null)) {
+  if (loading || !user || isAdmin === null || isAdmin === false) {
     return <FullPageLoader />;
   }
 
 
-  if (!isAdmin) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#F5F7FA] px-6 text-center">
-        <Shield className="h-10 w-10 text-rose-500" />
-        <h1 className="text-2xl font-semibold text-[#0A1A2F]">Acesso restrito</h1>
-        <p className="text-slate-600">Você não tem permissão para acessar o painel administrativo.</p>
-        <button
-          onClick={() => navigate({ to: "/" })}
-          className="mt-2 rounded-lg bg-[#0A1A2F] px-5 py-2 text-sm font-medium text-white hover:bg-[#0A1A2F]/90"
-        >
-          Voltar ao início
-        </button>
-      </div>
-    );
   }
 
   const TABS: { key: Tab; label: string; icon: typeof Calendar }[] = [
