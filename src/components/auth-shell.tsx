@@ -13,7 +13,8 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
             <img
               src={loginBg.url}
               alt="Maré Nobre — Cuidado completo para o seu lar"
-              className="h-full w-full object-cover object-left"
+              className="h-full w-full object-cover"
+              style={{ objectPosition: "0% center", transform: "scale(2)", transformOrigin: "left center" }}
             />
           </Link>
         </aside>
@@ -24,9 +25,8 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           className="relative flex flex-col items-center justify-center overflow-hidden bg-[#0A1A2F] px-6 py-8 lg:hidden"
           style={{
             backgroundImage: `linear-gradient(180deg, rgba(5,19,41,0.55) 0%, rgba(10,26,47,0.85) 100%), url(${loginBg.url})`,
-            backgroundSize: "cover",
+            backgroundSize: "200% auto",
             backgroundPosition: "left center",
-
           }}
         >
           <Link to="/" className="inline-block">
