@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
@@ -20,6 +20,7 @@ export type Mensagem = {
   autor_id: string;
   autor_tipo: "admin" | "usuario";
   conteudo: string;
+  anexo_url: string | null;
   lida: boolean;
   created_at: string;
 };
@@ -120,9 +121,10 @@ export function useMensagens(conversaId: string | null) {
 export function useEnviarMensagem() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (v: { conversaId: string; autorId: string; autorTipo: "admin" | "usuario"; conteudo: string }) => {
+    mutationFn: async (v: { conversaId: string; autorId: string; autorTipo: "admin" | "usuario"; conteudo: string; anexoUrl?: string | null }) => {
       const { error } = await supabase.from("mensagens").insert({
-        conversa_id: v.conversaId, autor_id: v.autorId, autor_tipo: v.autorTipo, conteudo: v.conteudo,
+        conversa_id: v.conversaId, autor_id: v.autorId, autor_tipo: v.autorTipo,
+        conteudo: v.conteudo, anexo_url: v.anexoUrl ?? null,
       });
       if (error) throw error;
     },
@@ -151,4 +153,91 @@ export function useMarcarLidas() {
       qc.invalidateQueries({ queryKey: ["minha-conversa"] });
     },
   });
+}
+
+/** Upload de anexo para o bucket privado. Retorna o path (não URL). */
+export async function uploadAnexoChat(userId: string, file: File): Promise<string> {
+  const ext = file.name.split(".").pop() ?? "bin";
+  const path = `${userId}/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from("chat-anexos").upload(path, file, {
+    contentType: file.type, upsert: false,
+  });
+  if (error) throw error;
+  return path;
+}
+
+/** Signed URL para exibir uma imagem do bucket privado. */
+export function useAnexoUrl(path: string | null) {
+  return useQuery({
+    queryKey: ["anexo-url", path],
+    enabled: !!path,
+    staleTime: 55 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase.storage.from("chat-anexos").createSignedUrl(path!, 60 * 60);
+      if (error) throw error;
+      return data.signedUrl;
+    },
+  });
+}
+
+/** Contagem global de não lidas + toca som quando aumenta. */
+export function useUnreadTotalWithSound(kind: "admin" | "usuario", enabled: boolean, user: User | null) {
+  const qc = useQueryClient();
+  const [total, setTotal] = useState(0);
+  const prev = useRef<number | null>(null);
+
+  const refetch = async () => {
+    if (!enabled) return;
+    if (kind === "admin") {
+      const { data } = await supabase.from("conversas").select("nao_lidas_admin");
+      const t = (data ?? []).reduce((s, c) => s + (c.nao_lidas_admin ?? 0), 0);
+      setTotal(t);
+    } else if (user) {
+      const { data } = await supabase.from("conversas").select("nao_lidas_usuario").eq("user_id", user.id).maybeSingle();
+      setTotal(data?.nao_lidas_usuario ?? 0);
+    }
+  };
+
+  useEffect(() => {
+    if (!enabled) return;
+    refetch();
+    const ch = supabase
+      .channel(`unread-${kind}-${user?.id ?? "x"}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "conversas" }, () => {
+        refetch();
+        qc.invalidateQueries({ queryKey: ["admin-conversas"] });
+        qc.invalidateQueries({ queryKey: ["minha-conversa"] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled, kind, user?.id]);
+
+  useEffect(() => {
+    if (prev.current !== null && total > prev.current) playBeep();
+    prev.current = total;
+  }, [total]);
+
+  return total;
+}
+
+/** Beep curto via Web Audio API (sem asset). */
+function playBeep() {
+  try {
+    const AC: typeof AudioContext =
+      (window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
+    const ctx = new AC();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(880, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.18);
+    g.gain.setValueAtTime(0.001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    o.connect(g).connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.4);
+    o.onended = () => ctx.close();
+  } catch { /* ignore */ }
 }

@@ -22,6 +22,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useProfile } from "@/hooks/queries/use-profile";
+import { useAuth } from "@/hooks/use-auth";
+import { useUnreadTotalWithSound } from "@/hooks/queries/use-mensagens";
 
 export const NAVY = "#0A1128";
 export const NAVY_2 = "#0D1B3D";
@@ -82,6 +84,9 @@ export function AdminShell({
   children: React.ReactNode;
 }) {
   const { displayName, initial } = useProfile();
+  const { user } = useAuth();
+  const unread = useUnreadTotalWithSound("admin", !!user, user);
+  const badges: Partial<Record<NavKey, number>> = { mensagens: unread };
 
   return (
     <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
@@ -100,7 +105,7 @@ export function AdminShell({
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 pb-4">
-          <SidebarSection title="PRINCIPAL" items={PRINCIPAL} active={active} />
+          <SidebarSection title="PRINCIPAL" items={PRINCIPAL} active={active} badges={badges} />
           <SidebarSection title="GERENCIAMENTO" items={GERENCIAMENTO} active={active} className="mt-6" />
         </nav>
 
@@ -159,14 +164,15 @@ export function AdminShell({
 }
 
 function SidebarSection({
-  title, items, active, className = "",
-}: { title: string; items: NavItem[]; active: NavKey; className?: string }) {
+  title, items, active, className = "", badges,
+}: { title: string; items: NavItem[]; active: NavKey; className?: string; badges?: Partial<Record<NavKey, number>> }) {
   return (
     <div className={className}>
       <p className="mb-2 px-4 text-[10px] font-semibold tracking-[0.16em] text-white/40">{title}</p>
       <ul className="space-y-0.5">
         {items.map((it) => {
           const isActive = it.key === active;
+          const badge = badges?.[it.key] ?? 0;
           const cls = `flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition ${
             isActive ? "text-white shadow-inner" : "text-white/65 hover:bg-white/[0.06] hover:text-white"
           }`;
@@ -174,7 +180,12 @@ function SidebarSection({
           const inner = (
             <>
               <it.icon className="h-[18px] w-[18px]" style={isActive ? { color: TEAL } : undefined} />
-              {it.label}
+              <span className="flex-1">{it.label}</span>
+              {badge > 0 && (
+                <span className="ml-auto rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  {badge > 99 ? "99+" : badge}
+                </span>
+              )}
             </>
           );
           return (
