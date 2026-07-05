@@ -48,6 +48,8 @@ import { useIsAdmin } from "@/hooks/queries/use-is-admin";
 import { useProfile } from "@/hooks/queries/use-profile";
 import { useAdminDashboard } from "@/hooks/queries/use-admin-dashboard";
 import { FullPageLoader } from "@/components/full-page-loader";
+import { AdminShell } from "@/components/admin/admin-shell";
+
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
