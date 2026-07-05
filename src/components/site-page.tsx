@@ -141,13 +141,13 @@ export function SiteFooter() {
           <p>© {new Date().getFullYear()} Maré Nobre — Soluções para o seu lar.</p>
           <div className="flex flex-wrap items-center gap-4">
             <span className="flex items-center gap-1.5">
-              <Mail className="h-3.5 w-3.5" /> contato@marenobre.com
+              <Mail className="h-3.5 w-3.5" /> atendimentomarenobre@gmail.com
             </span>
             <span className="flex items-center gap-1.5">
-              <Phone className="h-3.5 w-3.5" /> 0800 123 4567
+              <Phone className="h-3.5 w-3.5" /> (13) 99806-8265
             </span>
             <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5" /> São Paulo, SP
+              <MapPin className="h-3.5 w-3.5" /> Bertioga, SP
             </span>
           </div>
         </div>
