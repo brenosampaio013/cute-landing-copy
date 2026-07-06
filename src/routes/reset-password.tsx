@@ -1,9 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Loader2, KeyRound, CheckCircle2 } from "lucide-react";
-import { toast } from "sonner";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Eye, EyeOff, Loader2, Lock, CheckCircle2 } from "lucide-react";
 import { AuthShell } from "@/components/auth-shell";
 import { supabase } from "@/integrations/supabase/client";
+import { friendlyAuthError } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
@@ -12,133 +12,176 @@ export const Route = createFileRoute("/reset-password")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: ResetPasswordPage,
+  component: ResetPassword,
 });
 
-function ResetPasswordPage() {
+function ResetPassword() {
   const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
-  const [hasRecoverySession, setHasRecoverySession] = useState(false);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [done, setDone] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [invalidLink, setInvalidLink] = useState(false);
 
+  // Ao acessar via link do e-mail, o Supabase entrega uma sessão de recovery.
   useEffect(() => {
-    // Supabase parses the URL hash and emits PASSWORD_RECOVERY on load.
+    let mounted = true;
+
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) {
-        setHasRecoverySession(true);
-        setChecking(false);
+      if (!mounted) return;
+      if (event === "PASSWORD_RECOVERY" || session) {
+        setReady(true);
       }
     });
-    // Fallback: if we already have a session (link opened, event missed), allow reset.
+
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setHasRecoverySession(true);
-      setChecking(false);
+      if (!mounted) return;
+      if (data.session) {
+        setReady(true);
+      } else {
+        // Sem sessão e sem hash de recovery na URL => link inválido/expirado
+        const hash = window.location.hash;
+        if (!hash.includes("type=recovery") && !hash.includes("access_token")) {
+          setInvalidLink(true);
+        }
+      }
     });
-    return () => sub.subscription.unsubscribe();
+
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
-  async function onSubmit(e: React.FormEvent) {
+  const passwordError =
+    password && password.length < 6 ? "A senha deve ter no mínimo 6 caracteres." : "";
+  const confirmError =
+    confirm && confirm !== password ? "As senhas não coincidem." : "";
+
+  const canSubmit = useMemo(
+    () => ready && password.length >= 6 && confirm === password && !loading,
+    [ready, password, confirm, loading]
+  );
+
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setError(null);
-    if (password.length < 8) {
-      setError("A senha deve ter pelo menos 8 caracteres.");
-      return;
-    }
-    if (password !== confirm) {
-      setError("As senhas não coincidem.");
-      return;
-    }
-    setSaving(true);
+    setFormError(null);
+    if (!canSubmit) return;
+    setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
-    setSaving(false);
+    setLoading(false);
     if (error) {
-      setError(error.message);
-      toast.error("Não foi possível atualizar a senha.");
+      setFormError(friendlyAuthError(error.message));
       return;
     }
-    setDone(true);
-    toast.success("Senha atualizada com sucesso.");
-    setTimeout(() => navigate({ to: "/dashboard" }), 1500);
+    setSuccess(true);
+    setTimeout(() => navigate({ to: "/login" }), 2500);
   }
 
+  const inputBase =
+    "w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm text-slate-800 outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20";
+
   return (
-    <AuthShell>
-      <div className="flex min-h-full items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#2DD4BF]/10 text-[#0A9E8A]">
-              <KeyRound className="h-5 w-5" />
-            </div>
-            <div>
-              <h1
-                className="text-2xl text-[#0A1A2F]"
-                style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
+    <AuthShell quote="Redefina sua senha com segurança." imageUrl="">
+      <h1
+        className="text-center text-3xl text-[#0A1A2F] sm:text-4xl"
+        style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
+      >
+        Nova <span className="text-[#0A9E8A]">senha</span>
+      </h1>
+      <p className="mt-2 text-center text-sm text-slate-500">
+        Escolha uma senha nova para acessar sua conta
+      </p>
+
+      {invalidLink ? (
+        <div className="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          Este link de recuperação é inválido ou expirou.{" "}
+          <Link to="/login" className="font-semibold underline">
+            Solicitar novo link
+          </Link>
+        </div>
+      ) : success ? (
+        <div className="mt-8 flex flex-col items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-6 text-center text-sm text-emerald-800">
+          <CheckCircle2 className="h-10 w-10 text-emerald-600" />
+          <p className="font-semibold">Senha atualizada com sucesso!</p>
+          <p>Redirecionando para o login…</p>
+        </div>
+      ) : (
+        <form onSubmit={onSubmit} className="mt-8 space-y-4" noValidate>
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Nova senha
+            </label>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                type={showPwd ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={inputBase}
+                placeholder="Mínimo 6 caracteres"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPwd((s) => !s)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                tabIndex={-1}
               >
-                Redefinir senha
-              </h1>
-              <p className="text-sm text-slate-500">Escolha uma nova senha segura para sua conta.</p>
+                {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
             </div>
+            {passwordError && (
+              <p className="mt-1 text-xs text-red-600">{passwordError}</p>
+            )}
           </div>
 
-          {checking ? (
-            <div className="flex items-center justify-center py-16 text-slate-400">
-              <Loader2 className="h-6 w-6 animate-spin" />
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Confirmar senha
+            </label>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                type={showPwd ? "text" : "password"}
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                className={inputBase}
+                placeholder="Repita a nova senha"
+                autoComplete="new-password"
+              />
             </div>
-          ) : !hasRecoverySession ? (
-            <div className="rounded-xl bg-amber-50 p-4 text-sm text-amber-800 ring-1 ring-amber-200">
-              Link inválido ou expirado. Solicite um novo link na página de{" "}
-              <a href="/login" className="font-semibold underline">login</a>.
+            {confirmError && (
+              <p className="mt-1 text-xs text-red-600">{confirmError}</p>
+            )}
+          </div>
+
+          {formError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {formError}
             </div>
-          ) : done ? (
-            <div className="flex items-center gap-3 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-800 ring-1 ring-emerald-200">
-              <CheckCircle2 className="h-5 w-5" />
-              Senha atualizada. Redirecionando…
-            </div>
-          ) : (
-            <form onSubmit={onSubmit} className="space-y-4">
-              <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">Nova senha</span>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="new-password"
-                  minLength={8}
-                  required
-                  className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#0A1A2F] outline-none focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20"
-                />
-              </label>
-              <label className="block">
-                <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">Confirmar senha</span>
-                <input
-                  type="password"
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  autoComplete="new-password"
-                  minLength={8}
-                  required
-                  className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-[#0A1A2F] outline-none focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20"
-                />
-              </label>
-              {error && (
-                <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 ring-1 ring-red-100">{error}</p>
-              )}
-              <button
-                type="submit"
-                disabled={saving}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#0A1A2F] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-125 disabled:opacity-50"
-              >
-                {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-                Atualizar senha
-              </button>
-            </form>
           )}
-        </div>
-      </div>
+
+          <button
+            type="submit"
+            disabled={!canSubmit}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#0A9E8A] px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+            Redefinir senha
+          </button>
+
+          <p className="pt-4 text-center text-sm text-slate-500">
+            Lembrou sua senha?{" "}
+            <Link to="/login" className="font-semibold text-[#0A9E8A] hover:underline">
+              Voltar ao login
+            </Link>
+          </p>
+        </form>
+      )}
     </AuthShell>
   );
 }
