@@ -42,9 +42,9 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { photo: photoPosObraAsset.url, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
-  { photo: photoPassadoriaAsset.url, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
-  { photo: photoLimpezaPiscinaAsset.url, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
+  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
+  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
+  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
 ];
 
 
