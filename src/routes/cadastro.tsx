@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
-import { AuthShell, GoogleButton } from "@/components/auth-shell";
+import { AuthShell } from "@/components/auth-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { friendlyAuthError } from "@/hooks/use-auth";
