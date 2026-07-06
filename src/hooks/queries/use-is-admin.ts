@@ -16,14 +16,20 @@ export function useIsAdmin(user: User | null): boolean | null {
     enabled: !!user,
     staleTime: 5 * 60_000,
     gcTime: 30 * 60_000,
+    retry: 1,
     queryFn: async () => {
       if (!user) return false;
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", user.id)
         .eq("role", "admin")
         .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
       return !!data;
     },
   });
