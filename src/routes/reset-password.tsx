@@ -34,21 +34,44 @@ function ResetPassword() {
       if (!mounted) return;
       if (event === "PASSWORD_RECOVERY" || session) {
         setReady(true);
+        setInvalidLink(false);
       }
     });
 
-    supabase.auth.getSession().then(({ data }) => {
+    (async () => {
+      // Fluxo PKCE: link vem com ?code=... — precisa trocar por sessão.
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get("code");
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (mounted && !error) {
+          setReady(true);
+          // limpa o code da URL
+          url.searchParams.delete("code");
+          window.history.replaceState({}, "", url.pathname + url.search + url.hash);
+          return;
+        }
+      }
+
+      const { data } = await supabase.auth.getSession();
       if (!mounted) return;
       if (data.session) {
         setReady(true);
-      } else {
-        // Sem sessão e sem hash de recovery na URL => link inválido/expirado
-        const hash = window.location.hash;
-        if (!hash.includes("type=recovery") && !hash.includes("access_token")) {
+        return;
+      }
+
+      const hash = window.location.hash;
+      const hasRecoveryHash =
+        hash.includes("type=recovery") || hash.includes("access_token");
+
+      // Aguarda um pouco para o onAuthStateChange disparar (PASSWORD_RECOVERY).
+      setTimeout(() => {
+        if (!mounted) return;
+        if (!hasRecoveryHash && !code) {
           setInvalidLink(true);
         }
-      }
-    });
+      }, 1500);
+    })();
 
     return () => {
       mounted = false;
