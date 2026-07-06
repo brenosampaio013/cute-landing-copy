@@ -6,9 +6,9 @@ import { toast } from "sonner";
 import { SitePage } from "@/components/site-page";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import iconLimpeza from "@/assets/icon-limpeza.png.asset.json";
-import iconPosObra from "@/assets/icon-posobra.png.asset.json";
-import iconPassadoria from "@/assets/icon-passadoria.png.asset.json";
+import iconLimpeza from "@/assets/icon-limpeza.png";
+import iconPosObra from "@/assets/icon-posobra.png";
+import iconPassadoria from "@/assets/icon-passadoria.png";
 
 export const Route = createFileRoute("/agendar")({
   head: () => ({ meta: [{ title: "Agendar serviço — Maré Nobre" }] }),
@@ -16,9 +16,9 @@ export const Route = createFileRoute("/agendar")({
 });
 
 const services = [
-  { icon: iconLimpeza.url, title: "Limpeza Padrão" },
-  { icon: iconPosObra.url, title: "Limpeza Pesada" },
-  { icon: iconPassadoria.url, title: "Passadoria" },
+  { icon: iconLimpeza, title: "Limpeza Padrão" },
+  { icon: iconPosObra, title: "Limpeza Pesada" },
+  { icon: iconPassadoria, title: "Passadoria" },
   { icon: "waves" as const, title: "Limpeza de Piscina" },
 ];
 

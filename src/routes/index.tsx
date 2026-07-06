@@ -12,10 +12,10 @@ import {
   Waves,
   Clock,
 } from "lucide-react";
-import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
-import photoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
-import photoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
-import photoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
+import heroCleaner from "@/assets/mare-nobre-hero.png";
+import photoPosObra from "@/assets/service-pos-obra-clean.jpg";
+import photoPassadoria from "@/assets/service-passadoria-clean.jpg";
+import photoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 import { InstallAppBanner } from "@/components/install-app-banner";
@@ -42,9 +42,9 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { photo: photoPosObraAsset.url, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
-  { photo: photoPassadoriaAsset.url, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
-  { photo: photoLimpezaPiscinaAsset.url, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
+  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
+  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
+  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
 ];
 
 
@@ -124,7 +124,7 @@ function Index() {
 
           <div className="relative flex justify-center lg:justify-end">
             <img
-              src={heroCleaner.url}
+              src={heroCleaner}
               alt="Profissional Maré Nobre com kit de limpeza"
               width={1440}
               height={1080}
