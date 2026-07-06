@@ -175,20 +175,8 @@ function Login() {
           Entrar
         </button>
 
-        <div className="relative py-3">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-white px-3 text-xs uppercase tracking-wide text-slate-400">
-              ou
-            </span>
-          </div>
-        </div>
 
-        <div onClick={onGoogle}>
-          <GoogleButton label="Continuar com Google" />
-        </div>
+
 
         <p className="pt-4 text-center text-sm text-slate-500">
           Não tem uma conta?{" "}
