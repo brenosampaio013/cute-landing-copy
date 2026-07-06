@@ -12,10 +12,10 @@ import {
   Waves,
   Clock,
 } from "lucide-react";
-import heroCleaner from "@/assets/mare-nobre-hero.png.asset.json";
-import photoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
-import photoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
-import photoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
+import heroCleaner from "@/assets/mare-nobre-hero.png";
+import photoPosObra from "@/assets/service-pos-obra-clean.jpg";
+import photoPassadoria from "@/assets/service-passadoria-clean.jpg";
+import photoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 import { InstallAppBanner } from "@/components/install-app-banner";
