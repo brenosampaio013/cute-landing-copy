@@ -1,9 +1,8 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
-import { AuthShell, GoogleButton } from "@/components/auth-shell";
+import { AuthShell } from "@/components/auth-shell";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { friendlyAuthError } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/login")({
@@ -53,22 +52,7 @@ function Login() {
     navigate({ to: "/dashboard" });
   }
 
-  async function onGoogle() {
-    setFormError(null);
-    setLoading(true);
-    sessionStorage.setItem("post_auth_redirect", "/dashboard");
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setLoading(false);
-      sessionStorage.removeItem("post_auth_redirect");
-      setFormError(friendlyAuthError(result.error.message ?? "Falha ao entrar com Google."));
-      return;
-    }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard" });
-  }
+
 
   async function onForgot() {
     setFormError(null);
@@ -191,20 +175,8 @@ function Login() {
           Entrar
         </button>
 
-        <div className="relative py-3">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-white px-3 text-xs uppercase tracking-wide text-slate-400">
-              ou
-            </span>
-          </div>
-        </div>
 
-        <div onClick={onGoogle}>
-          <GoogleButton label="Continuar com Google" />
-        </div>
+
 
         <p className="pt-4 text-center text-sm text-slate-500">
           Não tem uma conta?{" "}
