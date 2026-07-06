@@ -69,7 +69,7 @@ function DashboardLayout() {
     if (!loading && !user) navigate({ to: "/login" });
   }, [loading, user, navigate]);
 
-  if (loading || !user) {
+  if (loading || !user || isAdmin === null) {
     return <FullPageLoader />;
   }
 
