@@ -124,7 +124,7 @@ function Index() {
 
           <div className="relative flex justify-center lg:justify-end">
             <img
-              src={heroCleaner.url}
+              src={heroCleaner}
               alt="Profissional Maré Nobre com kit de limpeza"
               width={1440}
               height={1080}
