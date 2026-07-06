@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
 
 import { SitePage } from "@/components/site-page";
-import fotoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
-import fotoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
-import fotoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
+import fotoPosObra from "@/assets/service-pos-obra-clean.jpg";
+import fotoPassadoria from "@/assets/service-passadoria-clean.jpg";
+import fotoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
