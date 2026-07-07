@@ -63,6 +63,8 @@ function relativeTime(iso: string | null): string {
   return `há ${d} d`;
 }
 
+const ONLINE_WINDOW_MS = 2 * 60_000; // considerado online se last_seen < 2 min
+
 function ClientesOnlinePage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
@@ -70,8 +72,7 @@ function ClientesOnlinePage() {
 
   const [q, setQ] = useState("");
   const [ord, setOrd] = useState<OrderKey>("online");
-  const [onlineIds, setOnlineIds] = useState<Set<string>>(new Set());
-  const [, forceTick] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     if (loading) return;
@@ -79,39 +80,16 @@ function ClientesOnlinePage() {
     if (isAdmin === false) navigate({ to: "/dashboard", replace: true });
   }, [loading, user, isAdmin, navigate]);
 
-  // Tick a cada 30s para atualizar "última atividade"/agora
+  // Tick a cada 15s para re-avaliar quem está online e atualizar "há X min"
   useEffect(() => {
-    const t = window.setInterval(() => forceTick((n) => n + 1), 30_000);
+    const t = window.setInterval(() => setNow(Date.now()), 15_000);
     return () => window.clearInterval(t);
   }, []);
-
-  // Presença em tempo real
-  useEffect(() => {
-    if (!user || isAdmin !== true) return;
-    const channel = supabase.channel("presence:clientes");
-    const sync = () => {
-      const state = channel.presenceState() as Record<string, { user_id?: string }[]>;
-      const ids = new Set<string>();
-      for (const key of Object.keys(state)) {
-        ids.add(key);
-        for (const m of state[key]) if (m.user_id) ids.add(m.user_id);
-      }
-      setOnlineIds(ids);
-    };
-    channel
-      .on("presence", { event: "sync" }, sync)
-      .on("presence", { event: "join" }, sync)
-      .on("presence", { event: "leave" }, sync)
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user, isAdmin]);
 
   const { data: clientes = [], refetch } = useQuery({
     queryKey: ["admin", "clientes-online"],
     enabled: !!user && isAdmin === true,
-    refetchInterval: 30_000,
+    refetchInterval: 15_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
@@ -123,19 +101,34 @@ function ClientesOnlinePage() {
     },
   });
 
-  // Refetch quando alguém entra/sai da presença (novos cadastros aparecem também no polling)
+  // Refetch em tempo real quando algum perfil atualiza `last_seen`
   useEffect(() => {
-    if (onlineIds.size >= 0) void refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onlineIds.size]);
+    if (!user || isAdmin !== true) return;
+    const channel = supabase
+      .channel("profiles-last-seen")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "profiles" },
+        () => {
+          void refetch();
+          setNow(Date.now());
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, isAdmin, refetch]);
 
   const enriched = useMemo(
     () =>
       clientes.map((c) => ({
         ...c,
-        isOnline: onlineIds.has(c.id),
+        isOnline: c.last_seen
+          ? now - new Date(c.last_seen).getTime() < ONLINE_WINDOW_MS
+          : false,
       })),
-    [clientes, onlineIds],
+    [clientes, now],
   );
 
   const filtered = useMemo(() => {
