@@ -266,7 +266,7 @@ function Agendar() {
                         if (typeof anyEl.showPicker === "function") anyEl.showPicker();
                         else el.focus();
                       }}
-                      className="col-span-2 flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-white py-3 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-[#0A1A2F]"
+                      className="col-span-2 flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white py-3 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-[#0A1A2F]"
                     >
                       <CalendarDays className="h-4 w-4 text-slate-500" />
                       Ver mais
