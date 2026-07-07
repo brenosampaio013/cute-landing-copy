@@ -3,9 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
 /**
- * Enquanto o usuário estiver autenticado, entra no canal de presença global
- * `presence:clientes` e atualiza periodicamente o campo `last_seen` no perfil.
- * Isso alimenta a página "Clientes Online" do painel admin.
+ * Enquanto o usuário estiver autenticado, atualiza periodicamente o campo
+ * `last_seen` no perfil. Isso alimenta a página "Clientes Online" do painel
+ * admin (um cliente é considerado online se `last_seen` foi atualizado há
+ * menos de ~2 minutos).
  */
 export function usePresenceHeartbeat() {
   const { user } = useAuth();
@@ -13,24 +14,10 @@ export function usePresenceHeartbeat() {
   useEffect(() => {
     if (!user) return;
 
-    const channel = supabase.channel("presence:clientes", {
-      config: { presence: { key: user.id } },
-    });
-
-    channel.on("presence", { event: "sync" }, () => {
-      /* estado de presença mantido pelo Supabase */
-    });
-
-    channel.subscribe(async (status) => {
-      if (status === "SUBSCRIBED") {
-        await channel.track({
-          user_id: user.id,
-          online_at: new Date().toISOString(),
-        });
-      }
-    });
+    let cancelled = false;
 
     const ping = async () => {
+      if (cancelled) return;
       try {
         await supabase
           .from("profiles")
@@ -50,10 +37,9 @@ export function usePresenceHeartbeat() {
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
+      cancelled = true;
       window.clearInterval(interval);
       document.removeEventListener("visibilitychange", onVisibility);
-      void channel.untrack();
-      supabase.removeChannel(channel);
     };
   }, [user]);
 }
