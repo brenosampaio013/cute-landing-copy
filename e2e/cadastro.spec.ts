@@ -54,12 +54,13 @@ test.describe("Cadastro flow", () => {
     await page.goto("/cadastro");
     await waitForHydration(page);
 
-    await typeInto(page.locator('input[autocomplete="name"]'), "E2E Signup");
-    await typeInto(page.locator('input[type="email"]'), email);
-    await typeInto(page.locator('input[autocomplete="tel"]'), "11999998888");
-    await typeInto(page.locator('input[autocomplete="new-password"]').first(), password);
-    await typeInto(page.locator('input[autocomplete="new-password"]').nth(1), password);
+    await typeInto(page.getByPlaceholder("Seu nome"), "E2E Signup");
+    await typeInto(page.getByPlaceholder("voce@exemplo.com"), email);
+    await typeInto(page.getByPlaceholder("(00) 00000-0000"), "11999998888");
+    await typeInto(page.getByPlaceholder("Mínimo 6 caracteres"), password);
+    await typeInto(page.getByPlaceholder("Repita sua senha"), password);
     await page.locator('input[type="checkbox"]').check();
+
 
 
     const submit = page.getByRole("button", { name: "Criar conta" });
