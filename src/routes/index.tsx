@@ -86,7 +86,7 @@ function Index() {
             </span>
             <div className="mb-5">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold text-white/90 backdrop-blur sm:text-sm">
-                <Sparkles className="h-4 w-4 text-[#a78bfa]" strokeWidth={2} />
+                <Sparkles className="h-4 w-4 text-[#2DD4BF]" strokeWidth={2} />
                 Riviera <span className="text-white/40">·</span> Bertioga <span className="text-white/40">·</span> Litoral Norte
               </span>
             </div>
