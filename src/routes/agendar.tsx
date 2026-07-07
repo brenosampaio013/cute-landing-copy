@@ -208,7 +208,7 @@ function Agendar() {
         </div>
 
         {/* Card direito: formulário */}
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl ring-1 ring-slate-200/40 sm:p-8 lg:col-span-5">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl ring-1 ring-slate-200/40 sm:p-8 lg:col-span-7">
           <div className="space-y-6">
             <div>
               <div className="mb-4 flex items-center gap-3">
