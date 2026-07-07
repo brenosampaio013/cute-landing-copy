@@ -416,6 +416,7 @@ export type Database = {
           email: string | null
           foto_url: string | null
           id: string
+          last_seen: string | null
           nome: string | null
           telefone: string | null
           tipo_usuario: Database["public"]["Enums"]["user_type"]
@@ -426,6 +427,7 @@ export type Database = {
           email?: string | null
           foto_url?: string | null
           id: string
+          last_seen?: string | null
           nome?: string | null
           telefone?: string | null
           tipo_usuario?: Database["public"]["Enums"]["user_type"]
@@ -436,6 +438,7 @@ export type Database = {
           email?: string | null
           foto_url?: string | null
           id?: string
+          last_seen?: string | null
           nome?: string | null
           telefone?: string | null
           tipo_usuario?: Database["public"]["Enums"]["user_type"]

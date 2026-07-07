@@ -40,6 +40,7 @@ import { Route as AdminMensagensRouteImport } from './routes/admin.mensagens'
 import { Route as AdminLogsRouteImport } from './routes/admin.logs'
 import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
+import { Route as AdminClientesOnlineRouteImport } from './routes/admin.clientes-online'
 import { Route as AdminClientesRouteImport } from './routes/admin.clientes'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminAvaliacoesRouteImport } from './routes/admin.avaliacoes'
@@ -200,6 +201,11 @@ const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
   path: '/admin/configuracoes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminClientesOnlineRoute = AdminClientesOnlineRouteImport.update({
+  id: '/admin/clientes-online',
+  path: '/admin/clientes-online',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminClientesRoute = AdminClientesRouteImport.update({
   id: '/admin/clientes',
   path: '/admin/clientes',
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/logs': typeof AdminLogsRoute
@@ -272,6 +279,7 @@ export interface FileRoutesByTo {
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/logs': typeof AdminLogsRoute
@@ -310,6 +318,7 @@ export interface FileRoutesById {
   '/admin/avaliacoes': typeof AdminAvaliacoesRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/clientes': typeof AdminClientesRoute
+  '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/logs': typeof AdminLogsRoute
@@ -349,6 +358,7 @@ export interface FileRouteTypes {
     | '/admin/avaliacoes'
     | '/admin/categorias'
     | '/admin/clientes'
+    | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/logs'
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
     | '/admin/avaliacoes'
     | '/admin/categorias'
     | '/admin/clientes'
+    | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/logs'
@@ -422,6 +433,7 @@ export interface FileRouteTypes {
     | '/admin/avaliacoes'
     | '/admin/categorias'
     | '/admin/clientes'
+    | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/logs'
@@ -460,6 +472,7 @@ export interface RootRouteChildren {
   AdminAvaliacoesRoute: typeof AdminAvaliacoesRoute
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminClientesRoute: typeof AdminClientesRoute
+  AdminClientesOnlineRoute: typeof AdminClientesOnlineRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminLogsRoute: typeof AdminLogsRoute
@@ -692,6 +705,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConfiguracoesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/clientes-online': {
+      id: '/admin/clientes-online'
+      path: '/admin/clientes-online'
+      fullPath: '/admin/clientes-online'
+      preLoaderRoute: typeof AdminClientesOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/clientes': {
       id: '/admin/clientes'
       path: '/admin/clientes'
@@ -768,6 +788,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAvaliacoesRoute: AdminAvaliacoesRoute,
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminClientesRoute: AdminClientesRoute,
+  AdminClientesOnlineRoute: AdminClientesOnlineRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminLogsRoute: AdminLogsRoute,
@@ -783,13 +804,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

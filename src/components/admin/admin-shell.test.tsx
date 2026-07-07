@@ -20,6 +20,7 @@ describe("AdminShell — labels da sidebar", () => {
       ["servicos", "Serviços"],
       ["profissionais", "Profissionais"],
       ["clientes", "Clientes"],
+      ["clientes-online", "Clientes Online"],
       ["pagamentos", "Pagamentos"],
       ["avaliacoes", "Avaliações"],
       ["mensagens", "Mensagens"],
