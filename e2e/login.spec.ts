@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { typeInto, waitForHydration } from "./helpers";
+
 
 /**
  * E2E: fluxo de login (email/senha).
@@ -56,9 +58,12 @@ test.describe("Login flow", () => {
 
   test("credenciais inválidas exibem erro amigável", async ({ page }) => {
     await page.goto("/login");
-    await page.locator('input[type="email"]').fill(email);
-    await page.locator('input[type="password"]').fill("senhaErrada!123");
-    await page.getByRole("button", { name: "Entrar" }).click();
+    await waitForHydration(page);
+    await typeInto(page.locator('input[type="email"]'), email);
+    await typeInto(page.locator('input[type="password"]'), "senhaErrada!123");
+    const btn = page.getByRole("button", { name: "Entrar" });
+    await expect(btn).toBeEnabled();
+    await btn.click();
 
     await expect(
       page.getByText(/credenciais|inválid|senha|e-mail/i).first(),
@@ -68,11 +73,15 @@ test.describe("Login flow", () => {
 
   test("credenciais válidas autenticam e redirecionam ao dashboard", async ({ page }) => {
     await page.goto("/login");
-    await page.locator('input[type="email"]').fill(email);
-    await page.locator('input[type="password"]').fill(password);
-    await page.getByRole("button", { name: "Entrar" }).click();
+    await waitForHydration(page);
+    await typeInto(page.locator('input[type="email"]'), email);
+    await typeInto(page.locator('input[type="password"]'), password);
+    const btn = page.getByRole("button", { name: "Entrar" });
+    await expect(btn).toBeEnabled();
+    await btn.click();
 
     await page.waitForURL(/\/dashboard/, { timeout: 15_000 });
     expect(page.url()).toContain("/dashboard");
   });
+
 });

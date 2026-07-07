@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { typeInto, waitForHydration } from "./helpers";
+
 
 /**
  * E2E: fluxo de cadastro (`/cadastro`).
@@ -50,13 +52,15 @@ test.describe("Cadastro flow", () => {
 
   test("novo usuário cria conta e chega em área autenticada", async ({ page }) => {
     await page.goto("/cadastro");
+    await waitForHydration(page);
 
-    await page.locator('input[autocomplete="name"]').fill("E2E Signup");
-    await page.locator('input[type="email"]').fill(email);
-    await page.locator('input[autocomplete="tel"]').fill("11999998888");
-    await page.locator('input[autocomplete="new-password"]').first().fill(password);
-    await page.locator('input[autocomplete="new-password"]').nth(1).fill(password);
+    await typeInto(page.locator('input[autocomplete="name"]'), "E2E Signup");
+    await typeInto(page.locator('input[type="email"]'), email);
+    await typeInto(page.locator('input[autocomplete="tel"]'), "11999998888");
+    await typeInto(page.locator('input[autocomplete="new-password"]').first(), password);
+    await typeInto(page.locator('input[autocomplete="new-password"]').nth(1), password);
     await page.locator('input[type="checkbox"]').check();
+
 
     const submit = page.getByRole("button", { name: "Criar conta" });
     await expect(submit).toBeEnabled();
