@@ -278,7 +278,7 @@ function Agendar() {
                 {/* Coluna direita: horários */}
                 <div>
                   <p className={sectionLabelCls}>Horário</p>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {SLOTS.map((s, idx) => {
                       const active = slotIdx === idx;
                       const disabled = !data;
@@ -288,16 +288,16 @@ function Agendar() {
                           type="button"
                           disabled={disabled}
                           onClick={() => setSlotIdx(idx)}
-                          className={`relative rounded-xl border-2 px-2 py-3 text-xs font-semibold transition ${
+                          className={`relative flex min-h-[56px] items-center justify-center whitespace-nowrap rounded-xl border-2 px-3 py-4 text-sm font-semibold tabular-nums transition ${
                             active
-                              ? "border-[#2DD4BF] bg-[#2DD4BF] text-white shadow-md"
+                              ? "border-[#2DD4BF] bg-[#2DD4BF] text-white shadow-sm"
                               : "border-slate-200 bg-white text-[#0A1A2F] hover:border-slate-300"
                           } ${disabled ? "cursor-not-allowed opacity-50 hover:border-slate-200" : ""}`}
                         >
                           {s.cheaper && (
                             <span
-                              className={`absolute left-1.5 top-1.5 inline-flex h-4 w-4 items-center justify-center rounded-md ${
-                                active ? "bg-white/20 text-white" : "bg-blue-50 text-blue-500"
+                              className={`pointer-events-none absolute -left-1.5 -top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full ring-2 ring-white ${
+                                active ? "bg-white text-[#0A9E8A]" : "bg-blue-50 text-blue-500"
                               }`}
                               aria-label="Opção mais barata"
                             >
