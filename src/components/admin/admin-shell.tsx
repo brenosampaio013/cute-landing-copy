@@ -10,6 +10,7 @@ import {
   Star,
   MessageSquare,
   Ticket,
+  Wifi,
   FileBarChart,
   UserCog,
   Tag,
