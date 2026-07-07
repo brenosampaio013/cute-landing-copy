@@ -36,6 +36,7 @@ type NavKey =
   | "servicos"
   | "profissionais"
   | "clientes"
+  | "clientes-online"
   | "pagamentos"
   | "avaliacoes"
   | "mensagens"
@@ -55,6 +56,7 @@ export const PRINCIPAL: NavItem[] = [
   { key: "servicos", label: "Serviços", icon: LayoutGrid, to: "/admin/servicos" },
   { key: "profissionais", label: "Profissionais", icon: Users, to: "/admin/profissionais" },
   { key: "clientes", label: "Clientes", icon: UserCircle, to: "/admin/clientes" },
+  { key: "clientes-online", label: "Clientes Online", icon: Wifi, to: "/admin/clientes-online" },
   { key: "pagamentos", label: "Pagamentos", icon: CreditCard, to: "/admin/pagamentos" },
   { key: "avaliacoes", label: "Avaliações", icon: Star, to: "/admin/avaliacoes" },
   { key: "mensagens", label: "Mensagens", icon: MessageSquare, to: "/admin/mensagens" },
