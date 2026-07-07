@@ -23,58 +23,122 @@ function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [invalidLink, setInvalidLink] = useState(false);
+  const [recoveryStatus, setRecoveryStatus] = useState<"checking" | "ready" | "invalid">(
+    "checking",
+  );
 
-  // Ao acessar via link do e-mail, o Supabase entrega uma sessão de recovery.
+  // Ao acessar via link do e-mail, o backend entrega uma sessão temporária de recovery.
   useEffect(() => {
     let mounted = true;
+    let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const markReady = () => {
+      if (!mounted) return;
+      setRecoveryStatus("ready");
+      setFormError(null);
+    };
+
+    const markInvalid = (message = "Este link de recuperação é inválido ou expirou.") => {
+      if (!mounted) return;
+      setRecoveryStatus("invalid");
+      setFormError(message);
+    };
+
+    const cleanUrl = () => {
+      const cleanPath = `${window.location.pathname}${window.location.search}`.replace(
+        /[?&](code|token_hash|type)=[^&]*/g,
+        "",
+      );
+      window.history.replaceState({}, "", cleanPath || window.location.pathname);
+    };
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (!mounted) return;
       if (event === "PASSWORD_RECOVERY" || session) {
-        setReady(true);
-        setInvalidLink(false);
+        markReady();
       }
     });
 
     (async () => {
-      // Fluxo PKCE: link vem com ?code=... — precisa trocar por sessão.
-      const url = new URL(window.location.href);
-      const code = url.searchParams.get("code");
-      if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (mounted && !error) {
-          setReady(true);
-          // limpa o code da URL
-          url.searchParams.delete("code");
-          window.history.replaceState({}, "", url.pathname + url.search + url.hash);
+      try {
+        const url = new URL(window.location.href);
+        const hashParams = new URLSearchParams(url.hash.replace(/^#/, ""));
+        const code = url.searchParams.get("code");
+        const tokenHash = url.searchParams.get("token_hash");
+        const type = url.searchParams.get("type") ?? hashParams.get("type");
+        const accessToken = hashParams.get("access_token");
+        const refreshToken = hashParams.get("refresh_token");
+        const recoveryError = hashParams.get("error_description") ?? url.searchParams.get("error_description");
+
+        if (recoveryError) {
+          markInvalid(decodeURIComponent(recoveryError));
           return;
         }
-      }
 
-      const { data } = await supabase.auth.getSession();
-      if (!mounted) return;
-      if (data.session) {
-        setReady(true);
-        return;
-      }
-
-      const hash = window.location.hash;
-      const hasRecoveryHash =
-        hash.includes("type=recovery") || hash.includes("access_token");
-
-      // Aguarda um pouco para o onAuthStateChange disparar (PASSWORD_RECOVERY).
-      setTimeout(() => {
-        if (!mounted) return;
-        if (!hasRecoveryHash && !code) {
-          setInvalidLink(true);
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) {
+            markInvalid(friendlyAuthError(error.message));
+            return;
+          }
+          cleanUrl();
+          markReady();
+          return;
         }
-      }, 1500);
+
+        if (tokenHash && type === "recovery") {
+          const { error } = await supabase.auth.verifyOtp({
+            token_hash: tokenHash,
+            type: "recovery",
+          });
+          if (error) {
+            markInvalid(friendlyAuthError(error.message));
+            return;
+          }
+          cleanUrl();
+          markReady();
+          return;
+        }
+
+        if (accessToken && refreshToken && type === "recovery") {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (error) {
+            markInvalid(friendlyAuthError(error.message));
+            return;
+          }
+          window.history.replaceState({}, "", window.location.pathname);
+          markReady();
+          return;
+        }
+
+        const { data } = await supabase.auth.getSession();
+        if (!mounted) return;
+        if (data.session) {
+          markReady();
+          return;
+        }
+
+        const hasRecoverySignal = type === "recovery" || Boolean(accessToken || tokenHash || code);
+
+        fallbackTimer = setTimeout(() => {
+          if (!mounted) return;
+          if (hasRecoverySignal) {
+            markInvalid("Não foi possível validar o link. Solicite um novo link de recuperação.");
+          } else {
+            markInvalid();
+          }
+        }, 1500);
+      } catch {
+        markInvalid("Não foi possível validar o link. Solicite um novo link de recuperação.");
+      }
     })();
 
     return () => {
       mounted = false;
+      if (fallbackTimer) clearTimeout(fallbackTimer);
       sub.subscription.unsubscribe();
     };
   }, []);
@@ -85,13 +149,17 @@ function ResetPassword() {
     confirm && confirm !== password ? "As senhas não coincidem." : "";
 
   const canSubmit = useMemo(
-    () => ready && password.length >= 6 && confirm === password && !loading,
-    [ready, password, confirm, loading]
+    () => recoveryStatus === "ready" && password.length >= 6 && confirm === password && !loading,
+    [recoveryStatus, password, confirm, loading]
   );
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setFormError(null);
+    if (recoveryStatus !== "ready") {
+      setFormError("Aguarde a validação do link antes de salvar a nova senha.");
+      return;
+    }
     if (!canSubmit) return;
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
@@ -119,9 +187,9 @@ function ResetPassword() {
         Escolha uma senha nova para acessar sua conta
       </p>
 
-      {invalidLink ? (
+      {recoveryStatus === "invalid" ? (
         <div className="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-          Este link de recuperação é inválido ou expirou.{" "}
+          {formError ?? "Este link de recuperação é inválido ou expirou."}{" "}
           <Link to="/login" className="font-semibold underline">
             Solicitar novo link
           </Link>
@@ -185,6 +253,12 @@ function ResetPassword() {
           {formError && (
             <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
               {formError}
+            </div>
+          )}
+
+          {recoveryStatus === "checking" && (
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+              Validando o link de recuperação…
             </div>
           )}
 
