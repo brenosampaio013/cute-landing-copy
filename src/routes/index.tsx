@@ -80,10 +80,6 @@ function Index() {
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-20 pt-24 sm:gap-10 sm:px-6 sm:pb-24 sm:pt-28 lg:grid-cols-2 lg:pb-32 lg:pt-32">
           <div className="mx-auto w-full max-w-xl text-center lg:mx-0 lg:text-left">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2DD4BF] backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#2DD4BF]" />
-              Cuidado premium para o seu lar
-            </span>
             <div className="mb-5">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold text-white/90 backdrop-blur sm:text-sm">
                 <Sparkles className="h-4 w-4 text-[#2DD4BF]" strokeWidth={2} />
