@@ -163,7 +163,7 @@ function Agendar() {
         className="grid items-start gap-6 lg:grid-cols-12"
       >
         {/* Card esquerdo: serviços */}
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8 lg:col-span-7">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8 lg:col-span-5">
           <div className="mb-6 flex items-center gap-3">
             <StepBadge n={1} active />
             <h2 className={stepLabelCls}>Escolha o serviço</h2>
