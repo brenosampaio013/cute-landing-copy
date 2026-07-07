@@ -163,7 +163,7 @@ function Agendar() {
         className="grid items-start gap-6 lg:grid-cols-12"
       >
         {/* Card esquerdo: serviços */}
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8 lg:col-span-7">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8 lg:col-span-5">
           <div className="mb-6 flex items-center gap-3">
             <StepBadge n={1} active />
             <h2 className={stepLabelCls}>Escolha o serviço</h2>
@@ -208,7 +208,7 @@ function Agendar() {
         </div>
 
         {/* Card direito: formulário */}
-        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl ring-1 ring-slate-200/40 sm:p-8 lg:col-span-5">
+        <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl ring-1 ring-slate-200/40 sm:p-8 lg:col-span-7">
           <div className="space-y-6">
             <div>
               <div className="mb-4 flex items-center gap-3">
@@ -266,7 +266,7 @@ function Agendar() {
                         if (typeof anyEl.showPicker === "function") anyEl.showPicker();
                         else el.focus();
                       }}
-                      className="col-span-2 flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-white py-3 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-[#0A1A2F]"
+                      className="col-span-2 flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white py-3 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-[#0A1A2F]"
                     >
                       <CalendarDays className="h-4 w-4 text-slate-500" />
                       Ver mais
@@ -278,7 +278,7 @@ function Agendar() {
                 {/* Coluna direita: horários */}
                 <div>
                   <p className={sectionLabelCls}>Horário</p>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {SLOTS.map((s, idx) => {
                       const active = slotIdx === idx;
                       const disabled = !data;
@@ -288,16 +288,16 @@ function Agendar() {
                           type="button"
                           disabled={disabled}
                           onClick={() => setSlotIdx(idx)}
-                          className={`relative rounded-xl border-2 px-2 py-3 text-xs font-semibold transition ${
+                          className={`relative flex min-h-[56px] items-center justify-center whitespace-nowrap rounded-xl border-2 px-3 py-4 text-sm font-semibold tabular-nums transition ${
                             active
-                              ? "border-[#2DD4BF] bg-[#2DD4BF] text-white shadow-md"
+                              ? "border-[#2DD4BF] bg-[#2DD4BF] text-white shadow-sm"
                               : "border-slate-200 bg-white text-[#0A1A2F] hover:border-slate-300"
                           } ${disabled ? "cursor-not-allowed opacity-50 hover:border-slate-200" : ""}`}
                         >
                           {s.cheaper && (
                             <span
-                              className={`absolute left-1.5 top-1.5 inline-flex h-4 w-4 items-center justify-center rounded-md ${
-                                active ? "bg-white/20 text-white" : "bg-blue-50 text-blue-500"
+                              className={`pointer-events-none absolute -left-1.5 -top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full ring-2 ring-white ${
+                                active ? "bg-white text-[#0A9E8A]" : "bg-blue-50 text-blue-500"
                               }`}
                               aria-label="Opção mais barata"
                             >
