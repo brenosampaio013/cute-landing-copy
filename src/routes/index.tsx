@@ -84,6 +84,12 @@ function Index() {
               <span className="h-1.5 w-1.5 rounded-full bg-[#2DD4BF]" />
               Cuidado premium para o seu lar
             </span>
+            <div className="mb-5">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold text-white/90 backdrop-blur sm:text-sm">
+                <Sparkles className="h-4 w-4 text-[#a78bfa]" strokeWidth={2} />
+                Riviera <span className="text-white/40">·</span> Bertioga <span className="text-white/40">·</span> Litoral Norte
+              </span>
+            </div>
             <h1
               className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
