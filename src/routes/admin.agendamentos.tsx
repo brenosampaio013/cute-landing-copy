@@ -332,6 +332,18 @@ function AgendamentosPage() {
                 <span className="text-slate-500">{selected.size} selecionado(s)</span>
                 <Button size="sm" variant="outline" onClick={() => bulkSet("Confirmado")}>Confirmar</Button>
                 <Button size="sm" variant="outline" onClick={() => bulkSet("Cancelado")} className="text-rose-600">Cancelar</Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-rose-600 border-rose-200 hover:bg-rose-50"
+                  onClick={() => {
+                    const rawIds = rows.filter((r) => selected.has(r.id) && r.rawId).map((r) => r.rawId);
+                    if (rawIds.length === 0) return;
+                    setConfirmDelete({ ids: rawIds, label: `${rawIds.length} agendamento(s)` });
+                  }}
+                >
+                  <Trash2 className="mr-1 h-3.5 w-3.5" /> Excluir
+                </Button>
               </div>
             )}
           </div>
