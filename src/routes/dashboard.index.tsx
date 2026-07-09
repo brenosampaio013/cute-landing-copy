@@ -99,11 +99,21 @@ function DashboardHome() {
       setBookings((listRes.data as Agendamento[] | null) ?? []);
 
 
+      // Buscar pagamento mais relevante: do próximo agendamento, ou o mais recente do cliente
       if (proxRes.data) {
         const { data: p } = await supabase
           .from("pagamentos")
           .select("*")
           .eq("agendamento_id", proxRes.data.id)
+          .maybeSingle();
+        if (!cancelled) setPagamento((p as Pagamento | null) ?? null);
+      } else {
+        const { data: p } = await supabase
+          .from("pagamentos")
+          .select("*, agendamentos!inner(cliente_id)")
+          .eq("agendamentos.cliente_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
           .maybeSingle();
         if (!cancelled) setPagamento((p as Pagamento | null) ?? null);
       }
@@ -243,7 +253,7 @@ function DashboardHome() {
             </p>
           ) : (
             <p className="mt-4 text-sm text-slate-500">
-              Nenhum pagamento vinculado ao seu próximo agendamento.
+              Você ainda não possui pagamentos registrados.
             </p>
           )}
         </section>
