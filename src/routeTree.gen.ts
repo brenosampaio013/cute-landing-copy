@@ -30,6 +30,7 @@ import { Route as DashboardEnderecosRouteImport } from './routes/dashboard.ender
 import { Route as DashboardAvaliacoesRouteImport } from './routes/dashboard.avaliacoes'
 import { Route as DashboardAjudaRouteImport } from './routes/dashboard.ajuda'
 import { Route as DashboardAgendamentosRouteImport } from './routes/dashboard.agendamentos'
+import { Route as AdminVisitantesRouteImport } from './routes/admin.visitantes'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
 import { Route as AdminServicosRouteImport } from './routes/admin.servicos'
 import { Route as AdminRelatoriosRouteImport } from './routes/admin.relatorios'
@@ -151,6 +152,11 @@ const DashboardAgendamentosRoute = DashboardAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => DashboardRoute,
 } as any)
+const AdminVisitantesRoute = AdminVisitantesRouteImport.update({
+  id: '/admin/visitantes',
+  path: '/admin/visitantes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   id: '/admin/usuarios',
   path: '/admin/usuarios',
@@ -253,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/servicos': typeof AdminServicosRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/admin/visitantes': typeof AdminVisitantesRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByTo {
   '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/servicos': typeof AdminServicosRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/admin/visitantes': typeof AdminVisitantesRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -329,6 +337,7 @@ export interface FileRoutesById {
   '/admin/relatorios': typeof AdminRelatoriosRoute
   '/admin/servicos': typeof AdminServicosRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
+  '/admin/visitantes': typeof AdminVisitantesRoute
   '/dashboard/agendamentos': typeof DashboardAgendamentosRoute
   '/dashboard/ajuda': typeof DashboardAjudaRoute
   '/dashboard/avaliacoes': typeof DashboardAvaliacoesRoute
@@ -369,6 +378,7 @@ export interface FileRouteTypes {
     | '/admin/relatorios'
     | '/admin/servicos'
     | '/admin/usuarios'
+    | '/admin/visitantes'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/relatorios'
     | '/admin/servicos'
     | '/admin/usuarios'
+    | '/admin/visitantes'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -444,6 +455,7 @@ export interface FileRouteTypes {
     | '/admin/relatorios'
     | '/admin/servicos'
     | '/admin/usuarios'
+    | '/admin/visitantes'
     | '/dashboard/agendamentos'
     | '/dashboard/ajuda'
     | '/dashboard/avaliacoes'
@@ -483,6 +495,7 @@ export interface RootRouteChildren {
   AdminRelatoriosRoute: typeof AdminRelatoriosRoute
   AdminServicosRoute: typeof AdminServicosRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
+  AdminVisitantesRoute: typeof AdminVisitantesRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -634,6 +647,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/agendamentos'
       preLoaderRoute: typeof DashboardAgendamentosRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/admin/visitantes': {
+      id: '/admin/visitantes'
+      path: '/admin/visitantes'
+      fullPath: '/admin/visitantes'
+      preLoaderRoute: typeof AdminVisitantesRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/usuarios': {
       id: '/admin/usuarios'
@@ -799,6 +819,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRelatoriosRoute: AdminRelatoriosRoute,
   AdminServicosRoute: AdminServicosRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
+  AdminVisitantesRoute: AdminVisitantesRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport

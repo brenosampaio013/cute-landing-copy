@@ -11,6 +11,7 @@ import {
   MessageSquare,
   Ticket,
   Wifi,
+  Eye,
   FileBarChart,
   UserCog,
   Tag,
@@ -38,6 +39,7 @@ type NavKey =
   | "profissionais"
   | "clientes"
   | "clientes-online"
+  | "visitantes"
   | "pagamentos"
   | "avaliacoes"
   | "mensagens"
@@ -58,6 +60,7 @@ export const PRINCIPAL: NavItem[] = [
   { key: "profissionais", label: "Profissionais", icon: Users, to: "/admin/profissionais" },
   { key: "clientes", label: "Clientes", icon: UserCircle, to: "/admin/clientes" },
   { key: "clientes-online", label: "Clientes Online", icon: Wifi, to: "/admin/clientes-online" },
+  { key: "visitantes", label: "Visitantes ao vivo", icon: Eye, to: "/admin/visitantes" },
   { key: "pagamentos", label: "Pagamentos", icon: CreditCard, to: "/admin/pagamentos" },
   { key: "avaliacoes", label: "Avaliações", icon: Star, to: "/admin/avaliacoes" },
   { key: "mensagens", label: "Mensagens", icon: MessageSquare, to: "/admin/mensagens" },
