@@ -241,9 +241,9 @@ function Agendar() {
 
           {/* Passo 2: Data e horário */}
           <section>
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="text-xl font-bold text-[#0A1128]">Quando podemos te atender?</h2>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">Quando podemos te atender?</h2>
+              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">
                 02 · Data e horário
               </span>
             </div>
