@@ -1,0 +1,3 @@
+CREATE POLICY "Admins atualizam pagamentos" ON public.pagamentos FOR UPDATE USING (private.has_role(auth.uid(), 'admin'::app_role)) WITH CHECK (private.has_role(auth.uid(), 'admin'::app_role));
+CREATE POLICY "Admins excluem pagamentos" ON public.pagamentos FOR DELETE USING (private.has_role(auth.uid(), 'admin'::app_role));
+CREATE POLICY "Admins criam pagamentos" ON public.pagamentos FOR INSERT WITH CHECK (private.has_role(auth.uid(), 'admin'::app_role));
