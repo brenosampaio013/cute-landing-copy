@@ -114,7 +114,11 @@ function PagamentosPage() {
 
   const updateMut = useMutation({
     mutationFn: async (input: { id: string; status: StatusUi; metodo?: string | null }) => {
-      const patch: Record<string, unknown> = { status: STATUS_TO_DB[input.status] };
+      const patch: {
+        status: StatusDb;
+        data_pagamento?: string | null;
+        metodo?: string | null;
+      } = { status: STATUS_TO_DB[input.status] };
       if (input.status === "Pago") {
         patch.data_pagamento = new Date().toISOString();
         if (input.metodo !== undefined) patch.metodo = input.metodo;
