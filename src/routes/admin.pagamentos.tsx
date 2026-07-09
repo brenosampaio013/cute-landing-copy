@@ -332,7 +332,20 @@ function PagamentosPage() {
               <div className="rounded-md bg-slate-50 p-3">
                 <p className="text-xs text-slate-500">Cliente</p>
                 <p className="font-medium text-[#0A1128]">{markPaid.cliente} · {markPaid.servico}</p>
-                <p className="mt-1 text-xs text-slate-500">Valor: <span className="font-semibold text-[#0A1128]">{brl(markPaid.valor)}</span></p>
+                <p className="mt-1 text-xs text-slate-500">Valor atual: <span className="font-semibold text-[#0A1128]">{brl(markPaid.valor)}</span></p>
+              </div>
+              <div>
+                <Label className="text-xs">Valor do serviço (R$) *</Label>
+                <Input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  required
+                  className="mt-1"
+                  placeholder="0,00"
+                  value={markValor}
+                  onChange={(e) => setMarkValor(e.target.value)}
+                />
               </div>
               <div>
                 <Label className="text-xs">Método de pagamento</Label>
@@ -356,8 +369,17 @@ function PagamentosPage() {
               disabled={updateMut.isPending}
               onClick={() => {
                 if (!markPaid) return;
+                const valorNum = Number(String(markValor).replace(",", "."));
+                if (!markValor.trim() || Number.isNaN(valorNum) || valorNum <= 0) {
+                  toast.error("Informe um valor válido, maior que zero.");
+                  return;
+                }
+                if (valorNum > 1_000_000) {
+                  toast.error("Valor acima do limite permitido.");
+                  return;
+                }
                 updateMut.mutate(
-                  { id: markPaid.id, status: "Pago", metodo: markMetodo },
+                  { id: markPaid.id, status: "Pago", metodo: markMetodo, valor: valorNum },
                   { onSuccess: () => setMarkPaid(null) },
                 );
               }}
@@ -366,6 +388,7 @@ function PagamentosPage() {
               {updateMut.isPending ? "Salvando..." : "Confirmar pagamento"}
             </Button>
           </DialogFooter>
+
         </DialogContent>
       </Dialog>
     </AdminShell>
