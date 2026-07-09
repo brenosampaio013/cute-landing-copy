@@ -384,7 +384,7 @@ function Agendar() {
 
             <div className="mt-5">
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                Valor do serviço (opcional)
+                Valor do serviço <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <DollarSign className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" strokeWidth={1.75} />
@@ -392,6 +392,7 @@ function Agendar() {
                 <input
                   type="text"
                   inputMode="decimal"
+                  required
                   value={valor}
                   onChange={(e) => {
                     const v = e.target.value.replace(/[^\d.,]/g, "");
@@ -402,7 +403,7 @@ function Agendar() {
                 />
               </div>
               <p className="mt-2 text-xs text-slate-500">
-                Informe o valor combinado. Se deixar em branco, enviaremos um orçamento.
+                Informe o valor combinado do serviço (obrigatório, maior que zero).
               </p>
             </div>
           </section>
