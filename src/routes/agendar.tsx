@@ -147,15 +147,15 @@ function Agendar() {
         className="overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200/60 md:flex"
       >
         {/* Sidebar de passos */}
-        <aside className="w-full bg-[#0A1128] p-8 text-white md:w-80 md:shrink-0 md:p-10">
-          <div className="mb-10">
+        <aside className="w-full bg-[#0A1128] p-6 text-white sm:p-8 md:w-80 md:shrink-0 md:p-10">
+          <div className="mb-6 md:mb-10">
             <h1 className="text-2xl font-bold tracking-tight">Maré Nobre</h1>
             <p className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#2DD4BF]">
               Serviços Premium
             </p>
           </div>
 
-          <ol className="space-y-7">
+          <ol className="space-y-5 md:space-y-7">
             {steps.map((s) => (
               <li
                 key={s.n}
