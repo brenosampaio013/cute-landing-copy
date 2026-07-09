@@ -745,7 +745,21 @@ function NovoAgendamentoDialog({
     cliente: "", servico: "", profissional: "", data: "", hora: "", duracao: "60",
     endereco: "", valor: "", pagamento: "Pendente" as Pagamento, observacoes: "", cupom: "",
   });
+  const valorNum = Number(String(form.valor).replace(",", "."));
+  const valorValido = form.valor.trim().length > 0 && !Number.isNaN(valorNum) && valorNum > 0;
   const submit = () => {
+    if (!form.valor.trim()) {
+      toast.error("Informe o valor do serviço.");
+      return;
+    }
+    if (Number.isNaN(valorNum) || valorNum <= 0) {
+      toast.error("O valor do serviço deve ser maior que zero.");
+      return;
+    }
+    if (valorNum > 1_000_000) {
+      toast.error("Valor do serviço acima do limite permitido.");
+      return;
+    }
     onSave({
       id: `#${Math.floor(Math.random() * 9000 + 1000)}`,
       rawId: crypto.randomUUID(),
@@ -760,10 +774,11 @@ function NovoAgendamentoDialog({
       duracao: Number(form.duracao) || 60,
       status: "Pendente",
       pagamento: form.pagamento,
-      valor: Number(form.valor) || 150,
+      valor: valorNum,
       observacoes: form.observacoes || undefined,
     });
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
