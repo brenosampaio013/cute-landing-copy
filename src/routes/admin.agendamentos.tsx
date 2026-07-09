@@ -813,7 +813,7 @@ function NovoAgendamentoDialog({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={submit} className="text-white hover:opacity-90" style={{ background: TEAL }}>Salvar agendamento</Button>
+          <Button onClick={submit} disabled={!valorValido} className="text-white hover:opacity-90 disabled:opacity-50" style={{ background: TEAL }}>Salvar agendamento</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
