@@ -22,7 +22,7 @@ export const Route = createFileRoute("/admin/pagamentos")({
   component: PagamentosPage,
 });
 
-type StatusDb = "pago" | "pendente" | "estornado" | "falhou";
+type StatusDb = "pago" | "pendente" | "estornado";
 type StatusUi = "Pago" | "Pendente" | "Estornado";
 type Metodo = "Pix" | "Cartão de crédito" | "Dinheiro" | "Boleto" | "Transferência";
 
