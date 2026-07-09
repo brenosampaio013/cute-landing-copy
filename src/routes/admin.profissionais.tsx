@@ -11,37 +11,28 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/profissionais")({
   head: () => ({ meta: [{ title: "Profissionais — Painel Admin | Maré Nobre" }, { name: "robots", content: "noindex" }] }),
   component: ProfissionaisPage,
 });
 
+type DbStatus = "ativo" | "inativo" | "pendente" | "bloqueado";
 type ProfStatus = "Ativo" | "Pendente" | "Inativo" | "Bloqueado";
 type Prof = {
   id: string; nome: string; telefone: string; email: string; cpf: string;
   especialidades: string[]; avaliacao: number; concluidos: number;
-  status: ProfStatus; cadastro: string; foto: string; regiao: string;
+  status: ProfStatus; cadastro: string; regiao: string;
 };
 
 const ESPS = ["Limpeza Residencial", "Passadoria", "Hidráulica", "Elétrica", "Jardinagem", "Pintura"];
 const STATUSES: ProfStatus[] = ["Ativo", "Pendente", "Inativo", "Bloqueado"];
-const NOMES = ["Maria Eduarda Lima", "Carla Oliveira", "João Pedro Silva", "Ana Paula Souza", "Fábio Torres", "Sônia Ribeiro", "Rafael Costa", "Beatriz Vieira", "Marcos Antunes", "Larissa Reis"];
 
-const MOCK: Prof[] = Array.from({ length: 12 }, (_, i) => ({
-  id: `p${i + 1}`,
-  nome: NOMES[i % NOMES.length],
-  telefone: `(21) 9${(80000000 + i * 1234).toString().slice(0, 8)}`,
-  email: `prof${i + 1}@marenobre.com`,
-  cpf: `${100 + i}.${200 + i}.${300 + i}-${(i * 7) % 100}`,
-  especialidades: [ESPS[i % ESPS.length], ESPS[(i + 2) % ESPS.length]],
-  avaliacao: 3.8 + ((i * 3) % 12) / 10,
-  concluidos: 20 + i * 7,
-  status: (i % 5 === 0 ? "Pendente" : i % 7 === 0 ? "Bloqueado" : i % 6 === 0 ? "Inativo" : "Ativo") as ProfStatus,
-  cadastro: new Date(Date.now() - i * 86400000 * 12).toLocaleDateString("pt-BR"),
-  foto: "",
-  regiao: "Zona Sul, RJ",
-}));
+const toUi: Record<DbStatus, ProfStatus> = { ativo: "Ativo", inativo: "Inativo", pendente: "Pendente", bloqueado: "Bloqueado" };
+const toDb: Record<ProfStatus, DbStatus> = { Ativo: "ativo", Inativo: "inativo", Pendente: "pendente", Bloqueado: "bloqueado" };
 
 const badgeStatus: Record<ProfStatus, string> = {
   Ativo: "bg-emerald-100 text-emerald-700",
@@ -50,12 +41,71 @@ const badgeStatus: Record<ProfStatus, string> = {
   Bloqueado: "bg-rose-100 text-rose-700",
 };
 
+type Row = {
+  id: string; nome: string; telefone: string | null; email: string | null; cpf: string | null;
+  especialidades: string[]; avaliacao_media: number; atendimentos_concluidos: number;
+  status: string; created_at: string; regiao: string | null;
+};
+
+const mapRow = (r: Row): Prof => ({
+  id: r.id,
+  nome: r.nome,
+  telefone: r.telefone ?? "",
+  email: r.email ?? "",
+  cpf: r.cpf ?? "",
+  especialidades: r.especialidades ?? [],
+  avaliacao: Number(r.avaliacao_media ?? 0),
+  concluidos: r.atendimentos_concluidos ?? 0,
+  status: toUi[(r.status as DbStatus) ?? "pendente"] ?? "Pendente",
+  cadastro: new Date(r.created_at).toLocaleDateString("pt-BR"),
+  regiao: r.regiao ?? "",
+});
+
 function ProfissionaisPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const isAdmin = useIsAdmin(user);
+  const qc = useQueryClient();
 
-  const [rows, setRows] = useState<Prof[]>(MOCK);
+  const { data: rows = [], isLoading } = useQuery({
+    queryKey: ["admin", "profissionais"],
+    queryFn: async (): Promise<Prof[]> => {
+      const { data, error } = await supabase
+        .from("profissionais")
+        .select("id,nome,telefone,email,cpf,especialidades,avaliacao_media,atendimentos_concluidos,status,created_at,regiao")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data as Row[]).map(mapRow);
+    },
+    enabled: !!user && isAdmin === true,
+  });
+
+  const setStatusMut = useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: ProfStatus }) => {
+      const { error } = await supabase.from("profissionais").update({ status: toDb[status] }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin", "profissionais"] }); toast.success("Status atualizado"); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const createMut = useMutation({
+    mutationFn: async (p: { nome: string; telefone: string; email: string; cpf: string; especialidade: string; regiao: string }) => {
+      const { error } = await supabase.from("profissionais").insert({
+        nome: p.nome || "Novo profissional",
+        telefone: p.telefone || null,
+        email: p.email || null,
+        cpf: p.cpf || null,
+        especialidades: p.especialidade ? [p.especialidade] : [],
+        regiao: p.regiao || null,
+        status: "pendente",
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin", "profissionais"] }); toast.success("Profissional cadastrado"); setOpen(false); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const [q, setQ] = useState(""); const [esp, setEsp] = useState("all"); const [st, setSt] = useState("all"); const [minAv, setMinAv] = useState("all");
   const [open, setOpen] = useState(false); const [view, setView] = useState<Prof | null>(null);
 
@@ -72,16 +122,23 @@ function ProfissionaisPage() {
     (minAv === "all" || r.avaliacao >= Number(minAv))
   ), [rows, q, esp, st, minAv]);
 
-  const kpis = useMemo(() => ({
-    ativos: rows.filter((r) => r.status === "Ativo").length,
-    novos: 12,
-    media: rows.reduce((s, r) => s + r.avaliacao, 0) / (rows.length || 1),
-    pendentes: rows.filter((r) => r.status === "Pendente").length,
-  }), [rows]);
+  const kpis = useMemo(() => {
+    const now = new Date();
+    const novos = rows.filter((r) => {
+      const [d, m, y] = r.cadastro.split("/").map(Number);
+      return y === now.getFullYear() && m === now.getMonth() + 1;
+    }).length;
+    return {
+      ativos: rows.filter((r) => r.status === "Ativo").length,
+      novos,
+      media: rows.length ? rows.reduce((s, r) => s + r.avaliacao, 0) / rows.length : 0,
+      pendentes: rows.filter((r) => r.status === "Pendente").length,
+    };
+  }, [rows]);
 
   if (loading || !user || isAdmin === null || isAdmin === false) return <FullPageLoader />;
 
-  const setStatus = (id: string, status: ProfStatus) => setRows((rs) => rs.map((r) => r.id === id ? { ...r, status } : r));
+  const setStatus = (id: string, status: ProfStatus) => setStatusMut.mutate({ id, status });
 
   return (
     <AdminShell active="profissionais" title="Profissionais" subtitle="Gerencie os profissionais cadastrados na plataforma"
@@ -126,7 +183,8 @@ function ProfissionaisPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filtered.map((r) => (
+              {isLoading && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Carregando...</td></tr>}
+              {!isLoading && filtered.map((r) => (
                 <tr key={r.id} className="transition hover:bg-slate-50">
                   <td className="px-6 py-3.5">
                     <div className="flex items-center gap-3">
@@ -149,7 +207,7 @@ function ProfissionaisPage() {
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum profissional encontrado.</td></tr>}
+              {!isLoading && filtered.length === 0 && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum profissional encontrado.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -161,7 +219,7 @@ function ProfissionaisPage() {
         </SheetContent>
       </Sheet>
 
-      <NovoProfDialog open={open} onOpenChange={setOpen} onSave={(p) => { setRows((rs) => [p, ...rs]); setOpen(false); }} />
+      <NovoProfDialog open={open} onOpenChange={setOpen} onSave={(p) => createMut.mutate(p)} saving={createMut.isPending} />
     </AdminShell>
   );
 }
@@ -185,33 +243,11 @@ function ProfDetail({ p, onStatus }: { p: Prof; onStatus: (s: ProfStatus) => voi
 
         <Section title="Especialidades"><div className="flex flex-wrap gap-1">{p.especialidades.map((e) => <span key={e} className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">{e}</span>)}</div></Section>
 
-        <Section title="Documentos">
-          <ul className="space-y-1.5 text-xs">
-            {[["RG", "Aprovado"], ["CPF", "Aprovado"], ["Comprovante", "Pendente"]].map(([n, s]) => (
-              <li key={n} className="flex items-center justify-between rounded-md bg-slate-50 px-3 py-2">
-                <span className="text-slate-600">{n}</span>
-                <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${s === "Aprovado" ? "bg-emerald-100 text-emerald-700" : s === "Pendente" ? "bg-amber-100 text-amber-700" : "bg-rose-100 text-rose-700"}`}>{s}</span>
-              </li>
-            ))}
-          </ul>
-        </Section>
-
-        <Section title="Histórico"><p className="text-xs text-slate-500">{p.concluidos} agendamentos concluídos. Faturamento gerado: <span className="font-semibold text-[#0A1128]">{brl(p.concluidos * 180)}</span>.</p></Section>
-
-        <Section title="Avaliações recentes">
-          <ul className="space-y-2 text-xs">
-            {[[5, "Excelente serviço, pontual e caprichoso."], [4, "Muito bom, recomendo."], [5, "Superou expectativas."]].map(([n, c], i) => (
-              <li key={i} className="rounded-md bg-slate-50 p-2.5">
-                <p className="mb-1 flex items-center gap-1 text-amber-600"><Star className="h-3 w-3 fill-amber-400 text-amber-400" /> {String(n)}.0</p>
-                <p className="text-slate-600">{c}</p>
-              </li>
-            ))}
-          </ul>
-        </Section>
+        <Section title="Histórico"><p className="text-xs text-slate-500">{p.concluidos} agendamentos concluídos. Faturamento estimado: <span className="font-semibold text-[#0A1128]">{brl(p.concluidos * 180)}</span>.</p></Section>
 
         <div className="grid grid-cols-3 gap-2 pt-2">
           <Button size="sm" onClick={() => onStatus("Ativo")} className="text-white" style={{ background: TEAL }}>Aprovar</Button>
-          <Button size="sm" variant="outline">Editar</Button>
+          <Button size="sm" variant="outline" onClick={() => onStatus("Inativo")}>Inativar</Button>
           <Button size="sm" variant="outline" onClick={() => onStatus("Bloqueado")} className="text-rose-600">Bloquear</Button>
         </div>
       </div>
@@ -219,7 +255,7 @@ function ProfDetail({ p, onStatus }: { p: Prof; onStatus: (s: ProfStatus) => voi
   );
 }
 
-function NovoProfDialog({ open, onOpenChange, onSave }: { open: boolean; onOpenChange: (o: boolean) => void; onSave: (p: Prof) => void }) {
+function NovoProfDialog({ open, onOpenChange, onSave, saving }: { open: boolean; onOpenChange: (o: boolean) => void; onSave: (p: { nome: string; telefone: string; email: string; cpf: string; especialidade: string; regiao: string }) => void; saving: boolean }) {
   const [f, setF] = useState({ nome: "", telefone: "", email: "", cpf: "", especialidade: ESPS[0], regiao: "" });
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -232,11 +268,10 @@ function NovoProfDialog({ open, onOpenChange, onSave }: { open: boolean; onOpenC
           <Field label="CPF"><Input value={f.cpf} onChange={(e) => setF({ ...f, cpf: e.target.value })} /></Field>
           <Field label="Especialidade"><Select value={f.especialidade} onValueChange={(v) => setF({ ...f, especialidade: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{ESPS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></Field>
           <Field label="Região de atuação" className="sm:col-span-2"><Input value={f.regiao} onChange={(e) => setF({ ...f, regiao: e.target.value })} /></Field>
-          <Field label="Documentos" className="sm:col-span-2"><Input type="file" multiple /></Field>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={() => onSave({ id: `p${Date.now()}`, nome: f.nome || "Novo profissional", telefone: f.telefone, email: f.email, cpf: f.cpf, especialidades: [f.especialidade], avaliacao: 0, concluidos: 0, status: "Pendente", cadastro: new Date().toLocaleDateString("pt-BR"), foto: "", regiao: f.regiao })} className="text-white" style={{ background: TEAL }}>Salvar</Button>
+          <Button disabled={saving} onClick={() => onSave(f)} className="text-white" style={{ background: TEAL }}>{saving ? "Salvando..." : "Salvar"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
