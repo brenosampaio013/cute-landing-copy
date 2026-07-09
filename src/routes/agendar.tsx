@@ -88,9 +88,18 @@ function Agendar() {
       return;
     }
 
-    const valorNum = valor ? Number(valor.replace(",", ".")) : 0;
-    if (valor && (Number.isNaN(valorNum) || valorNum < 0)) {
-      toast.error("Informe um valor válido para o serviço.");
+    const valorTrim = valor.trim();
+    if (!valorTrim) {
+      toast.error("Informe o valor do serviço.");
+      return;
+    }
+    const valorNum = Number(valorTrim.replace(",", "."));
+    if (Number.isNaN(valorNum) || valorNum <= 0) {
+      toast.error("O valor do serviço deve ser maior que zero.");
+      return;
+    }
+    if (valorNum > 1_000_000) {
+      toast.error("Valor acima do limite permitido.");
       return;
     }
 
@@ -129,7 +138,8 @@ function Agendar() {
 
   const step1Done = !!servico;
   const step2Done = !!data && slotIdx !== null;
-  const step3Done = endereco.trim().length > 0;
+  const valorNumLive = Number((valor || "").replace(",", "."));
+  const step3Done = endereco.trim().length > 0 && valor.trim().length > 0 && !Number.isNaN(valorNumLive) && valorNumLive > 0;
   const canSubmit = step1Done && step2Done && step3Done && !!user;
 
   const steps = [
@@ -374,7 +384,7 @@ function Agendar() {
 
             <div className="mt-5">
               <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                Valor do serviço (opcional)
+                Valor do serviço <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
                 <DollarSign className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" strokeWidth={1.75} />
@@ -382,6 +392,7 @@ function Agendar() {
                 <input
                   type="text"
                   inputMode="decimal"
+                  required
                   value={valor}
                   onChange={(e) => {
                     const v = e.target.value.replace(/[^\d.,]/g, "");
@@ -392,7 +403,7 @@ function Agendar() {
                 />
               </div>
               <p className="mt-2 text-xs text-slate-500">
-                Informe o valor combinado. Se deixar em branco, enviaremos um orçamento.
+                Informe o valor combinado do serviço (obrigatório, maior que zero).
               </p>
             </div>
           </section>
