@@ -41,7 +41,7 @@ type Tx = {
 
 const METS: Metodo[] = ["Pix", "Cartão de crédito", "Dinheiro", "Boleto", "Transferência"];
 const TABS = ["Todos", "Pagos", "Pendentes", "Estornados"] as const;
-const STATUS_TO_UI: Record<StatusDb, StatusUi> = { pago: "Pago", pendente: "Pendente", estornado: "Estornado", falhou: "Estornado" };
+const STATUS_TO_UI: Record<StatusDb, StatusUi> = { pago: "Pago", pendente: "Pendente", estornado: "Estornado" };
 const STATUS_TO_DB: Record<StatusUi, StatusDb> = { Pago: "pago", Pendente: "pendente", Estornado: "estornado" };
 const badge: Record<StatusUi, string> = { Pago: "bg-emerald-100 text-emerald-700", Pendente: "bg-amber-100 text-amber-700", Estornado: "bg-rose-100 text-rose-700" };
 const metodoIconFor = (m: string | null): LucideIcon => {
