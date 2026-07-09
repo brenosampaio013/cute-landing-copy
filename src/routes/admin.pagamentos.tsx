@@ -24,7 +24,7 @@ export const Route = createFileRoute("/admin/pagamentos")({
 
 type StatusDb = "pago" | "pendente" | "estornado";
 type StatusUi = "Pago" | "Pendente" | "Estornado";
-type Metodo = "Pix" | "Cartão de crédito" | "Dinheiro" | "Boleto" | "Transferência";
+type Metodo = "Pix" | "Cartão de crédito";
 
 type Tx = {
   id: string;
