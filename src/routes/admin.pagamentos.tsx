@@ -39,7 +39,7 @@ type Tx = {
   createdAt: string;
 };
 
-const METS: Metodo[] = ["Pix", "Cartão de crédito", "Dinheiro", "Boleto", "Transferência"];
+const METS: Metodo[] = ["Pix", "Cartão de crédito"];
 const TABS = ["Todos", "Pagos", "Pendentes", "Estornados"] as const;
 const STATUS_TO_UI: Record<StatusDb, StatusUi> = { pago: "Pago", pendente: "Pendente", estornado: "Estornado" };
 const STATUS_TO_DB: Record<StatusUi, StatusDb> = { Pago: "pago", Pendente: "pendente", Estornado: "estornado" };
