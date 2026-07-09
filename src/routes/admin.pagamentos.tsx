@@ -98,6 +98,8 @@ function PagamentosPage() {
   const [confirmDelete, setConfirmDelete] = useState<Tx | null>(null);
   const [markPaid, setMarkPaid] = useState<Tx | null>(null);
   const [markMetodo, setMarkMetodo] = useState<Metodo>("Pix");
+  const [markValor, setMarkValor] = useState<string>("");
+
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["admin-pagamentos"],
@@ -129,11 +131,12 @@ function PagamentosPage() {
   }, [isAdmin, qc]);
 
   const updateMut = useMutation({
-    mutationFn: async (input: { id: string; status: StatusUi; metodo?: string | null }) => {
+    mutationFn: async (input: { id: string; status: StatusUi; metodo?: string | null; valor?: number }) => {
       const patch: {
         status: StatusDb;
         data_pagamento?: string | null;
         metodo?: string | null;
+        valor?: number;
       } = { status: STATUS_TO_DB[input.status] };
       if (input.status === "Pago") {
         patch.data_pagamento = new Date().toISOString();
@@ -141,12 +144,14 @@ function PagamentosPage() {
       } else if (input.status === "Pendente") {
         patch.data_pagamento = null;
       }
+      if (input.valor !== undefined) patch.valor = input.valor;
       const { error } = await supabase.from("pagamentos").update(patch).eq("id", input.id);
       if (error) throw error;
     },
     onSuccess: (_d, v) => { invalidate(); toast.success(`Pagamento marcado como ${v.status}.`); },
     onError: (e: Error) => toast.error(e.message),
   });
+
 
   const deleteMut = useMutation({
     mutationFn: async (id: string) => {
@@ -262,7 +267,7 @@ function PagamentosPage() {
                             size="sm"
                             className="h-8 gap-1 text-white hover:opacity-90"
                             style={{ background: TEAL }}
-                            onClick={() => { setMarkMetodo((r.metodo as Metodo) || "Pix"); setMarkPaid(r); }}
+                            onClick={() => { setMarkMetodo((r.metodo as Metodo) || "Pix"); setMarkValor(r.valor > 0 ? String(r.valor) : ""); setMarkPaid(r); }}
                           >
                             <CheckCircle2 className="h-3.5 w-3.5" /> Marcar pago
                           </Button>
@@ -327,7 +332,20 @@ function PagamentosPage() {
               <div className="rounded-md bg-slate-50 p-3">
                 <p className="text-xs text-slate-500">Cliente</p>
                 <p className="font-medium text-[#0A1128]">{markPaid.cliente} · {markPaid.servico}</p>
-                <p className="mt-1 text-xs text-slate-500">Valor: <span className="font-semibold text-[#0A1128]">{brl(markPaid.valor)}</span></p>
+                <p className="mt-1 text-xs text-slate-500">Valor atual: <span className="font-semibold text-[#0A1128]">{brl(markPaid.valor)}</span></p>
+              </div>
+              <div>
+                <Label className="text-xs">Valor do serviço (R$) *</Label>
+                <Input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  required
+                  className="mt-1"
+                  placeholder="0,00"
+                  value={markValor}
+                  onChange={(e) => setMarkValor(e.target.value)}
+                />
               </div>
               <div>
                 <Label className="text-xs">Método de pagamento</Label>
@@ -351,8 +369,17 @@ function PagamentosPage() {
               disabled={updateMut.isPending}
               onClick={() => {
                 if (!markPaid) return;
+                const valorNum = Number(String(markValor).replace(",", "."));
+                if (!markValor.trim() || Number.isNaN(valorNum) || valorNum <= 0) {
+                  toast.error("Informe um valor válido, maior que zero.");
+                  return;
+                }
+                if (valorNum > 1_000_000) {
+                  toast.error("Valor acima do limite permitido.");
+                  return;
+                }
                 updateMut.mutate(
-                  { id: markPaid.id, status: "Pago", metodo: markMetodo },
+                  { id: markPaid.id, status: "Pago", metodo: markMetodo, valor: valorNum },
                   { onSuccess: () => setMarkPaid(null) },
                 );
               }}
@@ -361,6 +388,7 @@ function PagamentosPage() {
               {updateMut.isPending ? "Salvando..." : "Confirmar pagamento"}
             </Button>
           </DialogFooter>
+
         </DialogContent>
       </Dialog>
     </AdminShell>
