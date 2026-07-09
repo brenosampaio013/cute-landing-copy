@@ -255,7 +255,12 @@ function PagamentosPage() {
                     <td className="px-3 py-3.5 text-slate-600">{r.cliente}</td>
                     <td className="px-3 py-3.5 text-slate-600">{r.servico}</td>
                     <td className="px-3 py-3.5"><span className="inline-flex items-center gap-1.5 text-slate-600"><Icon className="h-3.5 w-3.5" /> {r.metodo ?? "—"}</span></td>
-                    <td className={`px-3 py-3.5 text-right ${r.status === "Pago" ? "font-bold text-emerald-600" : "font-medium text-[#0A1128]"}`}>{brl(r.valor)}</td>
+                    <td className={`px-3 py-3.5 text-right ${r.status === "Pago" ? "font-bold text-emerald-600" : "font-medium text-[#0A1128]"}`}>
+                      <span className="inline-flex items-center justify-end gap-1.5">
+                        {r.status === "Pago" && <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-label="Pago" />}
+                        {brl(r.valor)}
+                      </span>
+                    </td>
                     <td className="px-3 py-3.5"><span className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${badge[r.status]}`}>{r.status}</span></td>
                     <td className="px-3 py-3.5 text-slate-600">
                       {r.dataPagamento ? new Date(r.dataPagamento).toLocaleDateString("pt-BR") : new Date(r.createdAt).toLocaleDateString("pt-BR")}
