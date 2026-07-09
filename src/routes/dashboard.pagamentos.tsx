@@ -32,16 +32,35 @@ function Pagamentos() {
 
   useEffect(() => {
     if (!user) return;
-    (async () => {
-      setLoading(true);
+    let active = true;
+
+    const load = async () => {
       const { data } = await supabase
         .from("pagamentos")
         .select("id, valor, status, data_pagamento, metodo, agendamentos!inner(servico, data, cliente_id)")
         .eq("agendamentos.cliente_id", user.id)
         .order("created_at", { ascending: false });
+      if (!active) return;
       setRows((data as unknown as Row[] | null) ?? []);
       setLoading(false);
-    })();
+    };
+
+    setLoading(true);
+    load();
+
+    const channel = supabase
+      .channel(`pagamentos-cliente-${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "pagamentos" },
+        () => { load(); },
+      )
+      .subscribe();
+
+    return () => {
+      active = false;
+      supabase.removeChannel(channel);
+    };
   }, [user]);
 
   const total = rows
