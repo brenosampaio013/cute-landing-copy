@@ -801,7 +801,7 @@ function NovoAgendamentoDialog({
           <Field label="Data"><Input type="date" value={form.data} onChange={(e) => setForm({ ...form, data: e.target.value })} /></Field>
           <Field label="Horário"><Input type="time" value={form.hora} onChange={(e) => setForm({ ...form, hora: e.target.value })} /></Field>
           <Field label="Endereço" className="sm:col-span-2"><Input value={form.endereco} onChange={(e) => setForm({ ...form, endereco: e.target.value })} /></Field>
-          <Field label="Valor (R$)"><Input type="number" value={form.valor} onChange={(e) => setForm({ ...form, valor: e.target.value })} /></Field>
+          <Field label="Valor do serviço (R$) *"><Input type="number" min="0.01" step="0.01" required value={form.valor} onChange={(e) => setForm({ ...form, valor: e.target.value })} placeholder="0,00" /></Field>
           <Field label="Cupom"><Input value={form.cupom} onChange={(e) => setForm({ ...form, cupom: e.target.value })} placeholder="Opcional" /></Field>
           <Field label="Forma de pagamento" className="sm:col-span-2">
             <Select value={form.pagamento} onValueChange={(v) => setForm({ ...form, pagamento: v as Pagamento })}>
