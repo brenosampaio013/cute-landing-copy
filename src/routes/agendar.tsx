@@ -384,7 +384,7 @@ function Agendar() {
             </button>
           </div>
           {!user && !authLoading && (
-            <p className="-mt-4 text-center text-xs text-slate-400 sm:text-right">
+            <p className="mt-2 text-center text-xs text-slate-400 sm:text-right">
               Você precisa estar logado para concluir o agendamento.
             </p>
           )}
