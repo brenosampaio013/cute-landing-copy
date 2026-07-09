@@ -147,15 +147,15 @@ function Agendar() {
         className="overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200/60 md:flex"
       >
         {/* Sidebar de passos */}
-        <aside className="w-full bg-[#0A1128] p-8 text-white md:w-80 md:shrink-0 md:p-10">
-          <div className="mb-10">
+        <aside className="w-full bg-[#0A1128] p-6 text-white sm:p-8 md:w-80 md:shrink-0 md:p-10">
+          <div className="mb-6 md:mb-10">
             <h1 className="text-2xl font-bold tracking-tight">Maré Nobre</h1>
             <p className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#2DD4BF]">
               Serviços Premium
             </p>
           </div>
 
-          <ol className="space-y-7">
+          <ol className="space-y-5 md:space-y-7">
             {steps.map((s) => (
               <li
                 key={s.n}
@@ -193,9 +193,9 @@ function Agendar() {
         <div className="flex-1 space-y-10 p-6 sm:p-8 md:p-12">
           {/* Passo 1: Serviço */}
           <section>
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="text-xl font-bold text-[#0A1128]">O que você precisa hoje?</h2>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">O que você precisa hoje?</h2>
+              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">
                 01 · Serviço
               </span>
             </div>
@@ -241,9 +241,9 @@ function Agendar() {
 
           {/* Passo 2: Data e horário */}
           <section>
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="text-xl font-bold text-[#0A1128]">Quando podemos te atender?</h2>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">Quando podemos te atender?</h2>
+              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">
                 02 · Data e horário
               </span>
             </div>
@@ -347,9 +347,9 @@ function Agendar() {
 
           {/* Passo 3: Endereço */}
           <section>
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="text-xl font-bold text-[#0A1128]">Onde será o serviço?</h2>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">Onde será o serviço?</h2>
+              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">
                 03 · Endereço
               </span>
             </div>
@@ -384,7 +384,7 @@ function Agendar() {
             </button>
           </div>
           {!user && !authLoading && (
-            <p className="-mt-4 text-center text-xs text-slate-400 sm:text-right">
+            <p className="mt-2 text-center text-xs text-slate-400 sm:text-right">
               Você precisa estar logado para concluir o agendamento.
             </p>
           )}
