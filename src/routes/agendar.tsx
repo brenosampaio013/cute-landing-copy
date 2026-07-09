@@ -49,6 +49,7 @@ function Agendar() {
   const [data, setData] = useState<string>("");
   const [slotIdx, setSlotIdx] = useState<number | null>(null);
   const [endereco, setEndereco] = useState<string>("");
+  const [valor, setValor] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
