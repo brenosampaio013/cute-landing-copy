@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Loader2, Wallet } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeading } from "@/components/dashboard/PageHeading";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -29,6 +30,9 @@ function Pagamentos() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<Row[]>([]);
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  const rowsRef = useRef<Row[]>([]);
+  rowsRef.current = rows;
 
   useEffect(() => {
     if (!user) return;
@@ -52,7 +56,29 @@ function Pagamentos() {
       .channel(`pagamentos-cliente-${user.id}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "pagamentos" },
+        { event: "UPDATE", schema: "public", table: "pagamentos" },
+        (payload) => {
+          const next = payload.new as { id: string; status: Row["status"] };
+          const prev = rowsRef.current.find((r) => r.id === next.id);
+          if (!prev) { load(); return; }
+          if (prev.status !== next.status) {
+            if (next.status === "pago") toast.success("Pagamento confirmado! ✅");
+            else if (next.status === "estornado") toast.info("Pagamento estornado.");
+            else if (next.status === "pendente") toast("Pagamento marcado como pendente.");
+            setHighlightId(next.id);
+            setTimeout(() => setHighlightId((cur) => (cur === next.id ? null : cur)), 2500);
+          }
+          load();
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "pagamentos" },
+        () => { load(); },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "pagamentos" },
         () => { load(); },
       )
       .subscribe();
@@ -109,7 +135,7 @@ function Pagamentos() {
                   const s = statusMap[r.status];
                   const data = r.data_pagamento ?? r.agendamentos?.data;
                   return (
-                    <tr key={r.id}>
+                    <tr key={r.id} className={`transition-colors duration-500 ${highlightId === r.id ? "bg-emerald-50/70" : ""}`}>
                       <td className="py-3 pr-4 text-slate-600">
                         {data ? new Date(data).toLocaleDateString("pt-BR") : "—"}
                       </td>
