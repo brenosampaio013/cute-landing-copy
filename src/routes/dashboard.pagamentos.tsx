@@ -30,6 +30,9 @@ function Pagamentos() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<Row[]>([]);
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  const rowsRef = useRef<Row[]>([]);
+  rowsRef.current = rows;
 
   useEffect(() => {
     if (!user) return;
@@ -53,7 +56,29 @@ function Pagamentos() {
       .channel(`pagamentos-cliente-${user.id}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "pagamentos" },
+        { event: "UPDATE", schema: "public", table: "pagamentos" },
+        (payload) => {
+          const next = payload.new as { id: string; status: Row["status"] };
+          const prev = rowsRef.current.find((r) => r.id === next.id);
+          if (!prev) { load(); return; }
+          if (prev.status !== next.status) {
+            if (next.status === "pago") toast.success("Pagamento confirmado! ✅");
+            else if (next.status === "estornado") toast.info("Pagamento estornado.");
+            else if (next.status === "pendente") toast("Pagamento marcado como pendente.");
+            setHighlightId(next.id);
+            setTimeout(() => setHighlightId((cur) => (cur === next.id ? null : cur)), 2500);
+          }
+          load();
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "pagamentos" },
+        () => { load(); },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "pagamentos" },
         () => { load(); },
       )
       .subscribe();
