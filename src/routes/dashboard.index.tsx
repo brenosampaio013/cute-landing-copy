@@ -253,7 +253,7 @@ function DashboardHome() {
             </p>
           ) : (
             <p className="mt-4 text-sm text-slate-500">
-              Nenhum pagamento vinculado ao seu próximo agendamento.
+              Você ainda não possui pagamentos registrados.
             </p>
           )}
         </section>
