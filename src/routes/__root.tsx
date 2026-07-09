@@ -16,7 +16,7 @@ import { WhatsappFab } from "../components/whatsapp-fab";
 import { supabase } from "../integrations/supabase/client";
 import { Toaster } from "../components/ui/sonner";
 import { usePresenceHeartbeat } from "../hooks/use-presence-heartbeat";
-import { useVisitorHeartbeat } from "../hooks/use-visitor-heartbeat";
+
 
 
 function NotFoundComponent() {
@@ -139,7 +139,6 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   usePresenceHeartbeat();
-  useVisitorHeartbeat();
 
   return (
     <QueryClientProvider client={queryClient}>
