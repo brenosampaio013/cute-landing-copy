@@ -88,9 +88,18 @@ function Agendar() {
       return;
     }
 
-    const valorNum = valor ? Number(valor.replace(",", ".")) : 0;
-    if (valor && (Number.isNaN(valorNum) || valorNum < 0)) {
-      toast.error("Informe um valor válido para o serviço.");
+    const valorTrim = valor.trim();
+    if (!valorTrim) {
+      toast.error("Informe o valor do serviço.");
+      return;
+    }
+    const valorNum = Number(valorTrim.replace(",", "."));
+    if (Number.isNaN(valorNum) || valorNum <= 0) {
+      toast.error("O valor do serviço deve ser maior que zero.");
+      return;
+    }
+    if (valorNum > 1_000_000) {
+      toast.error("Valor acima do limite permitido.");
       return;
     }
 
