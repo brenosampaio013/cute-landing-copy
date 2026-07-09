@@ -105,7 +105,15 @@ export type Database = {
           total?: number | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "agendamentos_profissional_id_fkey"
+            columns: ["profissional_id"]
+            isOneToOne: false
+            referencedRelation: "profissionais"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       avaliacoes: {
         Row: {
@@ -445,6 +453,136 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      profissionais: {
+        Row: {
+          atendimentos_concluidos: number
+          avaliacao_media: number
+          cpf: string | null
+          created_at: string
+          email: string | null
+          especialidades: string[]
+          id: string
+          nome: string
+          observacoes: string | null
+          regiao: string | null
+          status: string
+          telefone: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          atendimentos_concluidos?: number
+          avaliacao_media?: number
+          cpf?: string | null
+          created_at?: string
+          email?: string | null
+          especialidades?: string[]
+          id?: string
+          nome: string
+          observacoes?: string | null
+          regiao?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          atendimentos_concluidos?: number
+          avaliacao_media?: number
+          cpf?: string | null
+          created_at?: string
+          email?: string | null
+          especialidades?: string[]
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          regiao?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profissional_bloqueios: {
+        Row: {
+          created_at: string
+          data_fim: string
+          data_inicio: string
+          id: string
+          motivo: string | null
+          profissional_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data_fim: string
+          data_inicio: string
+          id?: string
+          motivo?: string | null
+          profissional_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data_fim?: string
+          data_inicio?: string
+          id?: string
+          motivo?: string | null
+          profissional_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profissional_bloqueios_profissional_id_fkey"
+            columns: ["profissional_id"]
+            isOneToOne: false
+            referencedRelation: "profissionais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profissional_horarios: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          dia_semana: number
+          hora_fim: string
+          hora_inicio: string
+          id: string
+          profissional_id: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          dia_semana: number
+          hora_fim: string
+          hora_inicio: string
+          id?: string
+          profissional_id: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          dia_semana?: number
+          hora_fim?: string
+          hora_inicio?: string
+          id?: string
+          profissional_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profissional_horarios_profissional_id_fkey"
+            columns: ["profissional_id"]
+            isOneToOne: false
+            referencedRelation: "profissionais"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
