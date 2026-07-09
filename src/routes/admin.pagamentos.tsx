@@ -98,6 +98,8 @@ function PagamentosPage() {
   const [confirmDelete, setConfirmDelete] = useState<Tx | null>(null);
   const [markPaid, setMarkPaid] = useState<Tx | null>(null);
   const [markMetodo, setMarkMetodo] = useState<Metodo>("Pix");
+  const [markValor, setMarkValor] = useState<string>("");
+
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["admin-pagamentos"],
