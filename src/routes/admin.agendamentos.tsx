@@ -478,6 +478,36 @@ function AgendamentosPage() {
           )}
         </SheetContent>
       </Sheet>
+
+      <Dialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir agendamento?</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-slate-600">
+            Tem certeza que deseja excluir {confirmDelete?.label}? Esta ação é permanente e não pode ser desfeita.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmDelete(null)}>Cancelar</Button>
+            <Button
+              className="bg-rose-600 text-white hover:bg-rose-700"
+              disabled={deleteMut.isPending}
+              onClick={() => {
+                if (!confirmDelete) return;
+                deleteMut.mutate(confirmDelete.ids, {
+                  onSuccess: () => {
+                    setSelected(new Set());
+                    setDetail(null);
+                    setConfirmDelete(null);
+                  },
+                });
+              }}
+            >
+              {deleteMut.isPending ? "Excluindo..." : "Excluir"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminShell>
   );
 }
