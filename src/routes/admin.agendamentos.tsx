@@ -389,7 +389,16 @@ function AgendamentosPage() {
                       <div className="flex items-center gap-1 text-slate-400">
                         <button onClick={() => setDetail(r)} className="rounded p-1 hover:bg-slate-100 hover:text-[#0A1128]" title="Ver"><Eye className="h-4 w-4" /></button>
                         <button className="rounded p-1 hover:bg-slate-100 hover:text-[#0A1128]" title="Editar"><Pencil className="h-4 w-4" /></button>
-                        <button className="rounded p-1 hover:bg-slate-100 hover:text-rose-600" title="Cancelar"><Trash2 className="h-4 w-4" /></button>
+                        <button
+                          onClick={() => {
+                            if (!r.rawId) return;
+                            setConfirmDelete({ ids: [r.rawId], label: `agendamento ${r.id}` });
+                          }}
+                          className="rounded p-1 hover:bg-slate-100 hover:text-rose-600"
+                          title="Excluir"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                         <button className="rounded p-1 hover:bg-slate-100 hover:text-[#0A1128]"><MoreVertical className="h-4 w-4" /></button>
                       </div>
                     </td>
