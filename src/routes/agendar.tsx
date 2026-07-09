@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves, CalendarDays, Tag, MapPin, Check, DollarSign } from "lucide-react";
+import { Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves, CalendarDays, Tag, MapPin, Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { SitePage } from "@/components/site-page";
@@ -49,7 +49,7 @@ function Agendar() {
   const [data, setData] = useState<string>("");
   const [slotIdx, setSlotIdx] = useState<number | null>(null);
   const [endereco, setEndereco] = useState<string>("");
-  const [valor, setValor] = useState<string>("");
+  
   const [submitting, setSubmitting] = useState(false);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -88,21 +88,6 @@ function Agendar() {
       return;
     }
 
-    const valorTrim = valor.trim();
-    if (!valorTrim) {
-      toast.error("Informe o valor do serviço.");
-      return;
-    }
-    const valorNum = Number(valorTrim.replace(",", "."));
-    if (Number.isNaN(valorNum) || valorNum <= 0) {
-      toast.error("O valor do serviço deve ser maior que zero.");
-      return;
-    }
-    if (valorNum > 1_000_000) {
-      toast.error("Valor acima do limite permitido.");
-      return;
-    }
-
     const slot = SLOTS[slotIdx];
     const inicio = new Date(`${data}T${slot.inicio}:00`);
     if (Number.isNaN(inicio.getTime())) { toast.error("Data ou horário inválido."); return; }
@@ -119,9 +104,10 @@ function Agendar() {
       horario_fim: slot.fim,
       endereco: endereco.trim(),
       status: "pendente",
-      preco: valorNum,
-      total: valorNum,
+      preco: 0,
+      total: 0,
     }).select("id").single();
+
 
     setSubmitting(false);
     if (error) {
@@ -138,8 +124,8 @@ function Agendar() {
 
   const step1Done = !!servico;
   const step2Done = !!data && slotIdx !== null;
-  const valorNumLive = Number((valor || "").replace(",", "."));
-  const step3Done = endereco.trim().length > 0 && valor.trim().length > 0 && !Number.isNaN(valorNumLive) && valorNumLive > 0;
+  const step3Done = endereco.trim().length > 0;
+
   const canSubmit = step1Done && step2Done && step3Done && !!user;
 
   const steps = [
@@ -382,30 +368,8 @@ function Agendar() {
               />
             </div>
 
-            <div className="mt-5">
-              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                Valor do serviço <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative">
-                <DollarSign className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" strokeWidth={1.75} />
-                <span className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-500">R$</span>
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  required
-                  value={valor}
-                  onChange={(e) => {
-                    const v = e.target.value.replace(/[^\d.,]/g, "");
-                    setValor(v);
-                  }}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-20 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
-                  placeholder="0,00"
-                />
-              </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Informe o valor combinado do serviço (obrigatório, maior que zero).
-              </p>
-            </div>
+
+
           </section>
 
           <div className="rounded-2xl border border-[#2DD4BF]/30 bg-[#2DD4BF]/5 px-4 py-3 text-sm text-[#0A1128]">
