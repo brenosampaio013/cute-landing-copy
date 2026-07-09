@@ -131,11 +131,12 @@ function PagamentosPage() {
   }, [isAdmin, qc]);
 
   const updateMut = useMutation({
-    mutationFn: async (input: { id: string; status: StatusUi; metodo?: string | null }) => {
+    mutationFn: async (input: { id: string; status: StatusUi; metodo?: string | null; valor?: number }) => {
       const patch: {
         status: StatusDb;
         data_pagamento?: string | null;
         metodo?: string | null;
+        valor?: number;
       } = { status: STATUS_TO_DB[input.status] };
       if (input.status === "Pago") {
         patch.data_pagamento = new Date().toISOString();
@@ -143,12 +144,14 @@ function PagamentosPage() {
       } else if (input.status === "Pendente") {
         patch.data_pagamento = null;
       }
+      if (input.valor !== undefined) patch.valor = input.valor;
       const { error } = await supabase.from("pagamentos").update(patch).eq("id", input.id);
       if (error) throw error;
     },
     onSuccess: (_d, v) => { invalidate(); toast.success(`Pagamento marcado como ${v.status}.`); },
     onError: (e: Error) => toast.error(e.message),
   });
+
 
   const deleteMut = useMutation({
     mutationFn: async (id: string) => {
