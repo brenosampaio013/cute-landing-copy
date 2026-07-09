@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves, CalendarDays, Tag, MapPin, Check } from "lucide-react";
+import { Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves, CalendarDays, Tag, MapPin, Check, DollarSign } from "lucide-react";
 import { toast } from "sonner";
 
 import { SitePage } from "@/components/site-page";
@@ -49,6 +49,7 @@ function Agendar() {
   const [data, setData] = useState<string>("");
   const [slotIdx, setSlotIdx] = useState<number | null>(null);
   const [endereco, setEndereco] = useState<string>("");
+  const [valor, setValor] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -87,6 +88,12 @@ function Agendar() {
       return;
     }
 
+    const valorNum = valor ? Number(valor.replace(",", ".")) : 0;
+    if (valor && (Number.isNaN(valorNum) || valorNum < 0)) {
+      toast.error("Informe um valor válido para o serviço.");
+      return;
+    }
+
     const slot = SLOTS[slotIdx];
     const inicio = new Date(`${data}T${slot.inicio}:00`);
     if (Number.isNaN(inicio.getTime())) { toast.error("Data ou horário inválido."); return; }
@@ -103,6 +110,8 @@ function Agendar() {
       horario_fim: slot.fim,
       endereco: endereco.trim(),
       status: "pendente",
+      preco: valorNum,
+      total: valorNum,
     }).select("id").single();
 
     setSubmitting(false);
@@ -361,6 +370,30 @@ function Agendar() {
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-12 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
                 placeholder="Rua, número, bairro e cidade"
               />
+            </div>
+
+            <div className="mt-5">
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                Valor do serviço (opcional)
+              </label>
+              <div className="relative">
+                <DollarSign className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" strokeWidth={1.75} />
+                <span className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-500">R$</span>
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={valor}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/[^\d.,]/g, "");
+                    setValor(v);
+                  }}
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-20 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
+                  placeholder="0,00"
+                />
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Informe o valor combinado. Se deixar em branco, enviaremos um orçamento.
+              </p>
             </div>
           </section>
 
