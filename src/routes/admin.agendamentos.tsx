@@ -94,6 +94,18 @@ function AgendamentosPage() {
     onSuccess: () => { invalidateAll(); toast.success("Agendamento reagendado."); },
     onError: (e: Error) => toast.error(e.message),
   });
+  const deleteMut = useMutation({
+    mutationFn: async (rawIds: string[]) => {
+      const { error } = await supabase.from("agendamentos").delete().in("id", rawIds);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      invalidateAll();
+      toast.success(ids.length > 1 ? `${ids.length} agendamentos excluídos.` : "Agendamento excluído.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const [confirmDelete, setConfirmDelete] = useState<{ ids: string[]; label: string } | null>(null);
 
 
   const { data: dataRows } = useAdminAgendamentos(isAdmin === true);
