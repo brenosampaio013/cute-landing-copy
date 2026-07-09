@@ -135,7 +135,7 @@ function Pagamentos() {
                   const s = statusMap[r.status];
                   const data = r.data_pagamento ?? r.agendamentos?.data;
                   return (
-                    <tr key={r.id}>
+                    <tr key={r.id} className={`transition-colors duration-500 ${highlightId === r.id ? "bg-emerald-50/70" : ""}`}>
                       <td className="py-3 pr-4 text-slate-600">
                         {data ? new Date(data).toLocaleDateString("pt-BR") : "—"}
                       </td>
