@@ -745,7 +745,21 @@ function NovoAgendamentoDialog({
     cliente: "", servico: "", profissional: "", data: "", hora: "", duracao: "60",
     endereco: "", valor: "", pagamento: "Pendente" as Pagamento, observacoes: "", cupom: "",
   });
+  const valorNum = Number(String(form.valor).replace(",", "."));
+  const valorValido = form.valor.trim().length > 0 && !Number.isNaN(valorNum) && valorNum > 0;
   const submit = () => {
+    if (!form.valor.trim()) {
+      toast.error("Informe o valor do serviço.");
+      return;
+    }
+    if (Number.isNaN(valorNum) || valorNum <= 0) {
+      toast.error("O valor do serviço deve ser maior que zero.");
+      return;
+    }
+    if (valorNum > 1_000_000) {
+      toast.error("Valor do serviço acima do limite permitido.");
+      return;
+    }
     onSave({
       id: `#${Math.floor(Math.random() * 9000 + 1000)}`,
       rawId: crypto.randomUUID(),
@@ -760,10 +774,11 @@ function NovoAgendamentoDialog({
       duracao: Number(form.duracao) || 60,
       status: "Pendente",
       pagamento: form.pagamento,
-      valor: Number(form.valor) || 150,
+      valor: valorNum,
       observacoes: form.observacoes || undefined,
     });
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
@@ -786,7 +801,7 @@ function NovoAgendamentoDialog({
           <Field label="Data"><Input type="date" value={form.data} onChange={(e) => setForm({ ...form, data: e.target.value })} /></Field>
           <Field label="Horário"><Input type="time" value={form.hora} onChange={(e) => setForm({ ...form, hora: e.target.value })} /></Field>
           <Field label="Endereço" className="sm:col-span-2"><Input value={form.endereco} onChange={(e) => setForm({ ...form, endereco: e.target.value })} /></Field>
-          <Field label="Valor (R$)"><Input type="number" value={form.valor} onChange={(e) => setForm({ ...form, valor: e.target.value })} /></Field>
+          <Field label="Valor do serviço (R$) *"><Input type="number" min="0.01" step="0.01" required value={form.valor} onChange={(e) => setForm({ ...form, valor: e.target.value })} placeholder="0,00" /></Field>
           <Field label="Cupom"><Input value={form.cupom} onChange={(e) => setForm({ ...form, cupom: e.target.value })} placeholder="Opcional" /></Field>
           <Field label="Forma de pagamento" className="sm:col-span-2">
             <Select value={form.pagamento} onValueChange={(v) => setForm({ ...form, pagamento: v as Pagamento })}>
@@ -798,7 +813,7 @@ function NovoAgendamentoDialog({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={submit} className="text-white hover:opacity-90" style={{ background: TEAL }}>Salvar agendamento</Button>
+          <Button onClick={submit} disabled={!valorValido} className="text-white hover:opacity-90 disabled:opacity-50" style={{ background: TEAL }}>Salvar agendamento</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
