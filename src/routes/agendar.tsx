@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves, CalendarDays, Tag, MapPin, Check, DollarSign } from "lucide-react";
+import { Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves, CalendarDays, Tag, MapPin, Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { SitePage } from "@/components/site-page";
