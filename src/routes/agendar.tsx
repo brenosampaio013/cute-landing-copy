@@ -88,21 +88,6 @@ function Agendar() {
       return;
     }
 
-    const valorTrim = valor.trim();
-    if (!valorTrim) {
-      toast.error("Informe o valor do serviço.");
-      return;
-    }
-    const valorNum = Number(valorTrim.replace(",", "."));
-    if (Number.isNaN(valorNum) || valorNum <= 0) {
-      toast.error("O valor do serviço deve ser maior que zero.");
-      return;
-    }
-    if (valorNum > 1_000_000) {
-      toast.error("Valor acima do limite permitido.");
-      return;
-    }
-
     const slot = SLOTS[slotIdx];
     const inicio = new Date(`${data}T${slot.inicio}:00`);
     if (Number.isNaN(inicio.getTime())) { toast.error("Data ou horário inválido."); return; }
@@ -119,9 +104,10 @@ function Agendar() {
       horario_fim: slot.fim,
       endereco: endereco.trim(),
       status: "pendente",
-      preco: valorNum,
-      total: valorNum,
+      preco: 0,
+      total: 0,
     }).select("id").single();
+
 
     setSubmitting(false);
     if (error) {
