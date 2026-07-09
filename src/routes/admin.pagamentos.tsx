@@ -112,6 +112,22 @@ function PagamentosPage() {
     qc.invalidateQueries({ queryKey: ["admin-dashboard"] });
   };
 
+  useEffect(() => {
+    if (isAdmin !== true) return;
+    const channel = supabase
+      .channel("admin-pagamentos-rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "pagamentos" }, () => {
+        qc.invalidateQueries({ queryKey: ["admin-pagamentos"] });
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "agendamentos" }, () => {
+        qc.invalidateQueries({ queryKey: ["admin-pagamentos"] });
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isAdmin, qc]);
+
   const updateMut = useMutation({
     mutationFn: async (input: { id: string; status: StatusUi; metodo?: string | null }) => {
       const patch: {
