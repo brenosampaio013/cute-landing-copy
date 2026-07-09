@@ -38,6 +38,7 @@ import { Route as AdminPagamentosRouteImport } from './routes/admin.pagamentos'
 import { Route as AdminNotificacoesRouteImport } from './routes/admin.notificacoes'
 import { Route as AdminMensagensRouteImport } from './routes/admin.mensagens'
 import { Route as AdminLogsRouteImport } from './routes/admin.logs'
+import { Route as AdminHorariosRouteImport } from './routes/admin.horarios'
 import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminClientesOnlineRouteImport } from './routes/admin.clientes-online'
@@ -191,6 +192,11 @@ const AdminLogsRoute = AdminLogsRouteImport.update({
   path: '/admin/logs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminHorariosRoute = AdminHorariosRouteImport.update({
+  id: '/admin/horarios',
+  path: '/admin/horarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCuponsRoute = AdminCuponsRouteImport.update({
   id: '/admin/cupons',
   path: '/admin/cupons',
@@ -245,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/horarios': typeof AdminHorariosRoute
   '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
@@ -282,6 +289,7 @@ export interface FileRoutesByTo {
   '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/horarios': typeof AdminHorariosRoute
   '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
@@ -321,6 +329,7 @@ export interface FileRoutesById {
   '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/horarios': typeof AdminHorariosRoute
   '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
   '/admin/notificacoes': typeof AdminNotificacoesRoute
@@ -361,6 +370,7 @@ export interface FileRouteTypes {
     | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
+    | '/admin/horarios'
     | '/admin/logs'
     | '/admin/mensagens'
     | '/admin/notificacoes'
@@ -398,6 +408,7 @@ export interface FileRouteTypes {
     | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
+    | '/admin/horarios'
     | '/admin/logs'
     | '/admin/mensagens'
     | '/admin/notificacoes'
@@ -436,6 +447,7 @@ export interface FileRouteTypes {
     | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
+    | '/admin/horarios'
     | '/admin/logs'
     | '/admin/mensagens'
     | '/admin/notificacoes'
@@ -475,6 +487,7 @@ export interface RootRouteChildren {
   AdminClientesOnlineRoute: typeof AdminClientesOnlineRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
+  AdminHorariosRoute: typeof AdminHorariosRoute
   AdminLogsRoute: typeof AdminLogsRoute
   AdminMensagensRoute: typeof AdminMensagensRoute
   AdminNotificacoesRoute: typeof AdminNotificacoesRoute
@@ -691,6 +704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLogsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/horarios': {
+      id: '/admin/horarios'
+      path: '/admin/horarios'
+      fullPath: '/admin/horarios'
+      preLoaderRoute: typeof AdminHorariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/cupons': {
       id: '/admin/cupons'
       path: '/admin/cupons'
@@ -791,6 +811,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminClientesOnlineRoute: AdminClientesOnlineRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
+  AdminHorariosRoute: AdminHorariosRoute,
   AdminLogsRoute: AdminLogsRoute,
   AdminMensagensRoute: AdminMensagensRoute,
   AdminNotificacoesRoute: AdminNotificacoesRoute,
