@@ -138,7 +138,8 @@ function Agendar() {
 
   const step1Done = !!servico;
   const step2Done = !!data && slotIdx !== null;
-  const step3Done = endereco.trim().length > 0;
+  const valorNumLive = Number((valor || "").replace(",", "."));
+  const step3Done = endereco.trim().length > 0 && valor.trim().length > 0 && !Number.isNaN(valorNumLive) && valorNumLive > 0;
   const canSubmit = step1Done && step2Done && step3Done && !!user;
 
   const steps = [
