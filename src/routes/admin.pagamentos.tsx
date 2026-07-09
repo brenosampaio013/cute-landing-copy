@@ -267,7 +267,7 @@ function PagamentosPage() {
                             size="sm"
                             className="h-8 gap-1 text-white hover:opacity-90"
                             style={{ background: TEAL }}
-                            onClick={() => { setMarkMetodo((r.metodo as Metodo) || "Pix"); setMarkPaid(r); }}
+                            onClick={() => { setMarkMetodo((r.metodo as Metodo) || "Pix"); setMarkValor(r.valor > 0 ? String(r.valor) : ""); setMarkPaid(r); }}
                           >
                             <CheckCircle2 className="h-3.5 w-3.5" /> Marcar pago
                           </Button>
