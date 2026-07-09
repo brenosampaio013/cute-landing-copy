@@ -193,9 +193,9 @@ function Agendar() {
         <div className="flex-1 space-y-10 p-6 sm:p-8 md:p-12">
           {/* Passo 1: Serviço */}
           <section>
-            <div className="mb-5 flex items-baseline justify-between">
-              <h2 className="text-xl font-bold text-[#0A1128]">O que você precisa hoje?</h2>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">O que você precisa hoje?</h2>
+              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">
                 01 · Serviço
               </span>
             </div>
