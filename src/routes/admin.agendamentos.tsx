@@ -94,6 +94,18 @@ function AgendamentosPage() {
     onSuccess: () => { invalidateAll(); toast.success("Agendamento reagendado."); },
     onError: (e: Error) => toast.error(e.message),
   });
+  const deleteMut = useMutation({
+    mutationFn: async (rawIds: string[]) => {
+      const { error } = await supabase.from("agendamentos").delete().in("id", rawIds);
+      if (error) throw error;
+    },
+    onSuccess: (_d, ids) => {
+      invalidateAll();
+      toast.success(ids.length > 1 ? `${ids.length} agendamentos excluídos.` : "Agendamento excluído.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const [confirmDelete, setConfirmDelete] = useState<{ ids: string[]; label: string } | null>(null);
 
 
   const { data: dataRows } = useAdminAgendamentos(isAdmin === true);
@@ -320,6 +332,18 @@ function AgendamentosPage() {
                 <span className="text-slate-500">{selected.size} selecionado(s)</span>
                 <Button size="sm" variant="outline" onClick={() => bulkSet("Confirmado")}>Confirmar</Button>
                 <Button size="sm" variant="outline" onClick={() => bulkSet("Cancelado")} className="text-rose-600">Cancelar</Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-rose-600 border-rose-200 hover:bg-rose-50"
+                  onClick={() => {
+                    const rawIds = rows.filter((r) => selected.has(r.id) && r.rawId).map((r) => r.rawId);
+                    if (rawIds.length === 0) return;
+                    setConfirmDelete({ ids: rawIds, label: `${rawIds.length} agendamento(s)` });
+                  }}
+                >
+                  <Trash2 className="mr-1 h-3.5 w-3.5" /> Excluir
+                </Button>
               </div>
             )}
           </div>
@@ -365,7 +389,16 @@ function AgendamentosPage() {
                       <div className="flex items-center gap-1 text-slate-400">
                         <button onClick={() => setDetail(r)} className="rounded p-1 hover:bg-slate-100 hover:text-[#0A1128]" title="Ver"><Eye className="h-4 w-4" /></button>
                         <button className="rounded p-1 hover:bg-slate-100 hover:text-[#0A1128]" title="Editar"><Pencil className="h-4 w-4" /></button>
-                        <button className="rounded p-1 hover:bg-slate-100 hover:text-rose-600" title="Cancelar"><Trash2 className="h-4 w-4" /></button>
+                        <button
+                          onClick={() => {
+                            if (!r.rawId) return;
+                            setConfirmDelete({ ids: [r.rawId], label: `agendamento ${r.id}` });
+                          }}
+                          className="rounded p-1 hover:bg-slate-100 hover:text-rose-600"
+                          title="Excluir"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                         <button className="rounded p-1 hover:bg-slate-100 hover:text-[#0A1128]"><MoreVertical className="h-4 w-4" /></button>
                       </div>
                     </td>
@@ -445,6 +478,36 @@ function AgendamentosPage() {
           )}
         </SheetContent>
       </Sheet>
+
+      <Dialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir agendamento?</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-slate-600">
+            Tem certeza que deseja excluir {confirmDelete?.label}? Esta ação é permanente e não pode ser desfeita.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmDelete(null)}>Cancelar</Button>
+            <Button
+              className="bg-rose-600 text-white hover:bg-rose-700"
+              disabled={deleteMut.isPending}
+              onClick={() => {
+                if (!confirmDelete) return;
+                deleteMut.mutate(confirmDelete.ids, {
+                  onSuccess: () => {
+                    setSelected(new Set());
+                    setDetail(null);
+                    setConfirmDelete(null);
+                  },
+                });
+              }}
+            >
+              {deleteMut.isPending ? "Excluindo..." : "Excluir"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminShell>
   );
 }

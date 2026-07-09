@@ -1,0 +1,1 @@
+CREATE POLICY "Admins excluem agendamentos" ON public.agendamentos FOR DELETE USING (private.has_role(auth.uid(), 'admin'::app_role));
