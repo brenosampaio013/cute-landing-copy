@@ -88,6 +88,12 @@ function Agendar() {
       return;
     }
 
+    const valorNum = valor ? Number(valor.replace(",", ".")) : 0;
+    if (valor && (Number.isNaN(valorNum) || valorNum < 0)) {
+      toast.error("Informe um valor válido para o serviço.");
+      return;
+    }
+
     const slot = SLOTS[slotIdx];
     const inicio = new Date(`${data}T${slot.inicio}:00`);
     if (Number.isNaN(inicio.getTime())) { toast.error("Data ou horário inválido."); return; }
@@ -104,6 +110,8 @@ function Agendar() {
       horario_fim: slot.fim,
       endereco: endereco.trim(),
       status: "pendente",
+      preco: valorNum,
+      total: valorNum,
     }).select("id").single();
 
     setSubmitting(false);
