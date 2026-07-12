@@ -70,7 +70,7 @@ function Login() {
       setFormError(friendlyAuthError(error.message));
       return;
     }
-    setFormError("Enviamos um link de recuperação para o seu e-mail.");
+    setFormError("Pronto! Enviamos um link seguro para o seu e-mail — verifique a caixa de entrada e o spam.");
   }
 
 
