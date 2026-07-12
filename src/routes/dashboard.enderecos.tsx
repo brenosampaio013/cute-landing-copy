@@ -61,20 +61,20 @@ function Enderecos() {
     });
     setSaving(false);
     if (error) {
-      toast.error("Não foi possível salvar o endereço.");
+      toast.error("Não conseguimos salvar o endereço. Confira os dados e tente novamente.");
       return;
     }
-    toast.success("Endereço adicionado.");
+    toast.success("Endereço adicionado com sucesso.");
     setForm(emptyForm);
     setOpen(false);
     load();
   }
 
   async function remover(id: string) {
-    if (!confirm("Remover este endereço?")) return;
+    if (!confirm("Tem certeza que deseja remover este endereço? Você não poderá desfazer.")) return;
     const { error } = await supabase.from("enderecos").delete().eq("id", id);
     if (error) {
-      toast.error("Não foi possível remover.");
+      toast.error("Não conseguimos remover agora. Tente novamente em instantes.");
       return;
     }
     toast.success("Endereço removido.");
@@ -86,7 +86,7 @@ function Enderecos() {
     const { error: e1 } = await supabase.from("enderecos").update({ principal: false }).eq("cliente_id", user.id);
     const { error: e2 } = await supabase.from("enderecos").update({ principal: true }).eq("id", id);
     if (e1 || e2) {
-      toast.error("Não foi possível definir como principal.");
+      toast.error("Não conseguimos atualizar o endereço principal. Tente novamente.");
       load();
       return;
     }
@@ -97,7 +97,7 @@ function Enderecos() {
   return (
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <PageHeading title="Endereços" subtitle="Gerencie os endereços onde você recebe atendimento." />
+        <PageHeading title="Meus endereços" subtitle="Cadastre os locais de atendimento uma vez — agendamentos futuros ficam em 2 toques." />
         <button
           onClick={() => setOpen((v) => !v)}
           className="inline-flex items-center gap-2 rounded-lg bg-[#2DD4BF] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
@@ -144,8 +144,8 @@ function Enderecos() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <MapPin className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Você ainda não tem endereços</p>
-          <p className="mt-1 text-xs text-slate-500">Adicione um endereço para agilizar seus agendamentos.</p>
+          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhum endereço cadastrado</p>
+          <p className="mt-1 text-xs text-slate-500">Cadastre um endereço agora e agilize todos os próximos agendamentos.</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">

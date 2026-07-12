@@ -59,7 +59,7 @@ function Perfil() {
       .upload(path, file, { upsert: true, contentType: file.type });
     if (upErr) {
       setUploading(false);
-      setMsg({ type: "err", text: "Não foi possível enviar a foto." });
+      setMsg({ type: "err", text: "Não conseguimos enviar a foto. Tente uma imagem menor ou em outro formato." });
       return;
     }
     const { data: signed } = await supabase.storage
@@ -83,7 +83,7 @@ function Perfil() {
       .eq("id", user.id);
     setSaving(false);
     if (error) {
-      setMsg({ type: "err", text: "Erro ao salvar. Tente novamente." });
+      setMsg({ type: "err", text: "Não conseguimos salvar agora. Confira sua conexão e tente novamente." });
       toast.error("Erro ao salvar perfil.");
     } else {
       setMsg({ type: "ok", text: "Perfil atualizado com sucesso." });
@@ -107,7 +107,7 @@ function Perfil() {
 
   return (
     <>
-      <PageHeading title="Perfil" subtitle="Atualize seus dados pessoais e de contato." />
+      <PageHeading title="Meu perfil" subtitle="Mantenha seus dados atualizados para agendar em segundos e receber avisos importantes." />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-100">

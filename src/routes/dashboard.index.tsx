@@ -165,7 +165,7 @@ function DashboardHome() {
         <h2 className="text-xl font-bold text-[#0A1A2F] sm:text-2xl">
           Olá, {nome || "cliente"}! 👋
         </h2>
-        <p className="mt-1 text-sm text-slate-500">Que bom ter você aqui.</p>
+        <p className="mt-1 text-sm text-slate-500">Tudo do seu lar num só lugar — agendamentos, pagamentos e histórico.</p>
       </section>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -213,8 +213,8 @@ function DashboardHome() {
           ) : (
             <EmptyState
               icon={Calendar}
-              title="Nenhum agendamento próximo"
-              hint="Você ainda não tem serviços confirmados."
+              title="Nenhum serviço agendado"
+              hint="Que tal deixar o próximo detalhe do lar com a gente? Agende em 2 minutos."
             />
           )}
         </section>
@@ -253,7 +253,7 @@ function DashboardHome() {
             </p>
           ) : (
             <p className="mt-4 text-sm text-slate-500">
-              Você ainda não possui pagamentos registrados.
+              Nenhum pagamento por aqui ainda — seus recibos aparecerão logo após o primeiro serviço.
             </p>
           )}
         </section>
@@ -302,8 +302,8 @@ function DashboardHome() {
           ) : (
             <EmptyState
               icon={Inbox}
-              title="Você ainda não tem agendamentos"
-              hint="Quando agendar um serviço, ele aparecerá aqui."
+              title="Nenhum agendamento por aqui"
+              hint="Assim que você marcar um serviço, ele fica salvo aqui — com data, horário e status em tempo real."
             />
           )}
         </section>
@@ -356,8 +356,8 @@ function DashboardHome() {
           ) : (
             <EmptyState
               icon={Star}
-              title="Sem avaliações pendentes"
-              hint="Você já avaliou todos os seus serviços concluídos."
+              title="Tudo em dia por aqui"
+              hint="Você já avaliou todos os serviços concluídos. Obrigado pelo feedback!"
             />
           )}
         </section>

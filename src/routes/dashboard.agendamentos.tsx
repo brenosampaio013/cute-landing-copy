@@ -57,22 +57,22 @@ function Agendamentos() {
   useEffect(() => { load(); }, [user]);
 
   async function cancelar(id: string) {
-    if (!confirm("Cancelar este agendamento?")) return;
+    if (!confirm("Tem certeza que deseja cancelar este agendamento? Essa ação não pode ser desfeita.")) return;
     setCancelling(id);
     const { error } = await supabase.from("agendamentos").update({ status: "cancelado" }).eq("id", id);
     setCancelling(null);
     if (error) {
-      toast.error("Não foi possível cancelar.");
+      toast.error("Não conseguimos cancelar agora. Tente novamente em instantes.");
       return;
     }
-    toast.success("Agendamento cancelado.");
+    toast.success("Agendamento cancelado com sucesso.");
     load();
   }
 
   return (
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <PageHeading title="Agendamentos" subtitle="Acompanhe os serviços agendados e o histórico." />
+        <PageHeading title="Meus agendamentos" subtitle="Acompanhe em tempo real os serviços marcados, em andamento e concluídos." />
         <Link
           to="/agendar"
           className="inline-flex items-center gap-2 rounded-lg bg-[#2DD4BF] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
@@ -90,8 +90,8 @@ function Agendamentos() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <Inbox className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhum agendamento ainda</p>
-          <p className="mt-1 text-xs text-slate-500">Clique em "Novo agendamento" para começar.</p>
+          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Sua agenda ainda está livre</p>
+          <p className="mt-1 text-xs text-slate-500">Toque em "Novo agendamento" e cuide do seu lar em 2 minutos.</p>
         </div>
       ) : (
         <div className="grid gap-4">

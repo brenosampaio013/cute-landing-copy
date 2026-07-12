@@ -180,19 +180,19 @@ function Agendar() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user) { toast.error("Faça login para agendar."); navigate({ to: "/login" }); return; }
+    if (!user) { toast.error("Faça login para concluir seu agendamento."); navigate({ to: "/login" }); return; }
     if (!servico || !data || slotIdx === null || !endereco.trim()) {
-      toast.error("Preencha serviço, data, horário e endereço.");
+      toast.error("Falta pouco! Preencha serviço, data, horário e endereço.");
       return;
     }
     const slot = slots[slotIdx];
-    if (!slot) { toast.error("Selecione um horário disponível."); return; }
+    if (!slot) { toast.error("Selecione um horário disponível para continuar."); return; }
 
     setSubmitting(true);
     const chosenProf = await pickProfissionalForSlot(slot);
     if (!chosenProf) {
       setSubmitting(false);
-      toast.error("Não há profissional disponível para este horário.");
+      toast.error("Este horário acabou de ficar indisponível. Escolha outro — a agenda atualiza em tempo real.");
       return;
     }
 
@@ -211,11 +211,11 @@ function Agendar() {
 
     setSubmitting(false);
     if (error) {
-      toast.error(error.message || "Não foi possível agendar. Tente novamente.");
+      toast.error(error.message || "Não conseguimos agendar agora. Confira sua conexão e tente novamente.");
       return;
     }
 
-    toast.success("Agendamento criado! Enviaremos o orçamento em seguida.");
+    toast.success("Agendamento confirmado! Em instantes você recebe o orçamento.");
     navigate({ to: "/dashboard/agendamentos" });
   }
 
@@ -234,17 +234,17 @@ function Agendar() {
   ];
 
   const trustItems = [
-    { icon: ShieldCheck, title: "Pagamento seguro", desc: "Seus dados protegidos" },
-    { icon: Clock, title: "Agendamento rápido", desc: "Confirmação em minutos" },
-    { icon: CalendarCheck, title: "Remarcação fácil", desc: "Altere quando precisar" },
-    { icon: Headphones, title: "Suporte dedicado", desc: "Atendimento humanizado" },
+    { icon: ShieldCheck, title: "Pagamento seguro", desc: "Criptografia de ponta a ponta" },
+    { icon: Clock, title: "Confirmação rápida", desc: "Resposta em minutos" },
+    { icon: CalendarCheck, title: "Remarcação fácil", desc: "Ajuste quando precisar" },
+    { icon: Headphones, title: "Suporte humano", desc: "Fala com gente de verdade" },
   ];
 
   return (
     <SitePage
       eyebrow="Agendamento online"
-      title="Agendar serviço"
-      subtitle="Escolha o serviço, a data e o horário. Confirmação em minutos."
+      title="Agende em 2 minutos"
+      subtitle="Escolha o serviço, o horário que cabe na sua rotina e receba a confirmação em instantes."
     >
       <form
         onSubmit={handleSubmit}
@@ -492,7 +492,7 @@ function Agendar() {
                 value={endereco}
                 onChange={(e) => setEndereco(e.target.value)}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-12 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
-                placeholder="Rua, número, bairro e cidade"
+                placeholder="Rua, número, bairro, cidade e complemento (se houver)"
               />
             </div>
           </section>

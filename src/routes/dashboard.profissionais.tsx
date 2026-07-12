@@ -74,7 +74,7 @@ function Profissionais() {
 
   return (
     <>
-      <PageHeading title="Profissionais" subtitle="Os profissionais que já atenderam você." />
+      <PageHeading title="Meus profissionais" subtitle="Os profissionais Maré Nobre que já cuidaram do seu lar." />
       {loading ? (
         <div className="flex items-center justify-center py-16 text-slate-400">
           <Loader2 className="h-6 w-6 animate-spin" />
@@ -84,8 +84,8 @@ function Profissionais() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <User className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhum profissional ainda</p>
-          <p className="mt-1 text-xs text-slate-500">Após seu primeiro atendimento, ele aparecerá aqui.</p>
+          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhum profissional por aqui ainda</p>
+          <p className="mt-1 text-xs text-slate-500">Depois do primeiro atendimento, o profissional que cuidou do seu lar aparece aqui.</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -59,7 +59,7 @@ function MinhasMensagens() {
 
   return (
     <>
-      <PageHeading title="Mensagens" subtitle="Fale com o suporte da Maré Nobre." />
+      <PageHeading title="Mensagens" subtitle="Fale direto com a equipe Maré Nobre — atendimento humano, sem robôs." />
       <div className="flex h-[calc(100vh-260px)] min-h-[520px] flex-col overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-100">
         <header className="flex items-center gap-3 border-b border-slate-100 p-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2DD4BF]/10 text-[#0A1A2F]">
@@ -67,7 +67,7 @@ function MinhasMensagens() {
           </div>
           <div>
             <p className="text-sm font-semibold text-[#0A1A2F]">Suporte Maré Nobre</p>
-            <p className="text-xs text-slate-500">Respondemos em horário comercial</p>
+            <p className="text-xs text-slate-500">Seg a Sáb · resposta em minutos no horário comercial</p>
           </div>
         </header>
 
@@ -75,7 +75,7 @@ function MinhasMensagens() {
           <div className="mx-auto flex max-w-2xl flex-col gap-3">
             {mensagens.length === 0 && (
               <p className="py-10 text-center text-sm text-slate-500">
-                Envie a primeira mensagem para o suporte.
+                👋 Oi! Envie uma mensagem e a equipe Maré Nobre responde por aqui.
               </p>
             )}
             {mensagens.map((m) => {
@@ -120,7 +120,7 @@ function MinhasMensagens() {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-              placeholder="Escreva uma mensagem..."
+              placeholder="Escreva sua mensagem…"
               rows={2}
               className="resize-none"
               disabled={!conversa}

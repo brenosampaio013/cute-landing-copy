@@ -53,8 +53,8 @@ function Ajuda() {
   return (
     <>
       <PageHeading
-        title="Ajuda"
-        subtitle="Estamos aqui para ajudar. Fale conosco ou consulte as dúvidas frequentes."
+        title="Central de ajuda"
+        subtitle="Consulte as dúvidas frequentes ou fale direto com a equipe — a gente responde rápido."
       />
 
       <div className="grid gap-4 sm:grid-cols-3">

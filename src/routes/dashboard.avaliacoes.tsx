@@ -39,7 +39,7 @@ function Avaliacoes() {
 
   return (
     <>
-      <PageHeading title="Avaliações" subtitle="Todas as avaliações que você já deu." />
+      <PageHeading title="Minhas avaliações" subtitle="Seu feedback mantém o padrão Maré Nobre e recompensa os melhores profissionais." />
       {loading ? (
         <div className="flex items-center justify-center py-16 text-slate-400">
           <Loader2 className="h-6 w-6 animate-spin" />
@@ -49,7 +49,7 @@ function Avaliacoes() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <Star className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhuma avaliação ainda</p>
+          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhuma avaliação por aqui ainda</p>
           <p className="mt-1 text-xs text-slate-500">Após um serviço concluído, você poderá avaliá-lo.</p>
         </div>
       ) : (

@@ -95,7 +95,7 @@ function Pagamentos() {
 
   return (
     <>
-      <PageHeading title="Pagamentos" subtitle="Histórico de transações dos seus serviços." />
+      <PageHeading title="Pagamentos" subtitle="Todos os recibos e transações em um só lugar — transparência total." />
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
@@ -117,7 +117,7 @@ function Pagamentos() {
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
         ) : rows.length === 0 ? (
-          <p className="py-8 text-center text-sm text-slate-500">Nenhum pagamento registrado ainda.</p>
+          <p className="py-8 text-center text-sm text-slate-500">Seus recibos aparecem aqui após o primeiro serviço.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
