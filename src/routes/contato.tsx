@@ -6,7 +6,7 @@ export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
       { title: "Contato — Maré Nobre" },
-      { name: "description", content: "Fale com a Maré Nobre pelo WhatsApp ou e-mail. Atendimento rápido e profissional." },
+      { name: "description", content: "Fale com a Maré Nobre pelo WhatsApp ou e-mail. Resposta em minutos, atendimento humano e sem robôs." },
     ],
   }),
   component: Contato,
