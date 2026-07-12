@@ -302,8 +302,8 @@ function DashboardHome() {
           ) : (
             <EmptyState
               icon={Inbox}
-              title="Você ainda não tem agendamentos"
-              hint="Quando agendar um serviço, ele aparecerá aqui."
+              title="Nenhum agendamento por aqui"
+              hint="Assim que você marcar um serviço, ele fica salvo aqui — com data, horário e status em tempo real."
             />
           )}
         </section>
