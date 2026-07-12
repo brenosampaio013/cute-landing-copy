@@ -57,15 +57,15 @@ function Agendamentos() {
   useEffect(() => { load(); }, [user]);
 
   async function cancelar(id: string) {
-    if (!confirm("Cancelar este agendamento?")) return;
+    if (!confirm("Tem certeza que deseja cancelar este agendamento? Essa ação não pode ser desfeita.")) return;
     setCancelling(id);
     const { error } = await supabase.from("agendamentos").update({ status: "cancelado" }).eq("id", id);
     setCancelling(null);
     if (error) {
-      toast.error("Não foi possível cancelar.");
+      toast.error("Não conseguimos cancelar agora. Tente novamente em instantes.");
       return;
     }
-    toast.success("Agendamento cancelado.");
+    toast.success("Agendamento cancelado com sucesso.");
     load();
   }
 
