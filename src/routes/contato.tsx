@@ -141,7 +141,7 @@ function Contato() {
           </div>
           <div>
             <label htmlFor="contato-mensagem" className={labelCls}>Mensagem</label>
-            <textarea id="contato-mensagem" name="mensagem" rows={5} required className={`${inputCls} mt-2 resize-none`} placeholder="Como podemos ajudar?" />
+            <textarea id="contato-mensagem" name="mensagem" rows={5} required className={`${inputCls} mt-2 resize-none`} placeholder="Descreva o serviço que você precisa, endereço e melhor horário para contato." />
           </div>
           <button
             type="button"
