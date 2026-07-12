@@ -97,7 +97,7 @@ function Enderecos() {
   return (
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <PageHeading title="Endereços" subtitle="Gerencie os endereços onde você recebe atendimento." />
+        <PageHeading title="Meus endereços" subtitle="Cadastre os locais de atendimento uma vez — agendamentos futuros ficam em 2 toques." />
         <button
           onClick={() => setOpen((v) => !v)}
           className="inline-flex items-center gap-2 rounded-lg bg-[#2DD4BF] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
