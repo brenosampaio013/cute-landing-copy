@@ -76,17 +76,17 @@ function Login() {
 
   return (
     <AuthShell
-      quote="Cuidado completo para o seu lar."
+      quote="Cuidado premium para o seu lar, sempre à mão."
       imageUrl=""
     >
       <h1
         className="text-center text-3xl text-[#0A1A2F] sm:text-4xl"
         style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
       >
-        Que bom <span className="text-[#0A9E8A]">te ver por aqui!</span>
+        Bem-vindo <span className="text-[#0A9E8A]">de volta</span>
       </h1>
       <p className="mt-2 text-center text-sm text-slate-500">
-        Acesse sua conta para continuar
+        Entre para acompanhar agendamentos e gerenciar seus serviços.
       </p>
 
 
