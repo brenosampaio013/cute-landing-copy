@@ -243,8 +243,8 @@ function Agendar() {
   return (
     <SitePage
       eyebrow="Agendamento online"
-      title="Agendar serviço"
-      subtitle="Escolha o serviço, a data e o horário. Confirmação em minutos."
+      title="Agende em 2 minutos"
+      subtitle="Escolha o serviço, o horário que cabe na sua rotina e receba a confirmação em instantes."
     >
       <form
         onSubmit={handleSubmit}
