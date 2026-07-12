@@ -356,8 +356,8 @@ function DashboardHome() {
           ) : (
             <EmptyState
               icon={Star}
-              title="Sem avaliações pendentes"
-              hint="Você já avaliou todos os seus serviços concluídos."
+              title="Tudo em dia por aqui"
+              hint="Você já avaliou todos os serviços concluídos. Obrigado pelo feedback!"
             />
           )}
         </section>
