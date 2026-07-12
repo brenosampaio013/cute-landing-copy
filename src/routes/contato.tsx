@@ -27,7 +27,7 @@ function Contato() {
       icon: MessageCircle,
       label: "WhatsApp",
       value: WHATSAPP_DISPLAY,
-      hint: "Resposta em minutos",
+      hint: "Resposta em minutos — atendimento humano",
       href: `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
         "Olá! Gostaria de solicitar um orçamento com a Maré Nobre."
       )}`,
