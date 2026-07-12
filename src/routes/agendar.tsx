@@ -234,10 +234,10 @@ function Agendar() {
   ];
 
   const trustItems = [
-    { icon: ShieldCheck, title: "Pagamento seguro", desc: "Seus dados protegidos" },
-    { icon: Clock, title: "Agendamento rápido", desc: "Confirmação em minutos" },
-    { icon: CalendarCheck, title: "Remarcação fácil", desc: "Altere quando precisar" },
-    { icon: Headphones, title: "Suporte dedicado", desc: "Atendimento humanizado" },
+    { icon: ShieldCheck, title: "Pagamento seguro", desc: "Criptografia de ponta a ponta" },
+    { icon: Clock, title: "Confirmação rápida", desc: "Resposta em minutos" },
+    { icon: CalendarCheck, title: "Remarcação fácil", desc: "Ajuste quando precisar" },
+    { icon: Headphones, title: "Suporte humano", desc: "Fala com gente de verdade" },
   ];
 
   return (
