@@ -31,8 +31,8 @@ function Avaliacoes() {
   return (
     <SitePage
       eyebrow="Quem já contratou aprovou"
-      title="Avaliações"
-      subtitle="Mais de 2.500 clientes já avaliaram nossos serviços."
+      title="A confiança de quem já vive o padrão Maré Nobre"
+      subtitle="Mais de 2.500 clientes avaliaram os nossos serviços — e a nota média fala por si."
     >
       <div className="grid gap-4 sm:grid-cols-3">
         {stats.map((s) => (
