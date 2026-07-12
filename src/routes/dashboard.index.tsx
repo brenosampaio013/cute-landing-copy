@@ -253,7 +253,7 @@ function DashboardHome() {
             </p>
           ) : (
             <p className="mt-4 text-sm text-slate-500">
-              Você ainda não possui pagamentos registrados.
+              Nenhum pagamento por aqui ainda — seus recibos aparecerão logo após o primeiro serviço.
             </p>
           )}
         </section>
