@@ -211,11 +211,11 @@ function Agendar() {
 
     setSubmitting(false);
     if (error) {
-      toast.error(error.message || "Não foi possível agendar. Tente novamente.");
+      toast.error(error.message || "Não conseguimos agendar agora. Confira sua conexão e tente novamente.");
       return;
     }
 
-    toast.success("Agendamento criado! Enviaremos o orçamento em seguida.");
+    toast.success("Agendamento confirmado! Em instantes você recebe o orçamento.");
     navigate({ to: "/dashboard/agendamentos" });
   }
 
