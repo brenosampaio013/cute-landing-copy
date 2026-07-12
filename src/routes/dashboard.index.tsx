@@ -165,7 +165,7 @@ function DashboardHome() {
         <h2 className="text-xl font-bold text-[#0A1A2F] sm:text-2xl">
           Olá, {nome || "cliente"}! 👋
         </h2>
-        <p className="mt-1 text-sm text-slate-500">Que bom ter você aqui.</p>
+        <p className="mt-1 text-sm text-slate-500">Tudo do seu lar num só lugar — agendamentos, pagamentos e histórico.</p>
       </section>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
