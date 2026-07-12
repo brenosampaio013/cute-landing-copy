@@ -5,8 +5,8 @@ import { SitePage } from "@/components/site-page";
 export const Route = createFileRoute("/avaliacoes")({
   head: () => ({
     meta: [
-      { title: "Avaliações — Maré Nobre" },
-      { name: "description", content: "Veja o que os clientes falam sobre a Maré Nobre." },
+      { title: "Avaliações reais de clientes — Maré Nobre" },
+      { name: "description", content: "4,9/5 em mais de 2.500 avaliações. Veja o que dizem os clientes que já receberam o padrão Maré Nobre." },
     ],
   }),
   component: Avaliacoes,
