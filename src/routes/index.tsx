@@ -23,17 +23,17 @@ import { InstallAppBanner } from "@/components/install-app-banner";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Maré Nobre — Soluções para o seu lar" },
+      { title: "Maré Nobre — Serviços premium para o seu lar no Litoral Norte" },
       {
         name: "description",
         content:
-          "Cuidados premium para o seu lar. Pós obra, passadoria e limpeza de piscina.",
+          "Profissionais verificados para limpeza pós-obra, passadoria e limpeza de piscina. Agende em 2 minutos e receba em casa com padrão Maré Nobre.",
       },
-      { property: "og:title", content: "Maré Nobre — Soluções para o seu lar" },
+      { property: "og:title", content: "Maré Nobre — Serviços premium para o seu lar" },
       {
         property: "og:description",
         content:
-          "Cuidados premium para o seu lar. Pós obra, passadoria e limpeza de piscina.",
+          "Profissionais verificados, agendamento em 2 minutos e cuidado de verdade com o seu lar. Riviera, Bertioga e Litoral Norte.",
       },
     ],
   }),
