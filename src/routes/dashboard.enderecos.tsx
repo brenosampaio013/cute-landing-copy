@@ -61,10 +61,10 @@ function Enderecos() {
     });
     setSaving(false);
     if (error) {
-      toast.error("Não foi possível salvar o endereço.");
+      toast.error("Não conseguimos salvar o endereço. Confira os dados e tente novamente.");
       return;
     }
-    toast.success("Endereço adicionado.");
+    toast.success("Endereço adicionado com sucesso.");
     setForm(emptyForm);
     setOpen(false);
     load();
