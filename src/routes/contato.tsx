@@ -6,7 +6,7 @@ export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
       { title: "Contato — Maré Nobre" },
-      { name: "description", content: "Fale com a Maré Nobre pelo WhatsApp ou e-mail. Atendimento rápido e profissional." },
+      { name: "description", content: "Fale com a Maré Nobre pelo WhatsApp ou e-mail. Resposta em minutos, atendimento humano e sem robôs." },
     ],
   }),
   component: Contato,
@@ -27,7 +27,7 @@ function Contato() {
       icon: MessageCircle,
       label: "WhatsApp",
       value: WHATSAPP_DISPLAY,
-      hint: "Resposta em minutos",
+      hint: "Resposta em minutos — atendimento humano",
       href: `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
         "Olá! Gostaria de solicitar um orçamento com a Maré Nobre."
       )}`,
@@ -38,7 +38,7 @@ function Contato() {
       icon: Mail,
       label: "E-mail",
       value: EMAIL,
-      hint: "Retorno em até 24h",
+      hint: "Retorno garantido em até 24h úteis",
       href: `mailto:${EMAIL}`,
       external: false,
       accent: "from-sky-400 to-indigo-500",
@@ -48,8 +48,8 @@ function Contato() {
   return (
     <SitePage
       eyebrow="Fale com a gente"
-      title="Contato"
-      subtitle="Escolha o canal que preferir — nossa equipe responde com rapidez e cordialidade."
+      title="A gente responde rápido — e por gente de verdade"
+      subtitle="Escolha o canal que preferir. Tira dúvidas, pede orçamento ou só bate um papo sobre o seu lar — nossa equipe está pronta."
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
         {/* Left: channels */}
@@ -122,7 +122,7 @@ function Contato() {
               Envie uma mensagem
             </p>
             <h3 className="mt-2 text-2xl font-semibold text-[#0A1A2F]">
-              Conte pra gente como podemos ajudar
+              Conte o que precisa — cuidamos do resto
             </h3>
           </div>
           <div>
@@ -141,7 +141,7 @@ function Contato() {
           </div>
           <div>
             <label htmlFor="contato-mensagem" className={labelCls}>Mensagem</label>
-            <textarea id="contato-mensagem" name="mensagem" rows={5} required className={`${inputCls} mt-2 resize-none`} placeholder="Como podemos ajudar?" />
+            <textarea id="contato-mensagem" name="mensagem" rows={5} required className={`${inputCls} mt-2 resize-none`} placeholder="Descreva o serviço que você precisa, endereço e melhor horário para contato." />
           </div>
           <button
             type="button"

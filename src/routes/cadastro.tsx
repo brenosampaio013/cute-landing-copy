@@ -114,7 +114,7 @@ function Cadastro() {
 
   return (
     <AuthShell
-      quote="Comece a cuidar do seu lar hoje."
+      quote="Cuide do seu lar em minutos — não em fins de semana."
       imageUrl="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80"
     >
       <h1
@@ -124,7 +124,7 @@ function Cadastro() {
         Crie sua conta
       </h1>
       <p className="mt-2 text-sm text-slate-500">
-        Encontre os melhores profissionais para o seu lar
+        Leva menos de um minuto. Depois é só escolher o serviço e o horário.
       </p>
 
 

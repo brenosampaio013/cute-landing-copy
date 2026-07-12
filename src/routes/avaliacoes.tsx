@@ -5,8 +5,8 @@ import { SitePage } from "@/components/site-page";
 export const Route = createFileRoute("/avaliacoes")({
   head: () => ({
     meta: [
-      { title: "Avaliações — Maré Nobre" },
-      { name: "description", content: "Veja o que os clientes falam sobre a Maré Nobre." },
+      { title: "Avaliações reais de clientes — Maré Nobre" },
+      { name: "description", content: "4,9/5 em mais de 2.500 avaliações. Veja o que dizem os clientes que já receberam o padrão Maré Nobre." },
     ],
   }),
   component: Avaliacoes,
@@ -31,8 +31,8 @@ function Avaliacoes() {
   return (
     <SitePage
       eyebrow="Quem já contratou aprovou"
-      title="Avaliações"
-      subtitle="Mais de 2.500 clientes já avaliaram nossos serviços."
+      title="A confiança de quem já vive o padrão Maré Nobre"
+      subtitle="Mais de 2.500 clientes avaliaram os nossos serviços — e a nota média fala por si."
     >
       <div className="grid gap-4 sm:grid-cols-3">
         {stats.map((s) => (

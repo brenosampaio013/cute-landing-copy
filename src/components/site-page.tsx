@@ -96,8 +96,7 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-              Cuidados premium para o seu lar. Profissionais verificados, agendamento
-              simples e a confiança que você merece.
+              Cuidado premium para o seu lar. Profissionais verificados, agendamento em 2 minutos e a tranquilidade que você merece.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {[

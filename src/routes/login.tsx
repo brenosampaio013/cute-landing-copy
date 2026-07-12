@@ -70,23 +70,23 @@ function Login() {
       setFormError(friendlyAuthError(error.message));
       return;
     }
-    setFormError("Enviamos um link de recuperação para o seu e-mail.");
+    setFormError("Pronto! Enviamos um link seguro para o seu e-mail — verifique a caixa de entrada e o spam.");
   }
 
 
   return (
     <AuthShell
-      quote="Cuidado completo para o seu lar."
+      quote="Cuidado premium para o seu lar, sempre à mão."
       imageUrl=""
     >
       <h1
         className="text-center text-3xl text-[#0A1A2F] sm:text-4xl"
         style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
       >
-        Que bom <span className="text-[#0A9E8A]">te ver por aqui!</span>
+        Bem-vindo <span className="text-[#0A9E8A]">de volta</span>
       </h1>
       <p className="mt-2 text-center text-sm text-slate-500">
-        Acesse sua conta para continuar
+        Entre para acompanhar agendamentos e gerenciar seus serviços.
       </p>
 
 
@@ -187,7 +187,7 @@ function Login() {
 
         <p className="flex items-center justify-center gap-1.5 pt-6 text-center text-xs text-slate-400">
           <Lock className="h-3 w-3" />
-          Seus dados estão protegidos conosco.
+          Conexão criptografada. Seus dados estão seguros.
         </p>
 
       </form>

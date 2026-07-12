@@ -9,8 +9,8 @@ import fotoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
 export const Route = createFileRoute("/servicos")({
   head: () => ({
     meta: [
-      { title: "Nossos serviços — Maré Nobre" },
-      { name: "description", content: "Conheça os serviços da Maré Nobre para o seu lar." },
+      { title: "Serviços — Maré Nobre" },
+      { name: "description", content: "Pós-obra, passadoria e limpeza de piscina com padrão premium. Profissionais verificados e agenda para o mesmo dia." },
     ],
   }),
   component: ServicosPage,
@@ -31,21 +31,21 @@ const services: Service[] = [
   {
     id: "pos-obra",
     title: "PÓS OBRA",
-    desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você.",
+    desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra.",
     photo: fotoPosObra,
     Icon: Sparkles,
   },
   {
     id: "passadoria",
     title: "PASSADORIA",
-    desc: "Suas roupas bem passadas, cuidadas e dobradas.",
+    desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa.",
     photo: fotoPassadoria,
     Icon: Shirt,
   },
   {
     id: "limpeza-piscina",
     title: "LIMPEZA DE PISCINA",
-    desc: "Água limpa, cristalina e sempre pronta para você aproveitar.",
+    desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho.",
     photo: fotoLimpezaPiscina,
     Icon: Waves,
   },
@@ -108,8 +108,8 @@ function ServicosPage() {
   return (
     <SitePage
       eyebrow="O que oferecemos"
-      title="Nossos serviços"
-      subtitle="Profissionais qualificados prontos para cuidar do seu lar com o padrão Maré Nobre."
+      title="Serviços para cada canto da casa"
+      subtitle="Escolha o serviço, defina o horário e receba um profissional Maré Nobre — pontual, treinado e com tudo o que precisa em mãos."
     >
       <div className="grid gap-8 md:grid-cols-3">
         {services.map((s) => (

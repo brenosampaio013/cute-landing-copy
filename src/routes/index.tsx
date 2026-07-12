@@ -23,17 +23,17 @@ import { InstallAppBanner } from "@/components/install-app-banner";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Maré Nobre — Soluções para o seu lar" },
+      { title: "Maré Nobre — Serviços premium para o seu lar no Litoral Norte" },
       {
         name: "description",
         content:
-          "Cuidados premium para o seu lar. Pós obra, passadoria e limpeza de piscina.",
+          "Profissionais verificados para limpeza pós-obra, passadoria e limpeza de piscina. Agende em 2 minutos e receba em casa com padrão Maré Nobre.",
       },
-      { property: "og:title", content: "Maré Nobre — Soluções para o seu lar" },
+      { property: "og:title", content: "Maré Nobre — Serviços premium para o seu lar" },
       {
         property: "og:description",
         content:
-          "Cuidados premium para o seu lar. Pós obra, passadoria e limpeza de piscina.",
+          "Profissionais verificados, agendamento em 2 minutos e cuidado de verdade com o seu lar. Riviera, Bertioga e Litoral Norte.",
       },
     ],
   }),
@@ -42,17 +42,17 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
-  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
-  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
+  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra." },
+  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa." },
+  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho." },
 ];
 
 
 const steps = [
-  { n: 1, icon: Calendar, title: "Escolha o serviço", desc: "Selecione o serviço que você precisa." },
-  { n: 2, icon: Calendar, title: "Escolha data e horário", desc: "Agende o melhor dia e horário para você." },
-  { n: 3, icon: CreditCard, title: "Pagamento seguro", desc: "Pague com segurança na plataforma." },
-  { n: 4, icon: UserCheck, title: "Profissional confirmado", desc: "Pronto! Seu profissional está a caminho." },
+  { n: 1, icon: Calendar, title: "Escolha o serviço", desc: "Diga o que você precisa em poucos cliques." },
+  { n: 2, icon: Calendar, title: "Escolha data e horário", desc: "Você define o melhor dia — nós ajustamos a agenda." },
+  { n: 3, icon: CreditCard, title: "Pagamento seguro", desc: "Pague pelo app, com total tranquilidade." },
+  { n: 4, icon: UserCheck, title: "Profissional a caminho", desc: "Profissional verificado confirmado no horário combinado." },
 ];
 
 function Index() {
@@ -90,12 +90,12 @@ function Index() {
               className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
-              Mais que limpeza.
+              Seu lar impecável,
               <br />
-              Cuidado completo para o seu lar.
+              sem você levantar um dedo.
             </h1>
             <p className="mt-5 text-sm text-white/75 sm:mt-6 sm:text-base md:text-lg">
-              Profissionais qualificados, serviços de qualidade e a confiança que você merece.
+              Profissionais verificados, atendimento premium e agenda flexível. Você marca — a gente cuida de tudo.
             </p>
             <div className="mt-7 flex flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 lg:justify-start">
               <Link
@@ -103,7 +103,7 @@ function Index() {
                 className="group inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110 sm:px-8 sm:py-4 sm:text-base"
                 style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
               >
-                Agendar agora
+                Agendar em 2 minutos
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
@@ -147,10 +147,10 @@ function Index() {
               className="mt-4 text-4xl text-[#0A1A2F] sm:text-5xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
-              Nossos serviços
+              Serviços para cada canto da casa
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-slate-500">
-              Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
+              Profissionais treinados, materiais próprios e padrão de acabamento que você sente no primeiro passo dentro de casa.
             </p>
           </div>
 

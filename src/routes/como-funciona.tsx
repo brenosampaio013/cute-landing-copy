@@ -6,17 +6,17 @@ export const Route = createFileRoute("/como-funciona")({
   head: () => ({
     meta: [
       { title: "Como funciona — Maré Nobre" },
-      { name: "description", content: "Entenda em 4 passos como funciona a Maré Nobre." },
+      { name: "description", content: "Do agendamento ao serviço concluído em 4 passos. Rápido, seguro e sem burocracia." },
     ],
   }),
   component: ComoFunciona,
 });
 
 const steps = [
-  { n: 1, icon: CalendarSearch, title: "Escolha o serviço", desc: "Selecione o serviço que você precisa em poucos cliques." },
-  { n: 2, icon: CalendarCheck2, title: "Escolha data e horário", desc: "Agende o melhor dia e horário para você." },
-  { n: 3, icon: CreditCard, title: "Pagamento seguro", desc: "Pague com tranquilidade dentro da plataforma." },
-  { n: 4, icon: UserCheck, title: "Profissional confirmado", desc: "Pronto! Seu profissional está a caminho." },
+  { n: 1, icon: CalendarSearch, title: "Escolha o serviço", desc: "Diga o que você precisa — de pós-obra a piscina — em poucos cliques." },
+  { n: 2, icon: CalendarCheck2, title: "Escolha data e horário", desc: "Veja a agenda em tempo real e escolha o horário que cabe na sua rotina." },
+  { n: 3, icon: CreditCard, title: "Pagamento seguro", desc: "Pague pelo app com criptografia. Sem dor de cabeça, sem surpresas." },
+  { n: 4, icon: UserCheck, title: "Profissional a caminho", desc: "Profissional verificado confirmado — chega no horário e cuida de tudo." },
 ];
 
 function ComoFunciona() {
@@ -24,7 +24,7 @@ function ComoFunciona() {
     <SitePage
       eyebrow="Simples e rápido"
       title="Como funciona"
-      subtitle="Quatro passos entre o agendamento e o seu lar impecável."
+      subtitle="Do primeiro clique ao serviço concluído — em 4 passos, sem burocracia e sem surpresas."
     >
       <div className="relative">
         {/* Connector line for desktop */}
@@ -69,7 +69,7 @@ function ComoFunciona() {
           className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
           style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
         >
-          Começar agora
+          Agendar em 2 minutos
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Link>
       </div>

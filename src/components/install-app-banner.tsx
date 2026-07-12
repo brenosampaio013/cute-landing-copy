@@ -84,15 +84,15 @@ export function InstallAppBanner() {
               <Download className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold">Instalar app Maré Nobre</p>
+              <p className="text-sm font-semibold">Tenha a Maré Nobre na tela inicial</p>
               <p className="mt-0.5 text-xs text-white/70">
-                Acesso rápido pela tela inicial do seu celular.
+                Agende serviços em 2 toques, direto do seu celular.
               </p>
               <button
                 onClick={handleInstall}
                 className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#2DD4BF] px-4 py-2 text-xs font-semibold text-[#0A1A2F] transition hover:brightness-110"
               >
-                {isIOS ? "Ver como instalar" : "Instalar agora"}
+                {isIOS ? "Como instalar" : "Instalar agora"}
               </button>
             </div>
           </div>
