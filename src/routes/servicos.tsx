@@ -108,8 +108,8 @@ function ServicosPage() {
   return (
     <SitePage
       eyebrow="O que oferecemos"
-      title="Nossos serviços"
-      subtitle="Profissionais qualificados prontos para cuidar do seu lar com o padrão Maré Nobre."
+      title="Serviços para cada canto da casa"
+      subtitle="Escolha o serviço, defina o horário e receba um profissional Maré Nobre — pontual, treinado e com tudo o que precisa em mãos."
     >
       <div className="grid gap-8 md:grid-cols-3">
         {services.map((s) => (
