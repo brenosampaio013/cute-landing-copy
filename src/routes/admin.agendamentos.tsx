@@ -37,6 +37,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { useAbTest } from "@/lib/ab-test";
 
 export const Route = createFileRoute("/admin/agendamentos")({
   head: () => ({
