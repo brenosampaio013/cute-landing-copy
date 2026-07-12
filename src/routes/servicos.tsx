@@ -9,8 +9,8 @@ import fotoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
 export const Route = createFileRoute("/servicos")({
   head: () => ({
     meta: [
-      { title: "Nossos serviços — Maré Nobre" },
-      { name: "description", content: "Conheça os serviços da Maré Nobre para o seu lar." },
+      { title: "Serviços — Maré Nobre" },
+      { name: "description", content: "Pós-obra, passadoria e limpeza de piscina com padrão premium. Profissionais verificados e agenda para o mesmo dia." },
     ],
   }),
   component: ServicosPage,
