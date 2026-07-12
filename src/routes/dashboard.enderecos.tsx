@@ -71,10 +71,10 @@ function Enderecos() {
   }
 
   async function remover(id: string) {
-    if (!confirm("Remover este endereço?")) return;
+    if (!confirm("Tem certeza que deseja remover este endereço? Você não poderá desfazer.")) return;
     const { error } = await supabase.from("enderecos").delete().eq("id", id);
     if (error) {
-      toast.error("Não foi possível remover.");
+      toast.error("Não conseguimos remover agora. Tente novamente em instantes.");
       return;
     }
     toast.success("Endereço removido.");
