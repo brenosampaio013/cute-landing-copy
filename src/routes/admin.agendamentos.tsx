@@ -831,3 +831,32 @@ function Field({ label, children, className = "" }: { label: string; children: R
     </div>
   );
 }
+
+/* ---------- A/B test: CTA de conclusão ---------- */
+const CONCLUIR_VARIANTS = ["A", "B", "C"] as const;
+type ConcluirVariant = (typeof CONCLUIR_VARIANTS)[number];
+const CONCLUIR_COPY: Record<ConcluirVariant, string> = {
+  A: "Concluir",
+  B: "Marcar como concluído",
+  C: "Finalizar atendimento",
+};
+
+function ConcluirCtaButton({ disabled, agId, onConcluir }: { disabled: boolean; agId: string; onConcluir: () => void }) {
+  const { variant, trackConversion } = useAbTest("admin_concluir_cta", CONCLUIR_VARIANTS, {
+    impressionMetadata: { surface: "agendamento_drawer" },
+  });
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      disabled={disabled}
+      className="gap-1.5 text-emerald-600"
+      onClick={() => {
+        trackConversion({ agendamento_id: agId });
+        onConcluir();
+      }}
+    >
+      <CheckCircle2 className="h-4 w-4" /> {CONCLUIR_COPY[variant]}
+    </Button>
+  );
+}
