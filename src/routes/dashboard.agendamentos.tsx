@@ -90,8 +90,8 @@ function Agendamentos() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <Inbox className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhum agendamento ainda</p>
-          <p className="mt-1 text-xs text-slate-500">Clique em "Novo agendamento" para começar.</p>
+          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Sua agenda ainda está livre</p>
+          <p className="mt-1 text-xs text-slate-500">Toque em "Novo agendamento" e cuide do seu lar em 2 minutos.</p>
         </div>
       ) : (
         <div className="grid gap-4">
