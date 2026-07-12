@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_events: {
+        Row: {
+          created_at: string
+          event: string
+          experiment: string
+          id: string
+          metadata: Json
+          session_key: string | null
+          user_id: string | null
+          variant: string
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          experiment: string
+          id?: string
+          metadata?: Json
+          session_key?: string | null
+          user_id?: string | null
+          variant: string
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          experiment?: string
+          id?: string
+          metadata?: Json
+          session_key?: string | null
+          user_id?: string | null
+          variant?: string
+        }
+        Relationships: []
+      }
       admin_profiles: {
         Row: {
           created_at: string

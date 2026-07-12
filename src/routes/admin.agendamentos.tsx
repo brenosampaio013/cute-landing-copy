@@ -37,6 +37,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { useAbTest } from "@/lib/ab-test";
 
 export const Route = createFileRoute("/admin/agendamentos")({
   head: () => ({
@@ -704,9 +705,11 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
           <Button variant="outline" size="sm" disabled={pending} className="gap-1.5" onClick={() => setReOpen(true)}>
             <RotateCcw className="h-4 w-4" /> Reagendar
           </Button>
-          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-emerald-600" onClick={() => onStatus("Concluído")}>
-            <CheckCircle2 className="h-4 w-4" /> Concluir
-          </Button>
+          <ConcluirCtaButton
+            disabled={pending}
+            agId={ag.rawId}
+            onConcluir={() => onStatus("Concluído")}
+          />
           <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-rose-600" onClick={() => onStatus("Cancelado")}>
             <X className="h-4 w-4" /> Cancelar
           </Button>
@@ -826,5 +829,34 @@ function Field({ label, children, className = "" }: { label: string; children: R
       <Label className="text-xs text-slate-500">{label}</Label>
       {children}
     </div>
+  );
+}
+
+/* ---------- A/B test: CTA de conclusão ---------- */
+const CONCLUIR_VARIANTS = ["A", "B", "C"] as const;
+type ConcluirVariant = (typeof CONCLUIR_VARIANTS)[number];
+const CONCLUIR_COPY: Record<ConcluirVariant, string> = {
+  A: "Concluir",
+  B: "Marcar como concluído",
+  C: "Finalizar atendimento",
+};
+
+function ConcluirCtaButton({ disabled, agId, onConcluir }: { disabled: boolean; agId: string; onConcluir: () => void }) {
+  const { variant, trackConversion } = useAbTest("admin_concluir_cta", CONCLUIR_VARIANTS, {
+    impressionMetadata: { surface: "agendamento_drawer" },
+  });
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      disabled={disabled}
+      className="gap-1.5 text-emerald-600"
+      onClick={() => {
+        trackConversion({ agendamento_id: agId });
+        onConcluir();
+      }}
+    >
+      <CheckCircle2 className="h-4 w-4" /> {CONCLUIR_COPY[variant]}
+    </Button>
   );
 }
