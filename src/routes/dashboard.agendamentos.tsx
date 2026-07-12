@@ -72,7 +72,7 @@ function Agendamentos() {
   return (
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <PageHeading title="Agendamentos" subtitle="Acompanhe os serviços agendados e o histórico." />
+        <PageHeading title="Meus agendamentos" subtitle="Acompanhe em tempo real os serviços marcados, em andamento e concluídos." />
         <Link
           to="/agendar"
           className="inline-flex items-center gap-2 rounded-lg bg-[#2DD4BF] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
