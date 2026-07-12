@@ -93,10 +93,6 @@ function Avaliacoes() {
               {r.text}
             </p>
 
-            <div className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#2DD4BF]">
-              <BadgeCheck className="h-4 w-4" />
-              Compra verificada
-            </div>
           </div>
         ))}
       </div>
