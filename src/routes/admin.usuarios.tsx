@@ -139,7 +139,7 @@ function UsuariosPage() {
   const toggleAtivo = async (u: Usuario) => {
     try {
       await toggle.mutateAsync(u);
-      toast.success(u.status === "ativo" ? "Usuário desativado" : "Usuário ativado");
+      toast.success(u.status === "ativo" ? "Acesso do usuário desativado." : "Acesso do usuário reativado.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao atualizar");
     }
@@ -158,7 +158,7 @@ function UsuariosPage() {
     try {
       await remove.mutateAsync(u.id);
       setExcluindo(null);
-      toast.success("Acesso removido");
+      toast.success("Acesso removido da plataforma.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao remover");
     }
@@ -168,7 +168,7 @@ function UsuariosPage() {
     <AdminShell
       active="usuarios"
       title="Usuários"
-      subtitle="Gerencie os usuários com acesso ao painel administrativo"
+      subtitle="Controle acessos, perfis e permissões do time no painel administrativo."
       actions={
         <Button onClick={abrirNovo} className="h-10 gap-2 bg-blue-600 text-white hover:bg-blue-700">
           <Plus className="h-4 w-4" /> Novo usuário
@@ -361,7 +361,7 @@ function UsuariosPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setPerfisAberto(false)}>Fechar</Button>
-            <Button style={{ background: TEAL }} className="text-white hover:opacity-90" onClick={() => { setPerfisAberto(false); toast.success("Perfis atualizados"); }}>Salvar alterações</Button>
+            <Button style={{ background: TEAL }} className="text-white hover:opacity-90" onClick={() => { setPerfisAberto(false); toast.success("Perfis de acesso atualizados."); }}>Salvar alterações</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -434,7 +434,7 @@ function UsuarioDialog({ open, onOpenChange, editando, onSalvar }: {
   const setPerm = (m: Modulo, n: Nivel) => setForm((f) => ({ ...f, permissoes: { ...f.permissoes, [m]: n } }));
 
   const submit = () => {
-    if (!form.nome.trim() || !form.email.trim()) { toast.error("Nome e e-mail são obrigatórios"); return; }
+    if (!form.nome.trim() || !form.email.trim()) { toast.error("Informe nome e e-mail para continuar."); return; }
     onSalvar(form, convite);
   };
 

@@ -101,7 +101,7 @@ function CuponsPage() {
 
   const save = (c: CupomInsert & { id?: string }) => {
     saveMut.mutate(c, {
-      onSuccess: () => { toast.success("Cupom salvo"); setOpen(false); setEditing(null); },
+      onSuccess: () => { toast.success("Cupom salvo com sucesso."); setOpen(false); setEditing(null); },
       onError: (e: Error) => toast.error(e.message ?? "Erro ao salvar"),
     });
   };
@@ -110,14 +110,14 @@ function CuponsPage() {
   });
   const del = (id: string) => {
     if (!confirm("Excluir este cupom?")) return;
-    deleteMut.mutate(id, { onSuccess: () => toast.success("Cupom excluído"), onError: (e: Error) => toast.error(e.message) });
+    deleteMut.mutate(id, { onSuccess: () => toast.success("Cupom removido."), onError: (e: Error) => toast.error(e.message) });
   };
   const dup = (c: CupomComStats) => dupMut.mutate(c, {
-    onSuccess: () => toast.success("Cupom duplicado"), onError: (e: Error) => toast.error(e.message),
+    onSuccess: () => toast.success("Cupom duplicado — ajuste os detalhes e salve."), onError: (e: Error) => toast.error(e.message),
   });
 
   return (
-    <AdminShell active="cupons" title="Cupons" subtitle="Crie e gerencie cupons de desconto para seus clientes"
+    <AdminShell active="cupons" title="Cupons" subtitle="Crie cupons estratégicos para aumentar conversão e fidelizar clientes."
       actions={<Button size="sm" onClick={() => { setEditing(null); setOpen(true); }} className="gap-1.5 text-white hover:opacity-90" style={{ background: "#3B82F6" }}><Plus className="h-4 w-4" /> Novo cupom</Button>}>
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -190,7 +190,7 @@ function CuponsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {filtered.map((c) => <Row key={c.id} c={c} onView={() => setDetail(c)} onEdit={() => { setEditing(c); setOpen(true); }} onDup={() => dup(c)} onToggle={() => toggle(c.id, !c.ativo)} onDel={() => del(c.id)} />)}
-                  {filtered.length === 0 && <tr><td colSpan={8} className="py-10 text-center text-sm text-slate-500">Nenhum cupom encontrado.</td></tr>}
+                  {filtered.length === 0 && <tr><td colSpan={8} className="py-10 text-center text-sm text-slate-500">Nenhum cupom encontrado. Crie o primeiro para impulsionar suas vendas.</td></tr>}
                 </tbody>
               </table>
             </div>

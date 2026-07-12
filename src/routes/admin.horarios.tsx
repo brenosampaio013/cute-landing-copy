@@ -52,7 +52,7 @@ function HorariosPage() {
   if (loading || !user || isAdmin === null || isAdmin === false) return <FullPageLoader />;
 
   return (
-    <AdminShell active="horarios" title="Horários" subtitle="Grade semanal e bloqueios pontuais dos profissionais">
+    <AdminShell active="horarios" title="Horários" subtitle="Defina a grade semanal e bloqueios pontuais de cada profissional.">
       <Panel>
         <div className="flex flex-wrap items-center gap-3">
           <Label className="text-xs text-slate-500">Profissional</Label>
@@ -98,7 +98,7 @@ function Grade({ profId }: { profId: string }) {
       const { error } = await supabase.from("profissional_horarios").insert({ profissional_id: profId, ...v, ativo: true });
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["horarios", profId] }); toast.success("Horário adicionado"); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["horarios", profId] }); toast.success("Horário adicionado à grade."); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -107,7 +107,7 @@ function Grade({ profId }: { profId: string }) {
       const { error } = await supabase.from("profissional_horarios").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["horarios", profId] }); toast.success("Horário removido"); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["horarios", profId] }); toast.success("Horário removido da grade."); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -165,7 +165,7 @@ function AddSlot({ onAdd }: { onAdd: (hi: string, hf: string) => void }) {
       <Input type="time" value={hi} onChange={(e) => setHi(e.target.value)} className="h-8 w-28" />
       <span className="text-xs text-slate-400">até</span>
       <Input type="time" value={hf} onChange={(e) => setHf(e.target.value)} className="h-8 w-28" />
-      <Button size="sm" onClick={() => { if (hf <= hi) { toast.error("Fim deve ser maior que início"); return; } onAdd(hi + ":00", hf + ":00"); }} className="h-8 gap-1 text-white" style={{ background: TEAL }}>
+      <Button size="sm" onClick={() => { if (hf <= hi) { toast.error("O horário final precisa ser maior que o inicial."); return; } onAdd(hi + ":00", hf + ":00"); }} className="h-8 gap-1 text-white" style={{ background: TEAL }}>
         <Plus className="h-3.5 w-3.5" /> Adicionar
       </Button>
     </div>
@@ -201,7 +201,7 @@ function Bloqueios({ profId }: { profId: string }) {
       });
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["bloqueios", profId] }); setIni(""); setFim(""); setMotivo(""); toast.success("Bloqueio criado"); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["bloqueios", profId] }); setIni(""); setFim(""); setMotivo(""); toast.success("Bloqueio criado com sucesso."); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -210,7 +210,7 @@ function Bloqueios({ profId }: { profId: string }) {
       const { error } = await supabase.from("profissional_bloqueios").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["bloqueios", profId] }); toast.success("Bloqueio removido"); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["bloqueios", profId] }); toast.success("Bloqueio removido."); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -239,7 +239,7 @@ function Bloqueios({ profId }: { profId: string }) {
       </div>
 
       {isLoading ? <p className="text-sm text-slate-500">Carregando...</p> : bloqueios.length === 0 ? (
-        <p className="text-sm text-slate-500">Nenhum bloqueio cadastrado.</p>
+        <p className="text-sm text-slate-500">Nenhum bloqueio cadastrado. Adicione folgas, feriados ou imprevistos abaixo.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[600px] text-sm">

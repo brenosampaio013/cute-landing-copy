@@ -168,7 +168,7 @@ function ClientesOnlinePage() {
     <AdminShell
       active="clientes-online"
       title="Clientes Online"
-      subtitle="Veja em tempo real quem está ativo na plataforma"
+      subtitle="Monitore em tempo real quem está navegando e agendando na plataforma."
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Panel>

@@ -54,7 +54,7 @@ function RelatoriosPage() {
     <AdminShell
       active="relatorios"
       title="Relatórios"
-      subtitle="Analise o desempenho da plataforma em detalhes"
+      subtitle="Insights de faturamento, ocupação e comportamento para decisões estratégicas."
       actions={
         <div className="flex flex-wrap items-center gap-2">
           <Select value={periodo} onValueChange={(v) => setPeriodo(v as Periodo)}>

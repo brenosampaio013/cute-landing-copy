@@ -75,7 +75,7 @@ function ServicosPage() {
   const del = (id: string) => setRows((rs) => rs.filter((r) => r.id !== id));
 
   return (
-    <AdminShell active="servicos" title="Serviços" subtitle="Gerencie o catálogo de serviços oferecidos"
+    <AdminShell active="servicos" title="Serviços" subtitle="Gerencie o catálogo, preços e duração dos serviços oferecidos."
       actions={<Button size="sm" onClick={() => { setEditing(null); setOpen(true); }} className="gap-1.5 text-white hover:opacity-90" style={{ background: "#3B82F6" }}><Plus className="h-4 w-4" /> Novo serviço</Button>}>
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -128,7 +128,7 @@ function ServicosPage() {
             </div>
           </div>
         ))}
-        {filtered.length === 0 && <p className="col-span-full py-10 text-center text-sm text-slate-500">Nenhum serviço encontrado.</p>}
+        {filtered.length === 0 && <p className="col-span-full py-10 text-center text-sm text-slate-500">Nenhum serviço encontrado. Cadastre um novo para expandir seu catálogo.</p>}
       </div>
 
       <ServicoDialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setEditing(null); }} editing={editing} onSave={save} />

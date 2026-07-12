@@ -69,7 +69,7 @@ function ClientesPage() {
   if (loading || !user || isAdmin === null || isAdmin === false) return <FullPageLoader />;
 
   return (
-    <AdminShell active="clientes" title="Clientes" subtitle="Gerencie os clientes cadastrados"
+    <AdminShell active="clientes" title="Clientes" subtitle="Base de clientes, histórico de agendamentos e comportamento de compra."
       actions={<Button size="sm" onClick={() => setOpen(true)} className="gap-1.5 text-white hover:opacity-90" style={{ background: "#3B82F6" }}><Plus className="h-4 w-4" /> Novo cliente</Button>}>
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -131,7 +131,7 @@ function ClientesPage() {
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum cliente encontrado.</td></tr>}
+              {filtered.length === 0 && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum cliente encontrado com esses filtros.</td></tr>}
             </tbody>
           </table>
         </div>

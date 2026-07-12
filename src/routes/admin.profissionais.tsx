@@ -85,7 +85,7 @@ function ProfissionaisPage() {
       const { error } = await supabase.from("profissionais").update({ status: toDb[status] }).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin", "profissionais"] }); toast.success("Status atualizado"); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin", "profissionais"] }); toast.success("Status atualizado com sucesso."); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -102,7 +102,7 @@ function ProfissionaisPage() {
       });
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin", "profissionais"] }); toast.success("Profissional cadastrado"); setOpen(false); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin", "profissionais"] }); toast.success("Profissional cadastrado com sucesso."); setOpen(false); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -141,7 +141,7 @@ function ProfissionaisPage() {
   const setStatus = (id: string, status: ProfStatus) => setStatusMut.mutate({ id, status });
 
   return (
-    <AdminShell active="profissionais" title="Profissionais" subtitle="Gerencie os profissionais cadastrados na plataforma"
+    <AdminShell active="profissionais" title="Profissionais" subtitle="Cadastre, avalie e acompanhe o desempenho da sua equipe de profissionais."
       actions={<Button size="sm" onClick={() => setOpen(true)} className="gap-1.5 text-white hover:opacity-90" style={{ background: "#3B82F6" }}><Plus className="h-4 w-4" /> Novo profissional</Button>}>
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -207,7 +207,7 @@ function ProfissionaisPage() {
                   </td>
                 </tr>
               ))}
-              {!isLoading && filtered.length === 0 && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum profissional encontrado.</td></tr>}
+              {!isLoading && filtered.length === 0 && <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum profissional encontrado com esses filtros.</td></tr>}
             </tbody>
           </table>
         </div>
