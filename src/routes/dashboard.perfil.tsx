@@ -59,7 +59,7 @@ function Perfil() {
       .upload(path, file, { upsert: true, contentType: file.type });
     if (upErr) {
       setUploading(false);
-      setMsg({ type: "err", text: "Não foi possível enviar a foto." });
+      setMsg({ type: "err", text: "Não conseguimos enviar a foto. Tente uma imagem menor ou em outro formato." });
       return;
     }
     const { data: signed } = await supabase.storage
