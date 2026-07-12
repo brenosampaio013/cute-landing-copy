@@ -38,7 +38,7 @@ function Contato() {
       icon: Mail,
       label: "E-mail",
       value: EMAIL,
-      hint: "Retorno em até 24h",
+      hint: "Retorno garantido em até 24h úteis",
       href: `mailto:${EMAIL}`,
       external: false,
       accent: "from-sky-400 to-indigo-500",
