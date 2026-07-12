@@ -83,7 +83,7 @@ function Perfil() {
       .eq("id", user.id);
     setSaving(false);
     if (error) {
-      setMsg({ type: "err", text: "Erro ao salvar. Tente novamente." });
+      setMsg({ type: "err", text: "Não conseguimos salvar agora. Confira sua conexão e tente novamente." });
       toast.error("Erro ao salvar perfil.");
     } else {
       setMsg({ type: "ok", text: "Perfil atualizado com sucesso." });
