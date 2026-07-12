@@ -15,8 +15,8 @@ function Page() {
   if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
-    <AdminShell active="notificacoes" title="Notificações" subtitle="Central de notificações.">
-      <Panel><p className="text-sm text-slate-500">Nenhuma notificação.</p></Panel>
+    <AdminShell active="notificacoes" title="Notificações" subtitle="Central de notificações da operação — alertas, avisos e comunicados internos.">
+      <Panel><p className="text-sm text-slate-500">Você está em dia. Novas notificações da equipe e do sistema aparecerão aqui.</p></Panel>
     </AdminShell>
   );
 }

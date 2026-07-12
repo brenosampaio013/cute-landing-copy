@@ -15,8 +15,8 @@ function Page() {
   if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
-    <AdminShell active="avaliacoes" title="Avaliações" subtitle="Gerencie as avaliações dos clientes.">
-      <Panel><p className="text-sm text-slate-500">Nenhuma avaliação por enquanto.</p></Panel>
+    <AdminShell active="avaliacoes" title="Avaliações" subtitle="Acompanhe a reputação da sua operação e responda avaliações em tempo real.">
+      <Panel><p className="text-sm text-slate-500">Assim que seus clientes avaliarem os atendimentos, os comentários aparecem aqui.</p></Panel>
     </AdminShell>
   );
 }

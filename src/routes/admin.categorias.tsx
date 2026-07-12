@@ -15,8 +15,8 @@ function Page() {
   if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
-    <AdminShell active="categorias" title="Categorias" subtitle="Organize os serviços por categoria.">
-      <Panel><p className="text-sm text-slate-500">Nenhuma categoria cadastrada.</p></Panel>
+    <AdminShell active="categorias" title="Categorias" subtitle="Organize seu catálogo em categorias para facilitar a busca e o agendamento.">
+      <Panel><p className="text-sm text-slate-500">Crie sua primeira categoria para começar a organizar o catálogo de serviços.</p></Panel>
     </AdminShell>
   );
 }

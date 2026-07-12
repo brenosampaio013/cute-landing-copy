@@ -15,8 +15,8 @@ function Page() {
   if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
-    <AdminShell active="logs" title="Logs do sistema" subtitle="Auditoria e eventos do sistema.">
-      <Panel><p className="text-sm text-slate-500">Nenhum log registrado.</p></Panel>
+    <AdminShell active="logs" title="Logs do sistema" subtitle="Auditoria completa de eventos, acessos e alterações críticas na plataforma.">
+      <Panel><p className="text-sm text-slate-500">Ainda não há eventos registrados. Toda ação sensível será auditada aqui.</p></Panel>
     </AdminShell>
   );
 }

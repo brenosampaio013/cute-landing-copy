@@ -158,7 +158,7 @@ function PagamentosPage() {
       const { error } = await supabase.from("pagamentos").delete().eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => { invalidate(); toast.success("Pagamento excluído."); },
+    onSuccess: () => { invalidate(); toast.success("Pagamento removido."); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -194,7 +194,7 @@ function PagamentosPage() {
   if (loading || !user || isAdmin === null || isAdmin === false) return <FullPageLoader />;
 
   return (
-    <AdminShell active="pagamentos" title="Pagamentos" subtitle="Acompanhe e confirme os pagamentos dos clientes"
+    <AdminShell active="pagamentos" title="Pagamentos" subtitle="Acompanhe transações, confirme recebimentos e monitore o fluxo financeiro."
       actions={<Button size="sm" variant="outline" className="gap-1.5"><Download className="h-4 w-4" /> Exportar</Button>}>
 
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -246,7 +246,7 @@ function PagamentosPage() {
               {isLoading ? (
                 <tr><td colSpan={8} className="px-6 py-16 text-center text-slate-400"><Loader2 className="mx-auto h-6 w-6 animate-spin" /></td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhuma transação encontrada.</td></tr>
+                <tr><td colSpan={8} className="px-6 py-10 text-center text-sm text-slate-500">Nenhuma transação encontrada para os filtros atuais.</td></tr>
               ) : filtered.map((r) => {
                 const Icon = metodoIconFor(r.metodo);
                 return (

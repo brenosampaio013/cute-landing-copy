@@ -15,8 +15,8 @@ function Page() {
   if (loading || isAdmin === null) return <FullPageLoader />;
   if (!user || !isAdmin) return null;
   return (
-    <AdminShell active="configuracoes" title="Configurações" subtitle="Ajustes gerais da plataforma.">
-      <Panel><p className="text-sm text-slate-500">Configurações em breve.</p></Panel>
+    <AdminShell active="configuracoes" title="Configurações" subtitle="Ajuste preferências gerais, integrações e regras de negócio da plataforma.">
+      <Panel><p className="text-sm text-slate-500">Novas configurações serão liberadas em breve. Fique de olho por aqui.</p></Panel>
     </AdminShell>
   );
 }

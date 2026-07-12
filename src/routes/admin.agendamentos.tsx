@@ -91,7 +91,7 @@ function AgendamentosPage() {
         .from("agendamentos").update({ data, horario_inicio: `${hora}:00`, horario_fim }).eq("id", rawId);
       if (error) throw error;
     },
-    onSuccess: () => { invalidateAll(); toast.success("Agendamento reagendado."); },
+    onSuccess: () => { invalidateAll(); toast.success("Agendamento reagendado com sucesso."); },
     onError: (e: Error) => toast.error(e.message),
   });
   const deleteMut = useMutation({
@@ -239,7 +239,7 @@ function AgendamentosPage() {
     <AdminShell
       active="agendamentos"
       title="Agendamentos"
-      subtitle="Gerencie todos os agendamentos da plataforma"
+      subtitle="Acompanhe, confirme e reorganize todos os agendamentos em um só lugar."
       actions={headerActions}
     >
       {/* KPI cards */}
@@ -405,7 +405,7 @@ function AgendamentosPage() {
                   </tr>
                 ))}
                 {pageRows.length === 0 && (
-                  <tr><td colSpan={11} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum agendamento encontrado.</td></tr>
+                  <tr><td colSpan={11} className="px-6 py-10 text-center text-sm text-slate-500">Nenhum agendamento encontrado para os filtros atuais.</td></tr>
                 )}
               </tbody>
             </table>
