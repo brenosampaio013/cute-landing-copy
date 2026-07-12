@@ -75,7 +75,7 @@ function MinhasMensagens() {
           <div className="mx-auto flex max-w-2xl flex-col gap-3">
             {mensagens.length === 0 && (
               <p className="py-10 text-center text-sm text-slate-500">
-                Envie a primeira mensagem para o suporte.
+                👋 Oi! Envie uma mensagem e a equipe Maré Nobre responde por aqui.
               </p>
             )}
             {mensagens.map((m) => {
