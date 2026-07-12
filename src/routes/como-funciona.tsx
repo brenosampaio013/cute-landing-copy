@@ -69,7 +69,7 @@ function ComoFunciona() {
           className="group inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110"
           style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
         >
-          Começar agora
+          Agendar em 2 minutos
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
