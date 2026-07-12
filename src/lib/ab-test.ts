@@ -77,7 +77,7 @@ async function logEvent(params: {
       event: params.event,
       user_id: userRes.user?.id ?? null,
       session_key: getSessionKey(),
-      metadata: params.metadata ?? {},
+      metadata: (params.metadata ?? {}) as never,
     });
   } catch {
     /* logging is best-effort — never break the UI */
