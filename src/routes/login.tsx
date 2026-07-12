@@ -187,7 +187,7 @@ function Login() {
 
         <p className="flex items-center justify-center gap-1.5 pt-6 text-center text-xs text-slate-400">
           <Lock className="h-3 w-3" />
-          Seus dados estão protegidos conosco.
+          Conexão criptografada. Seus dados estão seguros.
         </p>
 
       </form>
