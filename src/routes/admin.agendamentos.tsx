@@ -704,9 +704,11 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
           <Button variant="outline" size="sm" disabled={pending} className="gap-1.5" onClick={() => setReOpen(true)}>
             <RotateCcw className="h-4 w-4" /> Reagendar
           </Button>
-          <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-emerald-600" onClick={() => onStatus("Concluído")}>
-            <CheckCircle2 className="h-4 w-4" /> Concluir
-          </Button>
+          <ConcluirCtaButton
+            disabled={pending}
+            agId={ag.rawId}
+            onConcluir={() => onStatus("Concluído")}
+          />
           <Button variant="outline" size="sm" disabled={pending} className="gap-1.5 text-rose-600" onClick={() => onStatus("Cancelado")}>
             <X className="h-4 w-4" /> Cancelar
           </Button>
