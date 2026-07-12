@@ -180,13 +180,13 @@ function Agendar() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user) { toast.error("Faça login para agendar."); navigate({ to: "/login" }); return; }
+    if (!user) { toast.error("Faça login para concluir seu agendamento."); navigate({ to: "/login" }); return; }
     if (!servico || !data || slotIdx === null || !endereco.trim()) {
-      toast.error("Preencha serviço, data, horário e endereço.");
+      toast.error("Falta pouco! Preencha serviço, data, horário e endereço.");
       return;
     }
     const slot = slots[slotIdx];
-    if (!slot) { toast.error("Selecione um horário disponível."); return; }
+    if (!slot) { toast.error("Selecione um horário disponível para continuar."); return; }
 
     setSubmitting(true);
     const chosenProf = await pickProfissionalForSlot(slot);
