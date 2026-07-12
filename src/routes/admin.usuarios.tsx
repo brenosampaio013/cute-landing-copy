@@ -139,7 +139,7 @@ function UsuariosPage() {
   const toggleAtivo = async (u: Usuario) => {
     try {
       await toggle.mutateAsync(u);
-      toast.success(u.status === "ativo" ? "Usuário desativado" : "Usuário ativado");
+      toast.success(u.status === "ativo" ? "Acesso do usuário desativado." : "Acesso do usuário reativado.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao atualizar");
     }
