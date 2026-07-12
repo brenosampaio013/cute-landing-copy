@@ -90,12 +90,12 @@ function Index() {
               className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
-              Mais que limpeza.
+              Seu lar impecável,
               <br />
-              Cuidado completo para o seu lar.
+              sem você levantar um dedo.
             </h1>
             <p className="mt-5 text-sm text-white/75 sm:mt-6 sm:text-base md:text-lg">
-              Profissionais qualificados, serviços de qualidade e a confiança que você merece.
+              Profissionais verificados, atendimento premium e agenda flexível. Você marca — a gente cuida de tudo.
             </p>
             <div className="mt-7 flex flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 lg:justify-start">
               <Link
