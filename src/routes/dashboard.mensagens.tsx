@@ -120,7 +120,7 @@ function MinhasMensagens() {
               value={texto}
               onChange={(e) => setTexto(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-              placeholder="Escreva uma mensagem..."
+              placeholder="Escreva sua mensagem…"
               rows={2}
               className="resize-none"
               disabled={!conversa}
