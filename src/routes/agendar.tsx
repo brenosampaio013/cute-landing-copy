@@ -492,7 +492,7 @@ function Agendar() {
                 value={endereco}
                 onChange={(e) => setEndereco(e.target.value)}
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-12 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
-                placeholder="Rua, número, bairro e cidade"
+                placeholder="Rua, número, bairro, cidade e complemento (se houver)"
               />
             </div>
           </section>
