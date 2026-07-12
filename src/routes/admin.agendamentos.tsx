@@ -673,7 +673,7 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
         <section>
           <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Detalhes do serviço</p>
           <dl className="grid grid-cols-2 gap-y-2 text-xs">
-            <dt className="text-slate-500">Detalhes do serviço</dt><dd className="text-right font-medium text-[#0A1128]">{ag.servico}</dd>
+            <dt className="text-slate-500">Serviço</dt><dd className="text-right font-medium text-[#0A1128]">{ag.servico}</dd>
             <dt className="text-slate-500">Data</dt><dd className="text-right font-medium text-[#0A1128]">{fmtDateBR(ag.data)} {ag.hora}</dd>
             <dt className="text-slate-500">Duração</dt><dd className="text-right font-medium text-[#0A1128]">{ag.duracao} min</dd>
             <dt className="text-slate-500">Valor</dt><dd className="text-right font-semibold" style={{ color: TEAL }}>{brl(ag.valor)}</dd>
