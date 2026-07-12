@@ -213,8 +213,8 @@ function DashboardHome() {
           ) : (
             <EmptyState
               icon={Calendar}
-              title="Nenhum agendamento próximo"
-              hint="Você ainda não tem serviços confirmados."
+              title="Nenhum serviço agendado"
+              hint="Que tal deixar o próximo detalhe do lar com a gente? Agende em 2 minutos."
             />
           )}
         </section>
