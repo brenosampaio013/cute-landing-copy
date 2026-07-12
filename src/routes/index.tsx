@@ -42,17 +42,17 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Removemos toda a sujeira e resíduos da obra, deixando tudo pronto para você." },
-  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Suas roupas bem passadas, cuidadas e dobradas." },
-  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Água limpa, cristalina e sempre pronta para você aproveitar." },
+  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra." },
+  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa." },
+  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho." },
 ];
 
 
 const steps = [
-  { n: 1, icon: Calendar, title: "Escolha o serviço", desc: "Selecione o serviço que você precisa." },
-  { n: 2, icon: Calendar, title: "Escolha data e horário", desc: "Agende o melhor dia e horário para você." },
-  { n: 3, icon: CreditCard, title: "Pagamento seguro", desc: "Pague com segurança na plataforma." },
-  { n: 4, icon: UserCheck, title: "Profissional confirmado", desc: "Pronto! Seu profissional está a caminho." },
+  { n: 1, icon: Calendar, title: "Escolha o serviço", desc: "Diga o que você precisa em poucos cliques." },
+  { n: 2, icon: Calendar, title: "Escolha data e horário", desc: "Você define o melhor dia — nós ajustamos a agenda." },
+  { n: 3, icon: CreditCard, title: "Pagamento seguro", desc: "Pague pelo app, com total tranquilidade." },
+  { n: 4, icon: UserCheck, title: "Profissional a caminho", desc: "Profissional verificado confirmado no horário combinado." },
 ];
 
 function Index() {
