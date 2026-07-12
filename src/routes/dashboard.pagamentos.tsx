@@ -117,7 +117,7 @@ function Pagamentos() {
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
         ) : rows.length === 0 ? (
-          <p className="py-8 text-center text-sm text-slate-500">Nenhum pagamento registrado ainda.</p>
+          <p className="py-8 text-center text-sm text-slate-500">Seus recibos aparecem aqui após o primeiro serviço.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
