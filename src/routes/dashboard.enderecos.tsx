@@ -86,7 +86,7 @@ function Enderecos() {
     const { error: e1 } = await supabase.from("enderecos").update({ principal: false }).eq("cliente_id", user.id);
     const { error: e2 } = await supabase.from("enderecos").update({ principal: true }).eq("id", id);
     if (e1 || e2) {
-      toast.error("Não foi possível definir como principal.");
+      toast.error("Não conseguimos atualizar o endereço principal. Tente novamente.");
       load();
       return;
     }
