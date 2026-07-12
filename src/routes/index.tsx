@@ -147,10 +147,10 @@ function Index() {
               className="mt-4 text-4xl text-[#0A1A2F] sm:text-5xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
-              Nossos serviços
+              Serviços para cada canto da casa
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-slate-500">
-              Uma equipe cuidadosa e verificada, pronta para cuidar de cada canto do seu lar.
+              Profissionais treinados, materiais próprios e padrão de acabamento que você sente no primeiro passo dentro de casa.
             </p>
           </div>
 
