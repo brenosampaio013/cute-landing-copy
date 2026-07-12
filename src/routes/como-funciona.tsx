@@ -24,7 +24,7 @@ function ComoFunciona() {
     <SitePage
       eyebrow="Simples e rápido"
       title="Como funciona"
-      subtitle="Quatro passos entre o agendamento e o seu lar impecável."
+      subtitle="Do primeiro clique ao serviço concluído — em 4 passos, sem burocracia e sem surpresas."
     >
       <div className="relative">
         {/* Connector line for desktop */}
