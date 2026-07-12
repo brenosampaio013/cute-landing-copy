@@ -122,7 +122,7 @@ function Contato() {
               Envie uma mensagem
             </p>
             <h3 className="mt-2 text-2xl font-semibold text-[#0A1A2F]">
-              Conte pra gente como podemos ajudar
+              Conte o que precisa — cuidamos do resto
             </h3>
           </div>
           <div>
