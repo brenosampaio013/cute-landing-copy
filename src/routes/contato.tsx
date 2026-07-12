@@ -48,8 +48,8 @@ function Contato() {
   return (
     <SitePage
       eyebrow="Fale com a gente"
-      title="Contato"
-      subtitle="Escolha o canal que preferir — nossa equipe responde com rapidez e cordialidade."
+      title="A gente responde rápido — e por gente de verdade"
+      subtitle="Escolha o canal que preferir. Tira dúvidas, pede orçamento ou só bate um papo sobre o seu lar — nossa equipe está pronta."
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
         {/* Left: channels */}
