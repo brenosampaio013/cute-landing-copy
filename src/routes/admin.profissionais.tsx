@@ -227,7 +227,7 @@ function ProfissionaisPage() {
 function ProfDetail({ p, onStatus }: { p: Prof; onStatus: (s: ProfStatus) => void }) {
   return (
     <>
-      <SheetHeader><SheetTitle className="text-base">Perfil do profissional</SheetTitle></SheetHeader>
+      <SheetHeader><SheetTitle className="text-base">Perfil do profissional</SheetTitle><p className="mt-0.5 text-xs text-slate-500">Desempenho, especialidades e status de acesso à plataforma.</p></SheetHeader>
       <div className="mt-4 space-y-6 text-sm">
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center rounded-full text-lg font-semibold text-white" style={{ background: TEAL }}>{p.nome.split(" ").map((n) => n[0]).slice(0, 2).join("")}</div>
@@ -243,12 +243,12 @@ function ProfDetail({ p, onStatus }: { p: Prof; onStatus: (s: ProfStatus) => voi
 
         <Section title="Especialidades"><div className="flex flex-wrap gap-1">{p.especialidades.map((e) => <span key={e} className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">{e}</span>)}</div></Section>
 
-        <Section title="Histórico"><p className="text-xs text-slate-500">{p.concluidos} agendamentos concluídos. Faturamento estimado: <span className="font-semibold text-[#0A1128]">{brl(p.concluidos * 180)}</span>.</p></Section>
+        <Section title="Desempenho na plataforma"><p className="text-xs text-slate-500">{p.concluidos} agendamentos concluídos · Faturamento estimado <span className="font-semibold text-[#0A1128]">{brl(p.concluidos * 180)}</span>.</p></Section>
 
         <div className="grid grid-cols-3 gap-2 pt-2">
-          <Button size="sm" onClick={() => onStatus("Ativo")} className="text-white" style={{ background: TEAL }}>Aprovar</Button>
-          <Button size="sm" variant="outline" onClick={() => onStatus("Inativo")}>Inativar</Button>
-          <Button size="sm" variant="outline" onClick={() => onStatus("Bloqueado")} className="text-rose-600">Bloquear</Button>
+          <Button size="sm" onClick={() => onStatus("Ativo")} className="text-white" style={{ background: TEAL }}>Aprovar acesso</Button>
+          <Button size="sm" variant="outline" onClick={() => onStatus("Inativo")}>Colocar como inativo</Button>
+          <Button size="sm" variant="outline" onClick={() => onStatus("Bloqueado")} className="text-rose-600">Bloquear profissional</Button>
         </div>
       </div>
     </>
@@ -260,18 +260,18 @@ function NovoProfDialog({ open, onOpenChange, onSave, saving }: { open: boolean;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
-        <DialogHeader><DialogTitle>Novo profissional</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>Cadastrar novo profissional</DialogTitle></DialogHeader>
         <div className="grid gap-3 py-2 sm:grid-cols-2">
           <Field label="Nome" className="sm:col-span-2"><Input value={f.nome} onChange={(e) => setF({ ...f, nome: e.target.value })} /></Field>
           <Field label="Telefone"><Input value={f.telefone} onChange={(e) => setF({ ...f, telefone: e.target.value })} /></Field>
           <Field label="E-mail"><Input value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></Field>
           <Field label="CPF"><Input value={f.cpf} onChange={(e) => setF({ ...f, cpf: e.target.value })} /></Field>
           <Field label="Especialidade"><Select value={f.especialidade} onValueChange={(v) => setF({ ...f, especialidade: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{ESPS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></Field>
-          <Field label="Região de atuação" className="sm:col-span-2"><Input value={f.regiao} onChange={(e) => setF({ ...f, regiao: e.target.value })} /></Field>
+          <Field label="Regiões de atuação" className="sm:col-span-2"><Input value={f.regiao} onChange={(e) => setF({ ...f, regiao: e.target.value })} /></Field>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button disabled={saving} onClick={() => onSave(f)} className="text-white" style={{ background: TEAL }}>{saving ? "Salvando..." : "Salvar"}</Button>
+          <Button disabled={saving} onClick={() => onSave(f)} className="text-white" style={{ background: TEAL }}>{saving ? "Cadastrando..." : "Cadastrar profissional"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
