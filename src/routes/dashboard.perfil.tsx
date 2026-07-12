@@ -107,7 +107,7 @@ function Perfil() {
 
   return (
     <>
-      <PageHeading title="Perfil" subtitle="Atualize seus dados pessoais e de contato." />
+      <PageHeading title="Meu perfil" subtitle="Mantenha seus dados atualizados para agendar em segundos e receber avisos importantes." />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-100">
