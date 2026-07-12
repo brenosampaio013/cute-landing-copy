@@ -482,10 +482,10 @@ function AgendamentosPage() {
       <Dialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Excluir agendamento?</DialogTitle>
+            <DialogTitle>Excluir este agendamento?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-slate-600">
-            Tem certeza que deseja excluir {confirmDelete?.label}? Esta ação é permanente e não pode ser desfeita.
+            Você está prestes a excluir {confirmDelete?.label}. Esta ação é permanente e não pode ser desfeita — o histórico do cliente e do profissional também será impactado.
           </p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setConfirmDelete(null)}>Cancelar</Button>
@@ -503,7 +503,7 @@ function AgendamentosPage() {
                 });
               }}
             >
-              {deleteMut.isPending ? "Excluindo..." : "Excluir"}
+              {deleteMut.isPending ? "Excluindo..." : "Excluir definitivamente"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -626,10 +626,10 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
   const [rData, setRData] = useState(ag.data);
   const [rHora, setRHora] = useState(ag.hora);
   const timeline = [
-    { label: "Criado", done: true, when: "há 3 dias" },
-    { label: "Confirmado", done: ag.status !== "Pendente", when: ag.status !== "Pendente" ? "há 2 dias" : "—" },
-    { label: "Em andamento", done: ag.status === "Concluído", when: ag.status === "Concluído" ? "há 1 dia" : "—" },
-    { label: "Concluído", done: ag.status === "Concluído", when: ag.status === "Concluído" ? "hoje" : "—" },
+    { label: "Solicitação criada", done: true, when: "há 3 dias" },
+    { label: "Confirmado pelo profissional", done: ag.status !== "Pendente", when: ag.status !== "Pendente" ? "há 2 dias" : "—" },
+    { label: "Atendimento em andamento", done: ag.status === "Concluído", when: ag.status === "Concluído" ? "há 1 dia" : "—" },
+    { label: "Concluído com sucesso", done: ag.status === "Concluído", when: ag.status === "Concluído" ? "hoje" : "—" },
   ];
   return (
     <>
@@ -642,7 +642,7 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
 
       <div className="mt-6 space-y-6 text-sm">
         <section>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Cliente</p>
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Dados do cliente</p>
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 font-semibold text-slate-600">
               {ag.cliente.split(" ").map((n) => n[0]).slice(0, 2).join("")}
@@ -656,7 +656,7 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
         </section>
 
         <section>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Profissional</p>
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Profissional responsável</p>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full font-semibold text-white" style={{ background: TEAL }}>
               {ag.profissional.split(" ").map((n) => n[0]).slice(0, 2).join("")}
@@ -671,7 +671,7 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
         </section>
 
         <section>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Serviço</p>
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Detalhes do serviço</p>
           <dl className="grid grid-cols-2 gap-y-2 text-xs">
             <dt className="text-slate-500">Serviço</dt><dd className="text-right font-medium text-[#0A1128]">{ag.servico}</dd>
             <dt className="text-slate-500">Data</dt><dd className="text-right font-medium text-[#0A1128]">{fmtDateBR(ag.data)} {ag.hora}</dd>
@@ -683,7 +683,7 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
         </section>
 
         <section>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Histórico</p>
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Linha do tempo</p>
           <ol className="space-y-3">
             {timeline.map((t) => (
               <li key={t.label} className="flex items-center gap-3 text-xs">
@@ -714,7 +714,7 @@ function AgendamentoDetail({ ag, onStatus, onReagendar, pending }: {
 
         <Dialog open={reOpen} onOpenChange={setReOpen}>
           <DialogContent className="max-w-sm">
-            <DialogHeader><DialogTitle>Reagendar</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Reagendar atendimento</DialogTitle><p className="mt-1 text-xs text-slate-500">Escolha a nova data e horário. O cliente e o profissional serão notificados.</p></DialogHeader>
             <div className="grid gap-3 py-2">
               <Field label="Data"><Input type="date" value={rData} onChange={(e) => setRData(e.target.value)} /></Field>
               <Field label="Horário"><Input type="time" value={rHora} onChange={(e) => setRHora(e.target.value)} /></Field>

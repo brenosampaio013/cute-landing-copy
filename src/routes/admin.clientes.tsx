@@ -143,7 +143,7 @@ function ClientesPage() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Novo cliente</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Cadastrar novo cliente</DialogTitle></DialogHeader>
           <div className="grid gap-3 py-2 sm:grid-cols-2">
             <F label="Nome" cn="sm:col-span-2"><Input /></F>
             <F label="E-mail"><Input type="email" /></F>
@@ -163,14 +163,14 @@ function ClientesPage() {
 function ClienteDetail({ c }: { c: Cliente }) {
   return (
     <>
-      <SheetHeader><SheetTitle className="text-base">Perfil do cliente</SheetTitle></SheetHeader>
+      <SheetHeader><SheetTitle className="text-base">Perfil do cliente</SheetTitle><p className="mt-0.5 text-xs text-slate-500">Histórico, endereços e comportamento de compra em um só lugar.</p></SheetHeader>
       <div className="mt-4 space-y-6 text-sm">
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-200 text-lg font-semibold text-slate-600">{c.nome.split(" ").map((n) => n[0]).slice(0, 2).join("")}</div>
           <div><p className="font-semibold text-[#0A1128]">{c.nome}</p><p className="text-xs text-slate-500">{c.email} · {c.telefone}</p></div>
         </div>
 
-        <Section title="Endereços cadastrados">
+        <Section title="Endereços de atendimento">
           <ul className="space-y-1.5 text-xs">
             {["Rua das Flores, 123 - Botafogo", "Av. Atlântica, 500 - Copacabana"].map((e) => (
               <li key={e} className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-slate-600"><MapPin className="h-3 w-3" /> {e}</li>
@@ -178,7 +178,7 @@ function ClienteDetail({ c }: { c: Cliente }) {
           </ul>
         </Section>
 
-        <Section title="Histórico de agendamentos">
+        <Section title="Últimos agendamentos">
           <table className="w-full text-xs">
             <thead><tr className="text-left text-[10px] uppercase tracking-wider text-slate-400"><th className="pb-1">Data</th><th>Serviço</th><th>Status</th><th className="text-right">Valor</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
@@ -189,16 +189,16 @@ function ClienteDetail({ c }: { c: Cliente }) {
           </table>
         </Section>
 
-        <Section title="Total gasto"><p className="text-xl font-bold text-[#0A1128]">{brl(c.gasto)}</p></Section>
+        <Section title="Valor total investido"><p className="text-xl font-bold text-[#0A1128]">{brl(c.gasto)}</p></Section>
 
-        <Section title="Métodos de pagamento">
+        <Section title="Formas de pagamento salvas">
           <ul className="space-y-1.5 text-xs">
             <li className="rounded-md bg-slate-50 px-3 py-2 text-slate-600">Visa •••• 4242</li>
             <li className="rounded-md bg-slate-50 px-3 py-2 text-slate-600">Pix — CPF ••• 45</li>
           </ul>
         </Section>
 
-        <Section title="Cupons utilizados"><div className="flex flex-wrap gap-1 text-xs"><span className="rounded-full bg-fuchsia-100 px-2 py-0.5 font-medium text-fuchsia-700">BEMVINDO10</span><span className="rounded-full bg-fuchsia-100 px-2 py-0.5 font-medium text-fuchsia-700">MAIO20</span></div></Section>
+        <Section title="Cupons resgatados"><div className="flex flex-wrap gap-1 text-xs"><span className="rounded-full bg-fuchsia-100 px-2 py-0.5 font-medium text-fuchsia-700">BEMVINDO10</span><span className="rounded-full bg-fuchsia-100 px-2 py-0.5 font-medium text-fuchsia-700">MAIO20</span></div></Section>
       </div>
     </>
   );
