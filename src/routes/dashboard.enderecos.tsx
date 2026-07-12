@@ -144,8 +144,8 @@ function Enderecos() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
             <MapPin className="h-6 w-6" />
           </div>
-          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Você ainda não tem endereços</p>
-          <p className="mt-1 text-xs text-slate-500">Adicione um endereço para agilizar seus agendamentos.</p>
+          <p className="mt-3 text-sm font-semibold text-[#0A1A2F]">Nenhum endereço cadastrado</p>
+          <p className="mt-1 text-xs text-slate-500">Cadastre um endereço agora e agilize todos os próximos agendamentos.</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
