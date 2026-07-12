@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Star, Quote, BadgeCheck } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import { SitePage } from "@/components/site-page";
 
 export const Route = createFileRoute("/avaliacoes")({
