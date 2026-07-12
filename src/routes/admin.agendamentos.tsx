@@ -359,9 +359,9 @@ function AgendamentosPage() {
                     />
                   </th>
                   <th className="px-3 py-3 font-semibold">ID</th>
-                  <th className="px-3 py-3 font-semibold">Detalhes do serviço</th>
-                  <th className="px-3 py-3 font-semibold">Dados do cliente</th>
-                  <th className="px-3 py-3 font-semibold">Profissional responsável</th>
+                  <th className="px-3 py-3 font-semibold">Serviço</th>
+                  <th className="px-3 py-3 font-semibold">Cliente</th>
+                  <th className="px-3 py-3 font-semibold">Profissional</th>
                   <th className="px-3 py-3 font-semibold">Data e hora</th>
                   <th className="px-3 py-3 font-semibold">Duração</th>
                   <th className="px-3 py-3 font-semibold">Status</th>
