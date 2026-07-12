@@ -192,7 +192,7 @@ function Agendar() {
     const chosenProf = await pickProfissionalForSlot(slot);
     if (!chosenProf) {
       setSubmitting(false);
-      toast.error("Não há profissional disponível para este horário.");
+      toast.error("Este horário acabou de ficar indisponível. Escolha outro — a agenda atualiza em tempo real.");
       return;
     }
 
