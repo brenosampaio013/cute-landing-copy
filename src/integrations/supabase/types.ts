@@ -324,6 +324,102 @@ export type Database = {
         }
         Relationships: []
       }
+      disponibilidade_config: {
+        Row: {
+          antecedencia_minima_min: number
+          capacidade_por_slot: number
+          created_at: string
+          id: boolean
+          janela_futura_dias: number
+          poucos_horarios_threshold: number
+          slot_duracao_min: number
+          updated_at: string
+        }
+        Insert: {
+          antecedencia_minima_min?: number
+          capacidade_por_slot?: number
+          created_at?: string
+          id?: boolean
+          janela_futura_dias?: number
+          poucos_horarios_threshold?: number
+          slot_duracao_min?: number
+          updated_at?: string
+        }
+        Update: {
+          antecedencia_minima_min?: number
+          capacidade_por_slot?: number
+          created_at?: string
+          id?: boolean
+          janela_futura_dias?: number
+          poucos_horarios_threshold?: number
+          slot_duracao_min?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      disponibilidade_excecoes: {
+        Row: {
+          created_at: string
+          data: string
+          hora_fim: string | null
+          hora_inicio: string | null
+          id: string
+          motivo: string | null
+          tipo: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data: string
+          hora_fim?: string | null
+          hora_inicio?: string | null
+          id?: string
+          motivo?: string | null
+          tipo: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          hora_fim?: string | null
+          hora_inicio?: string | null
+          id?: string
+          motivo?: string | null
+          tipo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      disponibilidade_semanal: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          dia_semana: number
+          hora_fim: string
+          hora_inicio: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          dia_semana: number
+          hora_fim: string
+          hora_inicio: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          dia_semana?: number
+          hora_fim?: string
+          hora_inicio?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       enderecos: {
         Row: {
           bairro: string

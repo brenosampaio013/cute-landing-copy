@@ -39,6 +39,7 @@ import { Route as AdminNotificacoesRouteImport } from './routes/admin.notificaco
 import { Route as AdminMensagensRouteImport } from './routes/admin.mensagens'
 import { Route as AdminLogsRouteImport } from './routes/admin.logs'
 import { Route as AdminHorariosRouteImport } from './routes/admin.horarios'
+import { Route as AdminDisponibilidadeRouteImport } from './routes/admin.disponibilidade'
 import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminClientesOnlineRouteImport } from './routes/admin.clientes-online'
@@ -197,6 +198,11 @@ const AdminHorariosRoute = AdminHorariosRouteImport.update({
   path: '/admin/horarios',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDisponibilidadeRoute = AdminDisponibilidadeRouteImport.update({
+  id: '/admin/disponibilidade',
+  path: '/admin/disponibilidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCuponsRoute = AdminCuponsRouteImport.update({
   id: '/admin/cupons',
   path: '/admin/cupons',
@@ -251,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/disponibilidade': typeof AdminDisponibilidadeRoute
   '/admin/horarios': typeof AdminHorariosRoute
   '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
@@ -289,6 +296,7 @@ export interface FileRoutesByTo {
   '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/disponibilidade': typeof AdminDisponibilidadeRoute
   '/admin/horarios': typeof AdminHorariosRoute
   '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
@@ -329,6 +337,7 @@ export interface FileRoutesById {
   '/admin/clientes-online': typeof AdminClientesOnlineRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/disponibilidade': typeof AdminDisponibilidadeRoute
   '/admin/horarios': typeof AdminHorariosRoute
   '/admin/logs': typeof AdminLogsRoute
   '/admin/mensagens': typeof AdminMensagensRoute
@@ -370,6 +379,7 @@ export interface FileRouteTypes {
     | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
+    | '/admin/disponibilidade'
     | '/admin/horarios'
     | '/admin/logs'
     | '/admin/mensagens'
@@ -408,6 +418,7 @@ export interface FileRouteTypes {
     | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
+    | '/admin/disponibilidade'
     | '/admin/horarios'
     | '/admin/logs'
     | '/admin/mensagens'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '/admin/clientes-online'
     | '/admin/configuracoes'
     | '/admin/cupons'
+    | '/admin/disponibilidade'
     | '/admin/horarios'
     | '/admin/logs'
     | '/admin/mensagens'
@@ -487,6 +499,7 @@ export interface RootRouteChildren {
   AdminClientesOnlineRoute: typeof AdminClientesOnlineRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
+  AdminDisponibilidadeRoute: typeof AdminDisponibilidadeRoute
   AdminHorariosRoute: typeof AdminHorariosRoute
   AdminLogsRoute: typeof AdminLogsRoute
   AdminMensagensRoute: typeof AdminMensagensRoute
@@ -711,6 +724,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHorariosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/disponibilidade': {
+      id: '/admin/disponibilidade'
+      path: '/admin/disponibilidade'
+      fullPath: '/admin/disponibilidade'
+      preLoaderRoute: typeof AdminDisponibilidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/cupons': {
       id: '/admin/cupons'
       path: '/admin/cupons'
@@ -811,6 +831,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminClientesOnlineRoute: AdminClientesOnlineRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
+  AdminDisponibilidadeRoute: AdminDisponibilidadeRoute,
   AdminHorariosRoute: AdminHorariosRoute,
   AdminLogsRoute: AdminLogsRoute,
   AdminMensagensRoute: AdminMensagensRoute,
