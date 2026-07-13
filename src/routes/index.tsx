@@ -90,9 +90,9 @@ function Index() {
               className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-serif-bold)', fontWeight: 700 }}
             >
-              Seu lar impecável,
+              Uma casa impecável
               <br />
-              sem você levantar um dedo.
+              começa com um clique.
             </h1>
             <p className="mt-5 text-sm text-white/75 sm:mt-6 sm:text-base md:text-lg">
               Profissionais verificados, atendimento premium e agenda flexível. Você marca — a gente cuida de tudo.
