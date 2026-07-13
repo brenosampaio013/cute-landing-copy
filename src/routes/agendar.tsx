@@ -67,6 +67,18 @@ function formatDataLong(iso: string): string {
   return `${wd}, ${String(d).padStart(2, "0")} de ${MONTH_NAMES[m - 1].toLowerCase()}`;
 }
 
+function globalToSlot(data: string, inicio: string, fim: string): Slot {
+  const [y, mo, d] = data.split("-").map(Number);
+  const [hi, mi] = inicio.split(":").map(Number);
+  const [hf, mf] = fim.split(":").map(Number);
+  return {
+    inicio,
+    fim,
+    inicioISO: new Date(y, (mo || 1) - 1, d || 1, hi, mi).toISOString(),
+    fimISO: new Date(y, (mo || 1) - 1, d || 1, hf, mf).toISOString(),
+  };
+}
+
 type Profissional = {
   id: string;
   nome: string;
