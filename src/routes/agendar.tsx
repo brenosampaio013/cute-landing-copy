@@ -164,45 +164,143 @@ function Agendar() {
     },
   });
 
-  // Slots por dia do mês
+  // Camada global de disponibilidade (empresa)
+  const { data: dispConfig = DEFAULT_CONFIG } = useQuery({
+    queryKey: ["disponibilidade", "config"],
+    queryFn: async (): Promise<DispConfig> => {
+      const { data, error } = await supabase.from("disponibilidade_config").select("*").maybeSingle();
+      if (error) throw error;
+      return (data as DispConfig | null) ?? DEFAULT_CONFIG;
+    },
+    staleTime: 60_000,
+  });
+  const { data: dispSemanal = [] } = useQuery({
+    queryKey: ["disponibilidade", "semanal"],
+    queryFn: async (): Promise<DispSemanal[]> => {
+      const { data, error } = await supabase
+        .from("disponibilidade_semanal")
+        .select("id,dia_semana,hora_inicio,hora_fim,ativo");
+      if (error) throw error;
+      return (data ?? []) as DispSemanal[];
+    },
+    staleTime: 60_000,
+  });
+  const { data: dispExcecoes = [] } = useQuery({
+    queryKey: ["disponibilidade", "excecoes", monthRange.firstISO, monthRange.lastISO],
+    queryFn: async (): Promise<DispExcecao[]> => {
+      const { data, error } = await supabase
+        .from("disponibilidade_excecoes")
+        .select("id,data,tipo,hora_inicio,hora_fim,motivo")
+        .gte("data", monthRange.firstISO)
+        .lte("data", monthRange.lastISO);
+      if (error) throw error;
+      return (data ?? []) as DispExcecao[];
+    },
+    staleTime: 60_000,
+  });
+
+  // Todos agendamentos do mês (para capacidade global — inclui outros profissionais)
+  const { data: monthAgAll = [] } = useQuery({
+    queryKey: ["agendar", "monthAgAll", monthRange.firstISO, monthRange.lastISO],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("agendamentos")
+        .select("data, horario_inicio, horario_fim, status")
+        .gte("data", monthRange.firstISO)
+        .lte("data", monthRange.lastISO)
+        .neq("status", "cancelado");
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 30_000,
+  });
+
+  // Status do mês pela camada global
+  const monthStatus = useMemo(
+    () => computeMonthStatus({
+      ano: viewMonth.getFullYear(),
+      mes: viewMonth.getMonth(),
+      config: dispConfig,
+      semanal: dispSemanal,
+      excecoes: dispExcecoes,
+      agendamentos: monthAgAll,
+    }),
+    [viewMonth, dispConfig, dispSemanal, dispExcecoes, monthAgAll],
+  );
+
+  // Slots por dia = interseção (global × por-profissional)
   const daySlotCounts = useMemo(() => {
     const counts = new Map<string, number>();
-    if (!baseDispon || chosenIds.length === 0) return counts;
+    if (chosenIds.length === 0) return counts;
     const first = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
     const last = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0);
     for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 1)) {
       const iso = toISO(d);
       if (d < today) { counts.set(iso, 0); continue; }
-      const set = new Set<string>();
-      for (const id of chosenIds) {
-        const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
-        const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
-        const agendamentos = monthAg.filter((x) => x.profissional_id === id && x.data === iso);
-        const list = computeAvailableSlots({
-          data: iso, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60,
-        });
-        for (const s of list) set.add(`${s.inicio}-${s.fim}`);
+      const stat = monthStatus[iso];
+      if (!stat || stat.status === "indisponivel") { counts.set(iso, 0); continue; }
+      const globalSlots = computeGlobalSlots({
+        data: iso,
+        config: dispConfig,
+        semanal: dispSemanal,
+        excecoes: dispExcecoes,
+        agendamentos: monthAgAll.filter((a) => a.data === iso),
+      }).filter((s) => s.livres > 0);
+      if (!baseDispon) { counts.set(iso, globalSlots.length); continue; }
+      // filtra por presença de ao menos um profissional livre naquele intervalo
+      let livres = 0;
+      for (const g of globalSlots) {
+        for (const id of chosenIds) {
+          const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
+          const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
+          const ags = monthAg.filter((x) => x.profissional_id === id && x.data === iso);
+          const list = computeAvailableSlots({ data: iso, duracaoMin, horarios, bloqueios, agendamentos: ags, stepMin: 60 });
+          if (list.some((s) => s.inicio === g.inicio)) { livres++; break; }
+        }
       }
-      counts.set(iso, set.size);
+      counts.set(iso, livres);
     }
     return counts;
-  }, [baseDispon, monthAg, chosenIds, viewMonth, duracaoMin, today]);
+  }, [baseDispon, monthAg, monthAgAll, chosenIds, viewMonth, duracaoMin, today, dispConfig, dispSemanal, dispExcecoes, monthStatus]);
 
-  // Slots do dia selecionado
+  // Slots do dia selecionado (interseção global × profissional)
   const slots: Slot[] = useMemo(() => {
-    if (!data || !baseDispon || chosenIds.length === 0) return [];
+    if (!data || chosenIds.length === 0) return [];
+    const globalSlots = computeGlobalSlots({
+      data,
+      config: dispConfig,
+      semanal: dispSemanal,
+      excecoes: dispExcecoes,
+      agendamentos: monthAgAll.filter((a) => a.data === data),
+    }).filter((s) => s.livres > 0);
+    if (globalSlots.length === 0) return [];
+    if (!baseDispon) {
+      // Sem restrição por profissional carregada: usa só a camada global
+      return globalSlots.map((s) => {
+        const [y, mo, d] = data.split("-").map(Number);
+        const [hi, mi] = s.inicio.split(":").map(Number);
+        const [hf, mf] = s.fim.split(":").map(Number);
+        return {
+          inicio: s.inicio,
+          fim: s.fim,
+          inicioISO: new Date(y, (mo || 1) - 1, d || 1, hi, mi).toISOString(),
+          fimISO: new Date(y, (mo || 1) - 1, d || 1, hf, mf).toISOString(),
+        };
+      });
+    }
     const map = new Map<string, Slot>();
     for (const id of chosenIds) {
       const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
       const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
       const agendamentos = monthAg.filter((x) => x.profissional_id === id && x.data === data);
-      const list = computeAvailableSlots({
-        data, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60,
-      });
-      for (const s of list) map.set(`${s.inicio}-${s.fim}`, s);
+      const list = computeAvailableSlots({ data, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60 });
+      for (const s of list) {
+        if (globalSlots.some((g) => g.inicio === s.inicio)) map.set(`${s.inicio}-${s.fim}`, s);
+      }
     }
     return Array.from(map.values()).sort((a, b) => a.inicio.localeCompare(b.inicio));
-  }, [data, baseDispon, monthAg, chosenIds, duracaoMin]);
+  }, [data, baseDispon, monthAg, monthAgAll, chosenIds, duracaoMin, dispConfig, dispSemanal, dispExcecoes]);
+
 
   // Calendário: matriz de dias
   const monthGrid = useMemo(() => {
