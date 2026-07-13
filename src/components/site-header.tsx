@@ -54,7 +54,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
           <img
             src={logoAsset.url}
             alt="Maré Nobre"
-            className="h-16 w-auto sm:h-20 lg:h-24"
+            className="h-24 w-auto sm:h-28 lg:h-32"
           />
         </Link>
 
