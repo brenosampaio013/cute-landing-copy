@@ -63,7 +63,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             height={660}
             loading="eager"
             decoding="async"
-            className="h-14 w-auto max-w-[55vw] shrink object-contain sm:h-20 sm:max-w-none md:h-24 lg:h-32 xl:h-36"
+            className="h-20 w-auto max-w-[70vw] shrink object-contain sm:h-24 sm:max-w-none md:h-24 lg:h-32 xl:h-36"
             onError={(e) => {
               const img = e.currentTarget;
               img.style.display = "none";
