@@ -47,7 +47,7 @@ function Page() {
 
   return (
     <AdminShell
-      active="horarios"
+      active="disponibilidade"
       title="Disponibilidade"
       subtitle="Regras gerais de atendimento: grade padrão, exceções por data, antecedência e capacidade."
     >
