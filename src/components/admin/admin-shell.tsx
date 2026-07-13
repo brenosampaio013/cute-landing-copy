@@ -3,6 +3,7 @@ import {
   Waves,
   LayoutDashboard,
   Calendar,
+  CalendarCheck2,
   LayoutGrid,
   Users,
   UserCircle,
