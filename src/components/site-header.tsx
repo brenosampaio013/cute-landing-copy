@@ -55,7 +55,20 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             src={logoAsset.url}
             alt="Maré Nobre"
             className="h-24 w-auto object-contain sm:h-32 lg:h-40"
+            onError={(e) => {
+              const img = e.currentTarget;
+              img.style.display = "none";
+              const fallback = img.nextElementSibling as HTMLElement | null;
+              if (fallback) fallback.style.display = "inline-flex";
+            }}
           />
+          <span
+            aria-hidden="true"
+            style={{ display: "none", fontFamily: "'Playfair Display', serif" }}
+            className="items-center text-xl font-semibold tracking-wide text-white sm:text-2xl lg:text-3xl"
+          >
+            Maré <span className="text-[#2DD4BF]">Nobre</span>
+          </span>
         </Link>
 
         <nav className="hidden flex-1 justify-center gap-1 lg:flex">
