@@ -38,6 +38,7 @@ type NavKey =
   | "servicos"
   | "profissionais"
   | "horarios"
+  | "disponibilidade"
   | "clientes"
   | "clientes-online"
   | "pagamentos"
