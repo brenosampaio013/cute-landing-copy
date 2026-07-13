@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
+import logoAsset from "@/assets/mare-nobre-logo.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
@@ -52,7 +52,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <Link to="/" className="flex shrink-0 items-center gap-2">
           <img
-            src={logo}
+            src={logoAsset.url}
             alt="Maré Nobre"
             className="h-12 w-auto sm:h-[56px]"
           />
