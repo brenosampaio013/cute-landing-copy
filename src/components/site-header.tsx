@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logoAsset from "@/assets/mare-nobre-logo.png.asset.json";
+import logoAsset from "@/assets/mare-nobre-logo-v2.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
@@ -54,7 +54,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
           <img
             src={logoAsset.url}
             alt="Maré Nobre"
-            className="h-12 w-auto sm:h-[56px]"
+            className="h-16 w-auto sm:h-20 lg:h-24"
           />
         </Link>
 
