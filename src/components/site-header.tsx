@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
+
+const logoSrc = "/mare-nobre-logo-oficial.png";
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
   { label: "Início", to: "/", exact: true },
@@ -56,7 +57,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
           aria-label="Maré Nobre — página inicial"
         >
           <img
-            src={logoAsset.url}
+            src={logoSrc}
             alt="Maré Nobre"
             width={1016}
             height={660}
