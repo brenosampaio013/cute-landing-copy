@@ -368,6 +368,19 @@ function Agendar() {
       const horarios = baseDispon.horarios.filter((x) => x.profissional_id === p.id);
       const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === p.id);
       const agendamentos = monthAg.filter((x) => x.profissional_id === p.id && x.data === data);
+      if (horarios.length === 0) {
+        // sem grade própria → aceita se não há conflito com outros agendamentos
+        const [hi, mi] = slot.inicio.split(":").map(Number);
+        const [hf, mf] = slot.fim.split(":").map(Number);
+        const s = hi * 60 + mi, e = hf * 60 + mf;
+        const conflito = agendamentos.some((a) => {
+          const [ai, aim] = a.horario_inicio.split(":").map(Number);
+          const [ae, aem] = a.horario_fim.split(":").map(Number);
+          return s < ae * 60 + aem && ai * 60 + aim < e;
+        });
+        if (!conflito) return p.id;
+        continue;
+      }
       const list = computeAvailableSlots({ data, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60 });
       if (list.some((s) => s.inicio === slot.inicio && s.fim === slot.fim)) return p.id;
     }
