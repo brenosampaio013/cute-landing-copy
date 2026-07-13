@@ -50,11 +50,19 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
       }
     >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:gap-4 sm:px-6">
-        <Link to="/" className="flex min-w-0 shrink-0 items-center gap-2">
+        <Link
+          to="/"
+          className="flex min-w-0 shrink items-center gap-2"
+          aria-label="Maré Nobre — página inicial"
+        >
           <img
             src={logoAsset.url}
             alt="Maré Nobre"
-            className="h-24 w-auto object-contain sm:h-32 lg:h-40"
+            width={1016}
+            height={660}
+            loading="eager"
+            decoding="async"
+            className="h-14 w-auto max-w-[55vw] shrink object-contain sm:h-20 sm:max-w-none md:h-24 lg:h-32 xl:h-36"
             onError={(e) => {
               const img = e.currentTarget;
               img.style.display = "none";
@@ -65,11 +73,12 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
           <span
             aria-hidden="true"
             style={{ display: "none", fontFamily: "'Playfair Display', serif" }}
-            className="items-center text-xl font-semibold tracking-wide text-white sm:text-2xl lg:text-3xl"
+            className="items-center whitespace-nowrap text-lg font-semibold tracking-wide text-white sm:text-xl lg:text-2xl"
           >
-            Maré <span className="text-[#2DD4BF]">Nobre</span>
+            Maré <span className="ml-1 text-[#2DD4BF]">Nobre</span>
           </span>
         </Link>
+
 
         <nav className="hidden flex-1 justify-center gap-1 lg:flex">
           {navLinks.map((l) => (
