@@ -58,6 +58,7 @@ export const PRINCIPAL: NavItem[] = [
   { key: "servicos", label: "Serviços", icon: LayoutGrid, to: "/admin/servicos" },
   { key: "profissionais", label: "Profissionais", icon: Users, to: "/admin/profissionais" },
   { key: "horarios", label: "Horários", icon: Calendar, to: "/admin/horarios" },
+  { key: "disponibilidade", label: "Disponibilidade", icon: CalendarCheck2, to: "/admin/disponibilidade" },
   { key: "clientes", label: "Clientes", icon: UserCircle, to: "/admin/clientes" },
   { key: "clientes-online", label: "Clientes Online", icon: Wifi, to: "/admin/clientes-online" },
   { key: "pagamentos", label: "Pagamentos", icon: CreditCard, to: "/admin/pagamentos" },
