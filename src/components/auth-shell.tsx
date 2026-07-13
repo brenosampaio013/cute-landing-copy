@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Sparkles, Leaf } from "lucide-react";
-import logoAsset from "@/assets/mare-nobre-logo-v2.png.asset.json";
+import logoAsset from "@/assets/mare-nobre-logo-v3.png.asset.json";
 
 export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {
   return (
