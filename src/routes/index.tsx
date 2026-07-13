@@ -103,7 +103,7 @@ function Index() {
                 className="group inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:brightness-110 sm:px-8 sm:py-4 sm:text-base"
                 style={{ background: "var(--gradient-teal)", boxShadow: "var(--shadow-teal)" }}
               >
-                Agendar em 2 minutos
+                Quero agendar
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
