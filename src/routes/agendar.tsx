@@ -290,22 +290,35 @@ function Agendar() {
     }).filter((s) => s.livres > 0);
     if (globalSlots.length === 0) return [];
     if (!baseDispon) {
-      // Sem restrição por profissional carregada: usa só a camada global
-      return globalSlots.map((s) => {
-        const [y, mo, d] = data.split("-").map(Number);
-        const [hi, mi] = s.inicio.split(":").map(Number);
-        const [hf, mf] = s.fim.split(":").map(Number);
-        return {
-          inicio: s.inicio,
-          fim: s.fim,
-          inicioISO: new Date(y, (mo || 1) - 1, d || 1, hi, mi).toISOString(),
-          fimISO: new Date(y, (mo || 1) - 1, d || 1, hf, mf).toISOString(),
-        };
-      });
+      return globalSlots.map((s) => globalToSlot(data, s.inicio, s.fim));
     }
     const map = new Map<string, Slot>();
+    const anyWithoutGrade = chosenIds.some(
+      (id) => baseDispon.horarios.filter((x) => x.profissional_id === id).length === 0,
+    );
+    if (anyWithoutGrade) {
+      // Fallback: pelo menos um profissional sem grade própria → adota disponibilidade global
+      const agsDia = monthAg.filter((x) => x.data === data);
+      for (const g of globalSlots) {
+        const [hi, mi] = g.inicio.split(":").map(Number);
+        const [hf, mf] = g.fim.split(":").map(Number);
+        const s = hi * 60 + mi, e = hf * 60 + mf;
+        const someoneFree = chosenIds.some((id) => {
+          const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
+          if (horarios.length > 0) return false;
+          const conflito = agsDia.filter((a) => a.profissional_id === id).some((a) => {
+            const [ai, aim] = a.horario_inicio.split(":").map(Number);
+            const [ae, aem] = a.horario_fim.split(":").map(Number);
+            return s < ae * 60 + aem && ai * 60 + aim < e;
+          });
+          return !conflito;
+        });
+        if (someoneFree) map.set(`${g.inicio}-${g.fim}`, globalToSlot(data, g.inicio, g.fim));
+      }
+    }
     for (const id of chosenIds) {
       const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
+      if (horarios.length === 0) continue;
       const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
       const agendamentos = monthAg.filter((x) => x.profissional_id === id && x.data === data);
       const list = computeAvailableSlots({ data, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60 });
@@ -315,6 +328,7 @@ function Agendar() {
     }
     return Array.from(map.values()).sort((a, b) => a.inicio.localeCompare(b.inicio));
   }, [data, baseDispon, monthAg, monthAgAll, chosenIds, duracaoMin, dispConfig, dispSemanal, dispExcecoes]);
+
 
 
   // Calendário: matriz de dias
