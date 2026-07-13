@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logoAsset from "@/assets/mare-nobre-logo-v3.png.asset.json";
+import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
