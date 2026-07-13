@@ -49,12 +49,12 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
           : { background: "var(--gradient-hero)" }
       }
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-2">
-        <Link to="/" className="flex shrink-0 items-center gap-2">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:gap-4 sm:px-6">
+        <Link to="/" className="flex min-w-0 shrink-0 items-center gap-2">
           <img
             src={logoAsset.url}
             alt="Maré Nobre"
-            className="h-20 w-auto sm:h-24 lg:h-28 object-contain"
+            className="h-24 w-auto object-contain sm:h-32 lg:h-40"
           />
         </Link>
 
