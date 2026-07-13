@@ -247,13 +247,27 @@ function Agendar() {
         agendamentos: monthAgAll.filter((a) => a.data === iso),
       }).filter((s) => s.livres > 0);
       if (!baseDispon) { counts.set(iso, globalSlots.length); continue; }
-      // filtra por presença de ao menos um profissional livre naquele intervalo
+      // filtra por presença de ao menos um profissional livre naquele intervalo.
+      // Se o profissional não tem grade própria configurada, herda a global.
       let livres = 0;
       for (const g of globalSlots) {
         for (const id of chosenIds) {
           const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
           const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
           const ags = monthAg.filter((x) => x.profissional_id === id && x.data === iso);
+          if (horarios.length === 0) {
+            // sem grade própria → considera livre se não há agendamento conflitante
+            const [hi, mi] = g.inicio.split(":").map(Number);
+            const [hf, mf] = g.fim.split(":").map(Number);
+            const s = hi * 60 + mi, e = hf * 60 + mf;
+            const conflito = ags.some((a) => {
+              const [ai, aim] = a.horario_inicio.split(":").map(Number);
+              const [ae, aem] = a.horario_fim.split(":").map(Number);
+              return s < ae * 60 + aem && ai * 60 + aim < e;
+            });
+            if (!conflito) { livres++; break; }
+            continue;
+          }
           const list = computeAvailableSlots({ data: iso, duracaoMin, horarios, bloqueios, agendamentos: ags, stepMin: 60 });
           if (list.some((s) => s.inicio === g.inicio)) { livres++; break; }
         }
@@ -262,6 +276,7 @@ function Agendar() {
     }
     return counts;
   }, [baseDispon, monthAg, monthAgAll, chosenIds, viewMonth, duracaoMin, today, dispConfig, dispSemanal, dispExcecoes, monthStatus]);
+
 
   // Slots do dia selecionado (interseção global × profissional)
   const slots: Slot[] = useMemo(() => {
