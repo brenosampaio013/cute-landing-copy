@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Download, X, Share } from "lucide-react";
+import { X, Share } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
