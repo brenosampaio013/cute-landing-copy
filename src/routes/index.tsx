@@ -95,7 +95,7 @@ function Index() {
               começa com um clique.
             </h1>
             <p className="mt-5 text-sm text-white/75 sm:mt-6 sm:text-base md:text-lg">
-              Profissionais verificados, atendimento premium e agenda flexível. Você marca — a gente cuida de tudo.
+              Equipe qualificada, horários que se encaixam na sua rotina e um serviço que você pode confiar.
             </p>
             <div className="mt-7 flex flex-col items-stretch gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4 lg:justify-start">
               <Link
