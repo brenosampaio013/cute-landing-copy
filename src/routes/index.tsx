@@ -27,13 +27,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Profissionais verificados para limpeza pós-obra, passadoria e limpeza de piscina. Agende em 2 minutos e receba em casa com padrão Maré Nobre.",
+          "Agende profissionais selecionados para limpeza residencial, pós-obra, limpeza de piscinas e muito mais, com atendimento em todo o Litoral Norte.",
       },
       { property: "og:title", content: "Maré Nobre — Serviços premium para o seu lar" },
       {
         property: "og:description",
         content:
-          "Profissionais verificados, agendamento em 2 minutos e cuidado de verdade com o seu lar. Riviera, Bertioga e Litoral Norte.",
+          "Agende profissionais selecionados para limpeza residencial, pós-obra, limpeza de piscinas e muito mais, com atendimento em todo o Litoral Norte.",
       },
     ],
   }),
