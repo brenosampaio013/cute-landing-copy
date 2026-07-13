@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Download, X, Share } from "lucide-react";
+import { X, Share } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -78,10 +79,9 @@ export function InstallAppBanner() {
           </button>
           <div className="flex items-start gap-3">
             <div
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[#0A1A2F]"
-              style={{ background: "var(--gradient-teal)" }}
+              className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/15"
             >
-              <Download className="h-5 w-5" />
+              <img src={logo} alt="Maré Nobre" className="h-9 w-9 object-contain" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold">Tenha a Maré Nobre na tela inicial</p>
