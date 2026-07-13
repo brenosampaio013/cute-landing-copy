@@ -12,6 +12,14 @@ import { SitePage } from "@/components/site-page";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { computeAvailableSlots, type Slot } from "@/lib/horarios";
+import {
+  DEFAULT_CONFIG,
+  computeGlobalSlots,
+  computeMonthStatus,
+  type DispConfig,
+  type DispExcecao,
+  type DispSemanal,
+} from "@/lib/disponibilidade";
 import iconLimpeza from "@/assets/icon-limpeza.png";
 import iconPosObra from "@/assets/icon-posobra.png";
 import iconPassadoria from "@/assets/icon-passadoria.png";
