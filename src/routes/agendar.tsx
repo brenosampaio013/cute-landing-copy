@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Loader2, ShieldCheck, Clock, CalendarCheck, Headphones, Waves,
-  CalendarDays, MapPin, Check, UserRound, Sparkles,
+  Loader2, ShieldCheck, Clock, CalendarCheck, Waves,
+  MapPin, Check, UserRound, Sparkles, ChevronLeft, ChevronRight,
+  AlertCircle, CircleDollarSign,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,20 +21,42 @@ export const Route = createFileRoute("/agendar")({
   component: Agendar,
 });
 
-const services = [
-  { icon: iconLimpeza, title: "Limpeza Padrão", desc: "Manutenção residencial", duracaoMin: 330 },
-  { icon: iconPosObra, title: "Limpeza Pesada", desc: "Pós-obra ou faxina profunda", duracaoMin: 330 },
-  { icon: iconPassadoria, title: "Passadoria", desc: "Roupas engomadas e organizadas", duracaoMin: 240 },
-  { icon: "waves" as const, title: "Limpeza de Piscina", desc: "Tratamento e higienização", duracaoMin: 180 },
+type ServiceDef = {
+  title: string;
+  desc: string;
+  duracaoMin: number;
+  priceFrom: number;
+  duracaoLabel: string;
+  icon: string | "waves";
+};
+
+const services: ServiceDef[] = [
+  { title: "Limpeza Padrão", desc: "Manutenção residencial", duracaoMin: 330, priceFrom: 180, duracaoLabel: "4–6h", icon: iconLimpeza },
+  { title: "Limpeza Pesada", desc: "Pós-obra ou faxina profunda", duracaoMin: 330, priceFrom: 280, duracaoLabel: "5–7h", icon: iconPosObra },
+  { title: "Passadoria", desc: "Roupas engomadas e organizadas", duracaoMin: 240, priceFrom: 120, duracaoLabel: "3–4h", icon: iconPassadoria },
+  { title: "Limpeza de Piscina", desc: "Tratamento e higienização", duracaoMin: 180, priceFrom: 150, duracaoLabel: "2–3h", icon: "waves" },
 ];
 
-const WEEKDAY_ABBR = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+const MONTH_NAMES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const WEEKDAY_LETTERS = ["D", "S", "T", "Q", "Q", "S", "S"];
+const SCARCE_THRESHOLD = 3;
 
 function toISO(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
+}
+
+function formatBRL(v: number): string {
+  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+}
+
+function formatDataLong(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(y, m - 1, d);
+  const wd = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"][dt.getDay()];
+  return `${wd}, ${String(d).padStart(2, "0")} de ${MONTH_NAMES[m - 1].toLowerCase()}`;
 }
 
 type Profissional = {
@@ -52,10 +75,26 @@ function Agendar() {
   const [profId, setProfId] = useState<string>("any");
   const [data, setData] = useState<string>("");
   const [slotIdx, setSlotIdx] = useState<number | null>(null);
-  const [endereco, setEndereco] = useState<string>("");
+
+  // Endereço detalhado
+  const [cep, setCep] = useState("");
+  const [rua, setRua] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [uf, setUf] = useState("");
+  const [numero, setNumero] = useState("");
+  const [complemento, setComplemento] = useState("");
+  const [referencia, setReferencia] = useState("");
+  const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
 
   const [submitting, setSubmitting] = useState(false);
-  const dateInputRef = useRef<HTMLInputElement>(null);
+
+  // Mês visível no calendário
+  const today = useMemo(() => {
+    const t = new Date();
+    return new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  }, []);
+  const [viewMonth, setViewMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
 
   const servicoObj = services.find((s) => s.title === servico) ?? services[0];
   const duracaoMin = servicoObj.duracaoMin;
@@ -74,125 +113,175 @@ function Agendar() {
     },
   });
 
-  // Grade + bloqueios + agendamentos do profissional selecionado (ou todos ativos)
-  const { data: disponibilidade } = useQuery({
-    queryKey: ["agendar", "disponibilidade", profId, data, profissionais.map((p) => p.id).join(",")],
-    enabled: !!data && (profId === "any" ? profissionais.length > 0 : true),
-    queryFn: async () => {
-      const ids = profId === "any" ? profissionais.map((p) => p.id) : [profId];
-      if (ids.length === 0) return { horarios: [], bloqueios: [], agendamentos: [] };
+  const chosenIds = useMemo(
+    () => (profId === "any" ? profissionais.map((p) => p.id) : [profId]),
+    [profId, profissionais],
+  );
 
-      const [h, b, a] = await Promise.all([
-        supabase.from("profissional_horarios").select("*").in("profissional_id", ids),
-        supabase.from("profissional_bloqueios").select("*").in("profissional_id", ids),
-        supabase
-          .from("agendamentos")
-          .select("id, profissional_id, data, horario_inicio, horario_fim, status")
-          .in("profissional_id", ids)
-          .eq("data", data),
+  // Range do mês visível para buscar agendamentos
+  const monthRange = useMemo(() => {
+    const first = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+    const last = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0);
+    return { firstISO: toISO(first), lastISO: toISO(last) };
+  }, [viewMonth]);
+
+  // Grade + bloqueios (não dependem da data)
+  const { data: baseDispon } = useQuery({
+    queryKey: ["agendar", "base", chosenIds.join(",")],
+    enabled: chosenIds.length > 0,
+    queryFn: async () => {
+      const [h, b] = await Promise.all([
+        supabase.from("profissional_horarios").select("*").in("profissional_id", chosenIds),
+        supabase.from("profissional_bloqueios").select("*").in("profissional_id", chosenIds),
       ]);
       if (h.error) throw h.error;
       if (b.error) throw b.error;
-      if (a.error) throw a.error;
-      return {
-        horarios: h.data ?? [],
-        bloqueios: b.data ?? [],
-        agendamentos: a.data ?? [],
-      };
+      return { horarios: h.data ?? [], bloqueios: b.data ?? [] };
     },
   });
 
-  // Slots calculados
-  const slots: Slot[] = useMemo(() => {
-    if (!data || !disponibilidade) return [];
-    const ids = profId === "any" ? profissionais.map((p) => p.id) : [profId];
-    if (ids.length === 0) return [];
+  // Agendamentos do mês visível
+  const { data: monthAg = [] } = useQuery({
+    queryKey: ["agendar", "monthAg", chosenIds.join(","), monthRange.firstISO, monthRange.lastISO],
+    enabled: chosenIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("agendamentos")
+        .select("id, profissional_id, data, horario_inicio, horario_fim, status")
+        .in("profissional_id", chosenIds)
+        .gte("data", monthRange.firstISO)
+        .lte("data", monthRange.lastISO);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
 
-    // Se "qualquer profissional", união dos slots de todos os ativos
-    // (um horário aparece se ao menos um profissional o oferece).
-    const map = new Map<string, Slot>();
-    for (const id of ids) {
-      const horarios = disponibilidade.horarios.filter((x) => x.profissional_id === id);
-      const bloqueios = disponibilidade.bloqueios.filter((x) => x.profissional_id === id);
-      const agendamentos = disponibilidade.agendamentos.filter((x) => x.profissional_id === id);
-      const list = computeAvailableSlots({
-        data,
-        duracaoMin,
-        horarios,
-        bloqueios,
-        agendamentos,
-        stepMin: 60,
-      });
-      for (const s of list) {
-        map.set(`${s.inicio}-${s.fim}`, s);
+  // Slots por dia do mês
+  const daySlotCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    if (!baseDispon || chosenIds.length === 0) return counts;
+    const first = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+    const last = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0);
+    for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 1)) {
+      const iso = toISO(d);
+      if (d < today) { counts.set(iso, 0); continue; }
+      const set = new Set<string>();
+      for (const id of chosenIds) {
+        const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
+        const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
+        const agendamentos = monthAg.filter((x) => x.profissional_id === id && x.data === iso);
+        const list = computeAvailableSlots({
+          data: iso, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60,
+        });
+        for (const s of list) set.add(`${s.inicio}-${s.fim}`);
       }
+      counts.set(iso, set.size);
+    }
+    return counts;
+  }, [baseDispon, monthAg, chosenIds, viewMonth, duracaoMin, today]);
+
+  // Slots do dia selecionado
+  const slots: Slot[] = useMemo(() => {
+    if (!data || !baseDispon || chosenIds.length === 0) return [];
+    const map = new Map<string, Slot>();
+    for (const id of chosenIds) {
+      const horarios = baseDispon.horarios.filter((x) => x.profissional_id === id);
+      const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === id);
+      const agendamentos = monthAg.filter((x) => x.profissional_id === id && x.data === data);
+      const list = computeAvailableSlots({
+        data, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60,
+      });
+      for (const s of list) map.set(`${s.inicio}-${s.fim}`, s);
     }
     return Array.from(map.values()).sort((a, b) => a.inicio.localeCompare(b.inicio));
-  }, [data, disponibilidade, profId, profissionais, duracaoMin]);
+  }, [data, baseDispon, monthAg, chosenIds, duracaoMin]);
 
-  const quickDates = useMemo(() => {
-    const arr: { iso: string; wd: string; day: string }[] = [];
-    const base = new Date();
-    for (let i = 0; i < 3; i++) {
-      const d = new Date(base);
-      d.setDate(base.getDate() + i);
-      arr.push({
-        iso: toISO(d),
-        wd: WEEKDAY_ABBR[d.getDay()],
-        day: String(d.getDate()).padStart(2, "0"),
-      });
+  // Calendário: matriz de dias
+  const monthGrid = useMemo(() => {
+    const first = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
+    const startWeekday = first.getDay();
+    const daysInMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 0).getDate();
+    const cells: ({ iso: string; day: number } | null)[] = [];
+    for (let i = 0; i < startWeekday; i++) cells.push(null);
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dt = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), d);
+      cells.push({ iso: toISO(dt), day: d });
     }
-    return arr;
-  }, []);
+    while (cells.length % 7 !== 0) cells.push(null);
+    return cells;
+  }, [viewMonth]);
 
-  const extraDate = useMemo(() => {
-    if (!data) return null;
-    if (quickDates.some((q) => q.iso === data)) return null;
-    const [y, m, d] = data.split("-").map(Number);
-    const dt = new Date(y, m - 1, d);
-    return {
-      iso: data,
-      wd: WEEKDAY_ABBR[dt.getDay()],
-      day: String(dt.getDate()).padStart(2, "0"),
-    };
-  }, [data, quickDates]);
+  const monthLabel = `${MONTH_NAMES[viewMonth.getMonth()]} ${viewMonth.getFullYear()}`;
+  const isCurrentMonth = viewMonth.getFullYear() === today.getFullYear() && viewMonth.getMonth() === today.getMonth();
 
   async function pickProfissionalForSlot(slot: Slot): Promise<string | null> {
     if (profId !== "any") return profId;
-    if (!disponibilidade) return null;
-    // Escolhe o primeiro profissional ativo que cubra este slot.
+    if (!baseDispon) return null;
     for (const p of profissionais) {
-      const horarios = disponibilidade.horarios.filter((x) => x.profissional_id === p.id);
-      const bloqueios = disponibilidade.bloqueios.filter((x) => x.profissional_id === p.id);
-      const agendamentos = disponibilidade.agendamentos.filter((x) => x.profissional_id === p.id);
-      const list = computeAvailableSlots({
-        data,
-        duracaoMin,
-        horarios,
-        bloqueios,
-        agendamentos,
-        stepMin: 60,
-      });
+      const horarios = baseDispon.horarios.filter((x) => x.profissional_id === p.id);
+      const bloqueios = baseDispon.bloqueios.filter((x) => x.profissional_id === p.id);
+      const agendamentos = monthAg.filter((x) => x.profissional_id === p.id && x.data === data);
+      const list = computeAvailableSlots({ data, duracaoMin, horarios, bloqueios, agendamentos, stepMin: 60 });
       if (list.some((s) => s.inicio === slot.inicio && s.fim === slot.fim)) return p.id;
     }
     return null;
   }
 
+  // ViaCEP
+  useEffect(() => {
+    const digits = cep.replace(/\D/g, "");
+    if (digits.length !== 8) { setCepStatus("idle"); return; }
+    let aborted = false;
+    setCepStatus("loading");
+    fetch(`https://viacep.com.br/ws/${digits}/json/`)
+      .then((r) => r.json())
+      .then((j) => {
+        if (aborted) return;
+        if (j.erro) { setCepStatus("error"); return; }
+        setRua(j.logradouro || "");
+        setBairro(j.bairro || "");
+        setCidade(j.localidade || "");
+        setUf(j.uf || "");
+        setCepStatus("ok");
+      })
+      .catch(() => { if (!aborted) setCepStatus("error"); });
+    return () => { aborted = true; };
+  }, [cep]);
+
+  function formatCep(v: string) {
+    const digits = v.replace(/\D/g, "").slice(0, 8);
+    if (digits.length > 5) return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+    return digits;
+  }
+
+  const enderecoCompleto = useMemo(() => {
+    if (!rua || !numero || !cidade) return "";
+    const parts = [
+      `${rua}, ${numero}`,
+      complemento && `${complemento}`,
+      bairro,
+      `${cidade}${uf ? `/${uf}` : ""}`,
+      cep && `CEP ${cep}`,
+      referencia && `Ref: ${referencia}`,
+    ].filter(Boolean);
+    return parts.join(" — ");
+  }, [rua, numero, complemento, bairro, cidade, uf, cep, referencia]);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!user) { toast.error("Faça login para concluir seu agendamento."); navigate({ to: "/login" }); return; }
-    if (!servico || !data || slotIdx === null || !endereco.trim()) {
+    if (!servico || !data || slotIdx === null || !enderecoCompleto) {
       toast.error("Falta pouco! Preencha serviço, data, horário e endereço.");
       return;
     }
     const slot = slots[slotIdx];
-    if (!slot) { toast.error("Selecione um horário disponível para continuar."); return; }
+    if (!slot) { toast.error("Selecione um horário disponível."); return; }
 
     setSubmitting(true);
     const chosenProf = await pickProfissionalForSlot(slot);
     if (!chosenProf) {
       setSubmitting(false);
-      toast.error("Este horário acabou de ficar indisponível. Escolha outro — a agenda atualiza em tempo real.");
+      toast.error("Este horário acabou de ficar indisponível. Escolha outro.");
       return;
     }
 
@@ -203,7 +292,7 @@ function Agendar() {
       data,
       horario_inicio: slot.inicio,
       horario_fim: slot.fim,
-      endereco: endereco.trim(),
+      endereco: enderecoCompleto,
       status: "pendente",
       preco: 0,
       total: 0,
@@ -211,33 +300,36 @@ function Agendar() {
 
     setSubmitting(false);
     if (error) {
-      toast.error(error.message || "Não conseguimos agendar agora. Confira sua conexão e tente novamente.");
+      toast.error(error.message || "Não conseguimos agendar agora. Tente novamente.");
       return;
     }
-
     toast.success("Agendamento confirmado! Em instantes você recebe o orçamento.");
     navigate({ to: "/dashboard/agendamentos" });
   }
 
-  const today = new Date().toISOString().slice(0, 10);
-  const dateOptions = extraDate ? [...quickDates, extraDate] : quickDates;
-
+  // Progresso
   const step1Done = !!servico;
   const step2Done = !!data && slotIdx !== null;
-  const step3Done = endereco.trim().length > 0;
+  const step3Done = !!enderecoCompleto;
+  const step4Done = false; // confirmação = ao clicar
   const canSubmit = step1Done && step2Done && step3Done && !!user;
 
-  const steps = [
-    { n: 1, label: "Escolha o Serviço", active: true, done: step1Done },
-    { n: 2, label: "Data e Horário", active: step1Done, done: step2Done },
-    { n: 3, label: "Endereço", active: step2Done, done: step3Done },
+  const stepper = [
+    { label: "Serviço", done: step1Done },
+    { label: "Data e horário", done: step2Done },
+    { label: "Endereço", done: step3Done },
+    { label: "Confirmação", done: step4Done },
   ];
+  const currentStepIdx = stepper.findIndex((s) => !s.done);
+  const activeStep = currentStepIdx === -1 ? 3 : currentStepIdx;
+
+  const slotsCount = data ? slots.length : null;
+  const scarce = slotsCount !== null && slotsCount > 0 && slotsCount <= SCARCE_THRESHOLD;
 
   const trustItems = [
-    { icon: ShieldCheck, title: "Pagamento seguro", desc: "Criptografia de ponta a ponta" },
-    { icon: Clock, title: "Confirmação rápida", desc: "Resposta em minutos" },
-    { icon: CalendarCheck, title: "Remarcação fácil", desc: "Ajuste quando precisar" },
-    { icon: Headphones, title: "Suporte humano", desc: "Fala com gente de verdade" },
+    { icon: ShieldCheck, title: "Pagamento seguro" },
+    { icon: CalendarCheck, title: "Remarcação fácil" },
+    { icon: Clock, title: "Confirmação rápida" },
   ];
 
   return (
@@ -246,49 +338,55 @@ function Agendar() {
       title="Agende em 2 minutos"
       subtitle="Escolha o serviço, o horário que cabe na sua rotina e receba a confirmação em instantes."
     >
-      <form
-        onSubmit={handleSubmit}
-        className="overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200/60 md:flex"
-      >
-        <aside className="w-full bg-[#0A1128] p-6 text-white sm:p-8 md:w-80 md:shrink-0 md:p-10">
-          <div className="mb-6 md:mb-10">
-            <h1 className="text-2xl font-bold tracking-tight">Maré Nobre</h1>
-            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#2DD4BF]">
-              Serviços Premium
-            </p>
-          </div>
-
-          <ol className="space-y-5 md:space-y-7">
-            {steps.map((s) => (
-              <li key={s.n} className={`flex items-center gap-4 transition-opacity ${s.active ? "opacity-100" : "opacity-50"}`}>
-                <span
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold transition ${
-                    s.done
-                      ? "bg-[#2DD4BF] text-white shadow-lg shadow-[#2DD4BF]/30"
-                      : s.active
-                        ? "bg-[#2DD4BF]/15 text-[#2DD4BF] ring-2 ring-[#2DD4BF]/40"
-                        : "border-2 border-white/20 text-white/70"
-                  }`}
-                >
-                  {s.done ? <Check className="h-4 w-4" strokeWidth={3} /> : s.n}
-                </span>
-                <div className="min-w-0">
-                  <p className={`text-[10px] font-bold uppercase tracking-[0.18em] ${s.done || s.active ? "text-[#2DD4BF]" : "text-white/70"}`}>
-                    Passo {s.n}
-                  </p>
-                  <p className="text-sm font-medium">{s.label}</p>
+      {/* Stepper */}
+      <nav aria-label="Progresso do agendamento" className="mb-8 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200/60 sm:p-6">
+        <ol className="flex items-center gap-2 sm:gap-4">
+          {stepper.map((s, i) => {
+            const isActive = i === activeStep;
+            const isDone = s.done;
+            return (
+              <li key={s.label} className="flex flex-1 items-center gap-2 sm:gap-3">
+                <div className="flex flex-col items-center sm:flex-row sm:gap-3">
+                  <span
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition ${
+                      isDone
+                        ? "bg-[#2DD4BF] text-white shadow-md shadow-[#2DD4BF]/30"
+                        : isActive
+                          ? "bg-[#2DD4BF]/15 text-[#0A9E8A] ring-2 ring-[#2DD4BF]"
+                          : "bg-slate-100 text-slate-400"
+                    }`}
+                  >
+                    {isDone ? <Check className="h-4 w-4" strokeWidth={3} /> : i + 1}
+                  </span>
+                  <span
+                    className={`mt-1.5 text-center text-[10px] font-semibold uppercase tracking-wider sm:mt-0 sm:text-xs sm:tracking-normal ${
+                      isActive ? "text-[#0A1128]" : isDone ? "text-[#0A9E8A]" : "text-slate-400"
+                    }`}
+                  >
+                    {s.label}
+                  </span>
                 </div>
+                {i < stepper.length - 1 && (
+                  <span
+                    className={`hidden h-[2px] flex-1 rounded-full transition sm:block ${
+                      stepper[i].done ? "bg-[#2DD4BF]" : "bg-slate-200"
+                    }`}
+                  />
+                )}
               </li>
-            ))}
-          </ol>
-        </aside>
+            );
+          })}
+        </ol>
+      </nav>
 
-        <div className="flex-1 space-y-10 p-6 sm:p-8 md:p-12">
-          {/* Passo 1: Serviço */}
-          <section>
-            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+        {/* Coluna principal */}
+        <div className="space-y-8">
+          {/* Serviço */}
+          <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/60 sm:p-8">
+            <div className="mb-5 flex items-baseline justify-between">
               <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">O que você precisa hoje?</h2>
-              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">01 · Serviço</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">01 · Serviço</span>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {services.map((s) => {
@@ -314,6 +412,12 @@ function Agendar() {
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold text-[#0A1128]">{s.title}</p>
                       <p className="mt-0.5 text-xs text-slate-500">{s.desc}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold">
+                        <span className="text-[#0A9E8A]">a partir de {formatBRL(s.priceFrom)}</span>
+                        <span className="inline-flex items-center gap-1 text-slate-500">
+                          <Clock className="h-3 w-3" /> {s.duracaoLabel}
+                        </span>
+                      </div>
                     </div>
                     {active && (
                       <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#2DD4BF] text-white">
@@ -327,19 +431,17 @@ function Agendar() {
           </section>
 
           {/* Profissional */}
-          <section>
-            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/60 sm:p-8">
+            <div className="mb-5 flex items-baseline justify-between">
               <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">Profissional</h2>
-              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">Opcional</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Opcional</span>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <button
                 type="button"
                 onClick={() => { setProfId("any"); setSlotIdx(null); }}
                 className={`flex items-center gap-3 rounded-2xl border-2 p-4 text-left transition ${
-                  profId === "any"
-                    ? "border-[#2DD4BF] bg-[#2DD4BF]/5"
-                    : "border-slate-100 bg-white hover:border-slate-200"
+                  profId === "any" ? "border-[#2DD4BF] bg-[#2DD4BF]/5" : "border-slate-100 bg-white hover:border-slate-200"
                 }`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2DD4BF]/10 text-[#0A9E8A]">
@@ -350,11 +452,7 @@ function Agendar() {
                   <p className="text-xs text-slate-500">Escolhemos o melhor disponível</p>
                 </div>
               </button>
-
-              {loadingProfs && (
-                <div className="col-span-full text-xs text-slate-400">Carregando profissionais…</div>
-              )}
-
+              {loadingProfs && <div className="col-span-full text-xs text-slate-400">Carregando profissionais…</div>}
               {profissionais.map((p) => {
                 const active = profId === p.id;
                 return (
@@ -371,9 +469,7 @@ function Agendar() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold text-[#0A1128]">{p.nome}</p>
-                      <p className="truncate text-xs text-slate-500">
-                        {p.regiao || (p.especialidades?.[0] ?? "Profissional")}
-                      </p>
+                      <p className="truncate text-xs text-slate-500">{p.regiao || (p.especialidades?.[0] ?? "Profissional")}</p>
                     </div>
                   </button>
                 );
@@ -381,62 +477,78 @@ function Agendar() {
             </div>
           </section>
 
-          {/* Passo 2: Data e horário */}
-          <section>
-            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          {/* Data e horário */}
+          <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/60 sm:p-8">
+            <div className="mb-5 flex items-baseline justify-between">
               <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">Quando podemos te atender?</h2>
-              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">02 · Data e horário</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">02 · Data e horário</span>
             </div>
 
-            <input
-              ref={dateInputRef}
-              type="date"
-              min={today}
-              value={data}
-              onChange={(e) => { setData(e.target.value); setSlotIdx(null); }}
-              className="sr-only"
-              aria-hidden="true"
-              tabIndex={-1}
-            />
-
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+              {/* Calendário */}
               <div>
-                <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Escolha a data</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {dateOptions.map((d) => {
-                    const active = data === d.iso;
+                <div className="mb-3 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => !isCurrentMonth && setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1))}
+                    disabled={isCurrentMonth}
+                    aria-label="Mês anterior"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <p className="text-sm font-bold capitalize text-[#0A1128]">{monthLabel}</p>
+                  <button
+                    type="button"
+                    onClick={() => setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1))}
+                    aria-label="Próximo mês"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  {WEEKDAY_LETTERS.map((w, i) => <div key={i} className="py-1">{w}</div>)}
+                </div>
+                <div className="mt-1 grid grid-cols-7 gap-1">
+                  {monthGrid.map((cell, i) => {
+                    if (!cell) return <div key={i} />;
+                    const count = daySlotCounts.get(cell.iso) ?? 0;
+                    const isPast = cell.iso < toISO(today);
+                    const unavailable = isPast || count === 0;
+                    const isSelected = data === cell.iso;
+                    const isScarce = !unavailable && count <= SCARCE_THRESHOLD;
                     return (
                       <button
-                        key={d.iso}
+                        key={cell.iso}
                         type="button"
-                        onClick={() => { setData(d.iso); setSlotIdx(null); }}
-                        className={`flex flex-col items-center justify-center rounded-xl border-2 py-3 transition ${
-                          active ? "border-[#2DD4BF] bg-[#2DD4BF]/5 shadow-sm" : "border-slate-100 bg-white hover:border-slate-300"
+                        disabled={unavailable}
+                        onClick={() => { setData(cell.iso); setSlotIdx(null); }}
+                        aria-label={`${cell.day} ${MONTH_NAMES[viewMonth.getMonth()]} — ${count} horários`}
+                        className={`relative flex aspect-square flex-col items-center justify-center rounded-lg text-sm font-semibold transition ${
+                          isSelected
+                            ? "bg-[#2DD4BF] text-white shadow-md shadow-[#2DD4BF]/40"
+                            : unavailable
+                              ? "cursor-not-allowed text-slate-300"
+                              : "text-[#0A1128] hover:bg-[#2DD4BF]/10"
                         }`}
                       >
-                        <span className={`text-[10px] font-bold uppercase tracking-wider ${active ? "text-[#0A9E8A]" : "text-slate-400"}`}>{d.wd}</span>
-                        <span className="text-xl font-bold text-[#0A1128]">{d.day}</span>
+                        <span>{cell.day}</span>
+                        {isScarce && !isSelected && (
+                          <span className="absolute bottom-1 h-1 w-1 rounded-full bg-amber-400" aria-hidden />
+                        )}
                       </button>
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const el = dateInputRef.current;
-                    if (!el) return;
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const anyEl = el as any;
-                    if (typeof anyEl.showPicker === "function") anyEl.showPicker();
-                    else el.focus();
-                  }}
-                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 py-3 text-sm font-medium text-slate-500 transition hover:bg-slate-50"
-                >
-                  <CalendarDays className="h-4 w-4" />
-                  Ver mais datas
-                </button>
+                <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-slate-400">
+                  <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-amber-400" /> Poucos horários</span>
+                  <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#2DD4BF]" /> Selecionado</span>
+                </div>
               </div>
 
+              {/* Horários */}
               <div>
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Horário</p>
@@ -446,15 +558,21 @@ function Agendar() {
                     </span>
                   )}
                 </div>
-                <div className="space-y-2">
+                {scarce && (
+                  <div className="mb-3 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+                    <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    Poucos horários restantes nesta data
+                  </div>
+                )}
+                <div className="max-h-[320px] space-y-2 overflow-y-auto pr-1">
                   {!data && (
                     <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs text-slate-400">
-                      Escolha uma data para ver horários.
+                      Escolha uma data no calendário.
                     </p>
                   )}
                   {data && slots.length === 0 && (
                     <p className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs text-slate-400">
-                      Nenhum horário disponível nesta data. Tente outra data ou profissional.
+                      Nenhum horário disponível nesta data.
                     </p>
                   )}
                   {slots.map((s, idx) => {
@@ -480,61 +598,179 @@ function Agendar() {
             </div>
           </section>
 
-          {/* Passo 3: Endereço */}
-          <section>
-            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          {/* Endereço */}
+          <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/60 sm:p-8">
+            <div className="mb-5 flex items-baseline justify-between">
               <h2 className="text-lg font-bold text-[#0A1128] sm:text-xl">Onde será o serviço?</h2>
-              <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:inline">03 · Endereço</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">03 · Endereço</span>
             </div>
-            <div className="relative">
-              <MapPin className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" strokeWidth={1.75} />
-              <input
-                value={endereco}
-                onChange={(e) => setEndereco(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-12 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
-                placeholder="Rua, número, bairro, cidade e complemento (se houver)"
-              />
+
+            <div className="grid gap-4 sm:grid-cols-6">
+              <div className="sm:col-span-2">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">CEP</label>
+                <div className="relative">
+                  <input
+                    inputMode="numeric"
+                    value={cep}
+                    onChange={(e) => setCep(formatCep(e.target.value))}
+                    placeholder="00000-000"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
+                  />
+                  {cepStatus === "loading" && (
+                    <Loader2 className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-slate-400" />
+                  )}
+                  {cepStatus === "ok" && (
+                    <Check className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#0A9E8A]" strokeWidth={3} />
+                  )}
+                </div>
+                {cepStatus === "error" && (
+                  <p className="mt-1 text-[11px] text-amber-600">CEP não encontrado. Você pode preencher manualmente.</p>
+                )}
+                {cepStatus === "ok" && (
+                  <p className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-[#0A9E8A]">
+                    <Check className="h-3 w-3" strokeWidth={3} /> Endereço encontrado
+                  </p>
+                )}
+              </div>
+
+              <div className="sm:col-span-4">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Rua</label>
+                <div className="relative">
+                  <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input
+                    value={rua}
+                    onChange={(e) => setRua(e.target.value)}
+                    placeholder="Preenchido pelo CEP"
+                    readOnly={cepStatus === "ok"}
+                    className={`w-full rounded-xl border border-slate-200 py-3 pl-9 pr-4 text-sm outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20 ${cepStatus === "ok" ? "bg-slate-100 text-slate-600" : "bg-slate-50 focus:bg-white"}`}
+                  />
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Número</label>
+                <input
+                  value={numero}
+                  onChange={(e) => setNumero(e.target.value)}
+                  placeholder="123"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
+                />
+              </div>
+
+              <div className="sm:col-span-4">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Complemento</label>
+                <input
+                  value={complemento}
+                  onChange={(e) => setComplemento(e.target.value)}
+                  placeholder="Apto, bloco, casa (opcional)"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
+                />
+              </div>
+
+              <div className="sm:col-span-3">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Bairro</label>
+                <input
+                  value={bairro}
+                  onChange={(e) => setBairro(e.target.value)}
+                  readOnly={cepStatus === "ok"}
+                  className={`w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20 ${cepStatus === "ok" ? "bg-slate-100 text-slate-600" : "bg-slate-50 focus:bg-white"}`}
+                />
+              </div>
+
+              <div className="sm:col-span-3">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Cidade / UF</label>
+                <input
+                  value={uf ? `${cidade} / ${uf}` : cidade}
+                  onChange={(e) => setCidade(e.target.value)}
+                  readOnly={cepStatus === "ok"}
+                  className={`w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#2DD4BF] focus:ring-2 focus:ring-[#2DD4BF]/20 ${cepStatus === "ok" ? "bg-slate-100 text-slate-600" : "bg-slate-50 focus:bg-white"}`}
+                />
+              </div>
+
+              <div className="sm:col-span-6">
+                <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-slate-500">Ponto de referência</label>
+                <input
+                  value={referencia}
+                  onChange={(e) => setReferencia(e.target.value)}
+                  placeholder="Ex: próximo à padaria, portão azul (opcional)"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#2DD4BF] focus:bg-white focus:ring-2 focus:ring-[#2DD4BF]/20"
+                />
+              </div>
             </div>
           </section>
+        </div>
 
-          <div className="rounded-2xl border border-[#2DD4BF]/30 bg-[#2DD4BF]/5 px-4 py-3 text-sm text-[#0A1128]">
-            Após o agendamento, enviaremos um orçamento personalizado para o serviço escolhido.
-          </div>
+        {/* Painel de resumo (sticky em desktop) */}
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="rounded-2xl bg-[#0A1128] p-6 text-white shadow-2xl">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#2DD4BF]">Resumo do agendamento</p>
+            <h3 className="mt-1 text-lg font-bold">Confira antes de confirmar</h3>
 
-          <div className="flex flex-col-reverse items-stretch gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
-            <span className="text-sm text-slate-500">
-              {canSubmit ? "Tudo pronto para confirmar." : "Preencha os passos ao lado para continuar."}
-            </span>
+            <dl className="mt-5 space-y-4 text-sm">
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-white/50">Serviço</dt>
+                <dd className="mt-0.5 font-semibold">{servico || <span className="text-white/40">completar acima</span>}</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-white/50">Data</dt>
+                <dd className="mt-0.5 font-semibold capitalize">
+                  {data ? formatDataLong(data) : <span className="text-white/40">completar acima</span>}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-white/50">Horário</dt>
+                <dd className="mt-0.5 font-semibold tabular-nums">
+                  {slotIdx !== null && slots[slotIdx]
+                    ? `${slots[slotIdx].inicio} – ${slots[slotIdx].fim}`
+                    : <span className="text-white/40">completar acima</span>}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-white/50">Endereço</dt>
+                <dd className="mt-0.5 text-xs leading-relaxed text-white/80">
+                  {enderecoCompleto || <span className="text-white/40">completar acima</span>}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-6 rounded-xl border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 p-4">
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#2DD4BF]">
+                <CircleDollarSign className="h-3.5 w-3.5" /> Estimativa
+              </div>
+              <p className="mt-1 text-2xl font-bold text-white">
+                a partir de <span className="tabular-nums">{formatBRL(servicoObj.priceFrom)}</span>
+              </p>
+              <p className="mt-1 text-[11px] leading-relaxed text-white/60">
+                O valor final é confirmado após os detalhes do imóvel.
+              </p>
+            </div>
+
             <button
               type="submit"
               disabled={submitting || authLoading || !canSubmit}
-              className="flex items-center justify-center gap-2 rounded-xl bg-[#0A1128] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-[#0A1128]/20 transition hover:-translate-y-0.5 hover:bg-[#152145] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#2DD4BF] px-6 py-4 text-sm font-bold text-[#0A1128] shadow-xl shadow-[#2DD4BF]/30 transition hover:brightness-105 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/40 disabled:shadow-none"
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
               Confirmar agendamento
             </button>
-          </div>
-          {!user && !authLoading && (
-            <p className="mt-2 text-center text-xs text-slate-400 sm:text-right">
-              Você precisa estar logado para concluir o agendamento.
-            </p>
-          )}
-        </div>
-      </form>
 
-      <div className="mt-10 grid gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
-        {trustItems.map(({ icon: Icon, title, desc }) => (
-          <div key={title} className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#2DD4BF]/10 text-[#0A9E8A]">
-              <Icon className="h-5 w-5" strokeWidth={1.75} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-[#0A1128]">{title}</p>
-              <p className="text-xs text-slate-500">{desc}</p>
+            {!user && !authLoading && (
+              <p className="mt-2 text-center text-[11px] text-white/50">
+                Faça login para concluir.
+              </p>
+            )}
+
+            <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/10 pt-5">
+              {trustItems.map(({ icon: Icon, title }) => (
+                <div key={title} className="flex flex-col items-center gap-1.5 text-center">
+                  <Icon className="h-4 w-4 text-[#2DD4BF]" strokeWidth={1.75} />
+                  <span className="text-[10px] font-medium leading-tight text-white/70">{title}</span>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+        </aside>
+      </form>
     </SitePage>
   );
 }
