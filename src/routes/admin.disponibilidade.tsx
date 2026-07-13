@@ -75,7 +75,7 @@ function useConfig() {
     queryKey: ["disponibilidade", "config"],
     queryFn: async (): Promise<DispConfig> => {
       const { data, error } = await supabase
-        .from("disponibilidade_config" as never)
+        .from("disponibilidade_config")
         .select("*")
         .maybeSingle();
       if (error) throw error;
@@ -90,7 +90,7 @@ function useSemanal() {
     queryKey: ["disponibilidade", "semanal"],
     queryFn: async (): Promise<DispSemanal[]> => {
       const { data, error } = await supabase
-        .from("disponibilidade_semanal" as never)
+        .from("disponibilidade_semanal")
         .select("id,dia_semana,hora_inicio,hora_fim,ativo")
         .order("dia_semana")
         .order("hora_inicio");
@@ -106,7 +106,7 @@ function useExcecoes() {
     queryKey: ["disponibilidade", "excecoes"],
     queryFn: async (): Promise<DispExcecao[]> => {
       const { data, error } = await supabase
-        .from("disponibilidade_excecoes" as never)
+        .from("disponibilidade_excecoes")
         .select("id,data,tipo,hora_inicio,hora_fim,motivo")
         .order("data", { ascending: false });
       if (error) throw error;
@@ -125,7 +125,7 @@ function HorarioPadrao() {
 
   const addMut = useMutation({
     mutationFn: async (v: { dia_semana: number; hora_inicio: string; hora_fim: string }) => {
-      const { error } = await supabase.from("disponibilidade_semanal" as never).insert({ ...v, ativo: true });
+      const { error } = await supabase.from("disponibilidade_semanal").insert({ ...v, ativo: true });
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["disponibilidade", "semanal"] }); toast.success("Janela adicionada."); },
@@ -134,7 +134,7 @@ function HorarioPadrao() {
 
   const delMut = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("disponibilidade_semanal" as never).delete().eq("id", id);
+      const { error } = await supabase.from("disponibilidade_semanal").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["disponibilidade", "semanal"] }); toast.success("Janela removida."); },
@@ -143,7 +143,7 @@ function HorarioPadrao() {
 
   const toggleMut = useMutation({
     mutationFn: async ({ id, ativo }: { id: string; ativo: boolean }) => {
-      const { error } = await supabase.from("disponibilidade_semanal" as never).update({ ativo }).eq("id", id);
+      const { error } = await supabase.from("disponibilidade_semanal").update({ ativo }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["disponibilidade", "semanal"] }),
@@ -270,7 +270,7 @@ function Excecoes() {
         payload.hora_inicio = hi + ":00";
         payload.hora_fim = hf + ":00";
       }
-      const { error } = await supabase.from("disponibilidade_excecoes" as never).insert(payload);
+      const { error } = await supabase.from("disponibilidade_excecoes").insert(payload);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -283,7 +283,7 @@ function Excecoes() {
 
   const delMut = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("disponibilidade_excecoes" as never).delete().eq("id", id);
+      const { error } = await supabase.from("disponibilidade_excecoes").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["disponibilidade", "excecoes"] }); toast.success("Exceção removida."); },
@@ -405,7 +405,7 @@ function Regras() {
     mutationFn: async () => {
       if (!form) return;
       const { error } = await supabase
-        .from("disponibilidade_config" as never)
+        .from("disponibilidade_config")
         .update({
           slot_duracao_min: form.slot_duracao_min,
           capacidade_por_slot: form.capacidade_por_slot,
