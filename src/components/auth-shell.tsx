@@ -2,11 +2,10 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Sparkles, Leaf } from "lucide-react";
 import { mareNobreLogoCdnUrl, mareNobreLogoUrl } from "@/lib/brand-assets";
+import { applyImageFallback } from "@/lib/image-fallback";
 
 function handleLogoError(image: HTMLImageElement) {
-  if (image.src !== new URL(mareNobreLogoCdnUrl, window.location.origin).href) {
-    image.src = mareNobreLogoCdnUrl;
-  }
+  applyImageFallback(image, mareNobreLogoCdnUrl);
 }
 
 export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {

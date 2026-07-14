@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { X, Share } from "lucide-react";
 import { mareNobreLogoCdnUrl, mareNobreLogoUrl } from "@/lib/brand-assets";
+import { applyImageFallback } from "@/lib/image-fallback";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -89,9 +90,7 @@ export function InstallAppBanner() {
                 className="h-9 w-9 object-contain"
                 onError={(event) => {
                   const image = event.currentTarget;
-                  if (image.src !== new URL(mareNobreLogoCdnUrl, window.location.origin).href) {
-                    image.src = mareNobreLogoCdnUrl;
-                  }
+                  applyImageFallback(image, mareNobreLogoCdnUrl);
                 }}
               />
             </div>
