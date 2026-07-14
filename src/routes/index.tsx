@@ -20,7 +20,8 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 import { InstallAppBanner } from "@/components/install-app-banner";
 
-const heroCleaner = heroCleanerAsset.url;
+const HERO_IMAGE_VERSION = "20260714-hero-final";
+const heroCleaner = `${heroCleanerAsset.url}?v=${HERO_IMAGE_VERSION}`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -132,6 +133,9 @@ function Index() {
               alt="Profissional Maré Nobre com kit de limpeza"
               width={1440}
               height={1080}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
               className="h-auto w-full max-w-sm rounded-2xl object-cover shadow-2xl ring-1 ring-white/10 sm:max-w-md lg:max-w-lg"
             />
           </div>
