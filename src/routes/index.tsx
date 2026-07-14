@@ -12,13 +12,15 @@ import {
   Waves,
   Clock,
 } from "lucide-react";
-import heroCleaner from "@/assets/mare-nobre-hero.png";
+import heroCleanerAsset from "@/assets/mare-nobre-hero.png.asset.json";
 import photoPosObra from "@/assets/service-pos-obra-clean.jpg";
 import photoPassadoria from "@/assets/service-passadoria-clean.jpg";
 import photoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 import { InstallAppBanner } from "@/components/install-app-banner";
+
+const heroCleaner = heroCleanerAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
