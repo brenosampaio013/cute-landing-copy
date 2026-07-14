@@ -2,8 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
 
-const logoSrc = "/mare-nobre-logo-oficial.png";
+const logoSrc = logoAsset.url;
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
   { label: "Início", to: "/", exact: true },
