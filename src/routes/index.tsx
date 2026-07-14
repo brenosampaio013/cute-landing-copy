@@ -13,15 +13,18 @@ import {
   Clock,
 } from "lucide-react";
 import heroCleanerAsset from "@/assets/mare-nobre-hero.png.asset.json";
-import photoPosObra from "@/assets/service-pos-obra-clean.jpg";
-import photoPassadoria from "@/assets/service-passadoria-clean.jpg";
-import photoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
+import photoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
+import photoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
+import photoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
+import heroCleanerFallback from "@/assets/hero-cleaner.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-page";
 import { InstallAppBanner } from "@/components/install-app-banner";
 
 const HERO_IMAGE_VERSION = "20260714-hero-final";
+const SERVICE_IMAGE_VERSION = "20260714-services-cdn";
 const heroCleaner = `${heroCleanerAsset.url}?v=${HERO_IMAGE_VERSION}`;
+const serviceImage = (url: string) => `${url}?v=${SERVICE_IMAGE_VERSION}`;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,9 +48,9 @@ export const Route = createFileRoute("/")({
 
 
 const services = [
-  { photo: photoPosObra, icon: Sparkles, title: "PÓS OBRA", desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra." },
-  { photo: photoPassadoria, icon: Shirt, title: "PASSADORIA", desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa." },
-  { photo: photoLimpezaPiscina, icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho." },
+  { photo: serviceImage(photoPosObraAsset.url), icon: Sparkles, title: "PÓS OBRA", desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra." },
+  { photo: serviceImage(photoPassadoriaAsset.url), icon: Shirt, title: "PASSADORIA", desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa." },
+  { photo: serviceImage(photoLimpezaPiscinaAsset.url), icon: Waves, title: "LIMPEZA DE PISCINA", desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho." },
 ];
 
 
@@ -137,6 +140,12 @@ function Index() {
               decoding="async"
               fetchPriority="high"
               className="h-auto w-full max-w-sm rounded-2xl object-cover shadow-2xl ring-1 ring-white/10 sm:max-w-md lg:max-w-lg"
+              onError={(event) => {
+                const image = event.currentTarget;
+                if (image.src !== new URL(heroCleanerFallback, window.location.origin).href) {
+                  image.src = heroCleanerFallback;
+                }
+              }}
             />
           </div>
         </div>

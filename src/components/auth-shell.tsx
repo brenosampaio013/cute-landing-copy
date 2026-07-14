@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Sparkles, Leaf } from "lucide-react";
-import { mareNobreLogoUrl } from "@/lib/brand-assets";
+import { mareNobreLogoCdnUrl, mareNobreLogoUrl } from "@/lib/brand-assets";
+
+function handleLogoError(image: HTMLImageElement) {
+  if (image.src !== new URL(mareNobreLogoCdnUrl, window.location.origin).href) {
+    image.src = mareNobreLogoCdnUrl;
+  }
+}
 
 export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {
   return (
@@ -23,6 +29,7 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
                 loading="eager"
                 decoding="async"
                 className="mx-auto h-auto w-full max-w-[300px] xl:max-w-[340px]"
+                onError={(event) => handleLogoError(event.currentTarget)}
               />
             </Link>
 
@@ -92,6 +99,7 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
               loading="eager"
               decoding="async"
               className="h-16 w-auto sm:h-20"
+              onError={(event) => handleLogoError(event.currentTarget)}
             />
           </Link>
         </div>
