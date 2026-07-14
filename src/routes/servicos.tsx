@@ -2,9 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
 
 import { SitePage } from "@/components/site-page";
-import fotoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
-import fotoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
-import fotoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
+import { serviceImages } from "@/lib/brand-assets";
+import { applyImageFallback } from "@/lib/image-fallback";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -18,14 +17,13 @@ export const Route = createFileRoute("/servicos")({
 
 const NAVY = "#0B1E3D";
 const TEAL = "#1CA9B5";
-const SERVICE_IMAGE_VERSION = "20260714-services-cdn";
-const serviceImage = (url: string) => `${url}?v=${SERVICE_IMAGE_VERSION}`;
 
 type Service = {
   id: string;
   title: string;
   desc: string;
   photo: string;
+  fallbackPhoto: string;
   Icon: LucideIcon;
 };
 
@@ -34,26 +32,29 @@ const services: Service[] = [
     id: "pos-obra",
     title: "PÓS OBRA",
     desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra.",
-    photo: serviceImage(fotoPosObraAsset.url),
+    photo: serviceImages.posObra.src,
+    fallbackPhoto: serviceImages.posObra.fallbackSrc,
     Icon: Sparkles,
   },
   {
     id: "passadoria",
     title: "PASSADORIA",
     desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa.",
-    photo: serviceImage(fotoPassadoriaAsset.url),
+    photo: serviceImages.passadoria.src,
+    fallbackPhoto: serviceImages.passadoria.fallbackSrc,
     Icon: Shirt,
   },
   {
     id: "limpeza-piscina",
     title: "LIMPEZA DE PISCINA",
     desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho.",
-    photo: serviceImage(fotoLimpezaPiscinaAsset.url),
+    photo: serviceImages.limpezaPiscina.src,
+    fallbackPhoto: serviceImages.limpezaPiscina.fallbackSrc,
     Icon: Waves,
   },
 ];
 
-function ServiceCard({ title, desc, photo, Icon }: Service) {
+function ServiceCard({ title, desc, photo, fallbackPhoto, Icon }: Service) {
   return (
     <article
       className="group relative mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-3xl shadow-xl ring-1 ring-white/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:ring-[#2DD4BF]/30"
@@ -67,6 +68,9 @@ function ServiceCard({ title, desc, photo, Icon }: Service) {
           height={972}
           loading="lazy"
           className="h-full w-full object-cover object-top"
+          onError={(event) => {
+            applyImageFallback(event.currentTarget, fallbackPhoto);
+          }}
         />
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 h-20"

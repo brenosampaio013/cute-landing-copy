@@ -3,6 +3,7 @@ import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { mareNobreLogoCdnUrl, mareNobreLogoUrl } from "@/lib/brand-assets";
+import { applyImageFallback } from "@/lib/image-fallback";
 
 const logoSrc = mareNobreLogoUrl;
 
@@ -68,8 +69,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             className="h-20 w-auto max-w-[70vw] shrink object-contain sm:h-24 sm:max-w-none md:h-24 lg:h-32 xl:h-36"
             onError={(e) => {
               const img = e.currentTarget;
-              if (img.src !== new URL(mareNobreLogoCdnUrl, window.location.origin).href) {
-                img.src = mareNobreLogoCdnUrl;
+              if (applyImageFallback(img, mareNobreLogoCdnUrl)) {
                 return;
               }
               img.style.display = "none";
