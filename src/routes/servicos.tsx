@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, Sparkles, Shirt, Waves, type LucideIcon } from "lucide-react";
 
 import { SitePage } from "@/components/site-page";
-import fotoPosObra from "@/assets/service-pos-obra-clean.jpg";
-import fotoPassadoria from "@/assets/service-passadoria-clean.jpg";
-import fotoLimpezaPiscina from "@/assets/service-limpeza-piscina-clean.jpg";
+import fotoPosObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
+import fotoPassadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
+import fotoLimpezaPiscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
 
 export const Route = createFileRoute("/servicos")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/servicos")({
 
 const NAVY = "#0B1E3D";
 const TEAL = "#1CA9B5";
+const SERVICE_IMAGE_VERSION = "20260714-services-cdn";
+const serviceImage = (url: string) => `${url}?v=${SERVICE_IMAGE_VERSION}`;
 
 type Service = {
   id: string;
@@ -32,21 +34,21 @@ const services: Service[] = [
     id: "pos-obra",
     title: "PÓS OBRA",
     desc: "Sua casa entregue pronta pra morar — sem poeira, resíduos ou marcas de obra.",
-    photo: fotoPosObra,
+    photo: serviceImage(fotoPosObraAsset.url),
     Icon: Sparkles,
   },
   {
     id: "passadoria",
     title: "PASSADORIA",
     desc: "Roupas passadas com esmero, dobradas e prontas para o guarda-roupa.",
-    photo: fotoPassadoria,
+    photo: serviceImage(fotoPassadoriaAsset.url),
     Icon: Shirt,
   },
   {
     id: "limpeza-piscina",
     title: "LIMPEZA DE PISCINA",
     desc: "Piscina cristalina, tratada e sempre pronta para o próximo mergulho.",
-    photo: fotoLimpezaPiscina,
+    photo: serviceImage(fotoLimpezaPiscinaAsset.url),
     Icon: Waves,
   },
 ];
