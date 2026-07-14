@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck, Sparkles, Leaf } from "lucide-react";
-import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
+import { mareNobreLogoUrl } from "@/lib/brand-assets";
 
 export function AuthShell({ children }: { quote?: string; imageUrl?: string; children: ReactNode }) {
   return (
@@ -18,8 +18,10 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           <div className="relative z-10 flex h-full flex-col justify-between px-10 py-12 xl:px-14">
             <Link to="/" aria-label="Ir para a página inicial" className="inline-block self-center">
               <img
-                src={logoAsset.url}
+                src={mareNobreLogoUrl}
                 alt="Maré Nobre"
+                loading="eager"
+                decoding="async"
                 className="mx-auto h-auto w-full max-w-[300px] xl:max-w-[340px]"
               />
             </Link>
@@ -84,7 +86,13 @@ export function AuthShell({ children }: { quote?: string; imageUrl?: string; chi
           }}
         >
           <Link to="/" className="inline-block">
-            <img src={logoAsset.url} alt="Maré Nobre" className="h-16 w-auto sm:h-20" />
+            <img
+              src={mareNobreLogoUrl}
+              alt="Maré Nobre"
+              loading="eager"
+              decoding="async"
+              className="h-16 w-auto sm:h-20"
+            />
           </Link>
         </div>
 

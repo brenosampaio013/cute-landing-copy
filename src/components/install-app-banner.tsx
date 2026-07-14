@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { X, Share } from "lucide-react";
-import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
+import { mareNobreLogoUrl } from "@/lib/brand-assets";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -81,7 +81,7 @@ export function InstallAppBanner() {
             <div
               className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/15"
             >
-              <img src={logoAsset.url} alt="Maré Nobre" className="h-9 w-9 object-contain" />
+              <img src={mareNobreLogoUrl} alt="Maré Nobre" loading="eager" decoding="async" className="h-9 w-9 object-contain" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold">Tenha a Maré Nobre na tela inicial</p>

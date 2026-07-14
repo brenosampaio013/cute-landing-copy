@@ -2,9 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
+import { mareNobreLogoUrl } from "@/lib/brand-assets";
 
-const logoSrc = logoAsset.url;
+const logoSrc = mareNobreLogoUrl;
 
 const navLinks: { label: string; to: string; exact?: boolean }[] = [
   { label: "Início", to: "/", exact: true },
@@ -64,6 +64,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             height={660}
             loading="eager"
             decoding="async"
+            fetchPriority="high"
             className="h-20 w-auto max-w-[70vw] shrink object-contain sm:h-24 sm:max-w-none md:h-24 lg:h-32 xl:h-36"
             onError={(e) => {
               const img = e.currentTarget;
