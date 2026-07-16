@@ -66,7 +66,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             loading="eager"
             decoding="async"
             fetchPriority="high"
-            className="h-20 w-auto max-w-[70vw] shrink object-contain sm:h-24 sm:max-w-none md:h-24 lg:h-32 xl:h-36"
+            className="h-10 w-auto max-w-[60vw] shrink object-contain sm:h-12 sm:max-w-none md:h-14 lg:h-16"
             onError={(e) => {
               const img = e.currentTarget;
               if (applyImageFallback(img, mareNobreLogoCdnUrl)) {
