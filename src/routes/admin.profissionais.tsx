@@ -245,7 +245,7 @@ function ProfDetail({ p, onStatus }: { p: Prof; onStatus: (s: ProfStatus) => voi
 
         <Section title="Desempenho na plataforma"><p className="text-xs text-slate-500">{p.concluidos} agendamentos concluídos · Faturamento estimado <span className="font-semibold text-[#0A1128]">{brl(p.concluidos * 180)}</span>.</p></Section>
 
-        <div className="grid grid-cols-3 gap-2 pt-2">
+        <div className="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-3">
           <Button size="sm" onClick={() => onStatus("Ativo")} className="text-white" style={{ background: TEAL }}>Aprovar acesso</Button>
           <Button size="sm" variant="outline" onClick={() => onStatus("Inativo")}>Colocar como inativo</Button>
           <Button size="sm" variant="outline" onClick={() => onStatus("Bloqueado")} className="text-rose-600">Bloquear profissional</Button>

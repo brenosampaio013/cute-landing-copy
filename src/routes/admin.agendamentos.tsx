@@ -585,10 +585,10 @@ function CalendarMonth({
           const dayRows = c ? rows.filter((r) => r.data === iso) : [];
           const today = c && c.toDateString() === now.toDateString();
           return (
-            <div key={i} className="min-h-[110px] bg-white p-1.5">
+            <div key={i} className="min-h-[70px] bg-white p-1 sm:min-h-[110px] sm:p-1.5">
               {c && (
                 <>
-                  <div className={`mb-1 text-[11px] font-semibold ${today ? "inline-flex h-5 w-5 items-center justify-center rounded-full text-white" : "text-slate-500"}`} style={today ? { background: TEAL } : undefined}>
+                  <div className={`mb-1 text-[10px] font-semibold sm:text-[11px] ${today ? "inline-flex h-5 w-5 items-center justify-center rounded-full text-white" : "text-slate-500"}`} style={today ? { background: TEAL } : undefined}>
                     {c.getDate()}
                   </div>
                   <div className="space-y-0.5">
@@ -596,14 +596,14 @@ function CalendarMonth({
                       <button
                         key={r.id}
                         onClick={() => onSelect(r)}
-                        className={`block w-full truncate rounded px-1.5 py-0.5 text-left text-[10px] font-medium ${statusColor[r.status]}`}
+                        className={`block w-full truncate rounded px-1 py-0.5 text-left text-[9px] font-medium sm:px-1.5 sm:text-[10px] ${statusColor[r.status]}`}
                         title={`${r.hora} ${r.servico} — ${r.cliente}`}
                       >
                         {r.hora} {r.servico}
                       </button>
                     ))}
                     {dayRows.length > 3 && (
-                      <p className="pl-1 text-[10px] text-slate-400">+{dayRows.length - 3} mais</p>
+                      <p className="pl-1 text-[9px] text-slate-400 sm:text-[10px]">+{dayRows.length - 3} mais</p>
                     )}
                   </div>
                 </>
@@ -784,7 +784,7 @@ function NovoAgendamentoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader><DialogTitle>Novo agendamento</DialogTitle></DialogHeader>
         <div className="grid gap-4 py-2 sm:grid-cols-2">
           <Field label="Cliente"><Input value={form.cliente} onChange={(e) => setForm({ ...form, cliente: e.target.value })} placeholder="Buscar cliente..." /></Field>

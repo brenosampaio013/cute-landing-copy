@@ -58,7 +58,7 @@ function RelatoriosPage() {
       actions={
         <div className="flex flex-wrap items-center gap-2">
           <Select value={periodo} onValueChange={(v) => setPeriodo(v as Periodo)}>
-            <SelectTrigger className="h-10 w-[190px] bg-white"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-10 w-full bg-white sm:w-[190px]"><SelectValue /></SelectTrigger>
             <SelectContent>
               {(Object.keys(PERIODO_LABEL) as Periodo[]).map((k) => (
                 <SelectItem key={k} value={k}>{PERIODO_LABEL[k]}</SelectItem>

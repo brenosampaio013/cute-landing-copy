@@ -202,8 +202,8 @@ function AdminPanel() {
 
           <Panel>
             <h3 className="mb-4 font-semibold text-[#0A1128]">Agendamentos por status</h3>
-            <div className="flex items-center gap-4">
-              <div className="h-[180px] w-[180px] shrink-0">
+            <div className="flex flex-col items-center gap-4 sm:flex-row">
+              <div className="h-[140px] w-[140px] shrink-0 sm:h-[180px] sm:w-[180px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie data={donut} innerRadius={55} outerRadius={80} paddingAngle={2} dataKey="value">
@@ -212,7 +212,7 @@ function AdminPanel() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <ul className="flex-1 space-y-2 text-xs">
+              <ul className="w-full flex-1 space-y-2 text-xs">
                 {donut.map((d) => {
                   const pct = donutTotal ? Math.round((d.value / donutTotal) * 100) : 0;
                   return (
