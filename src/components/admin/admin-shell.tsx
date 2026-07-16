@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Waves,
   LayoutDashboard,
@@ -21,6 +22,8 @@ import {
   HelpCircle,
   Search,
   ChevronDown,
+  Menu,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { useProfile } from "@/hooks/queries/use-profile";
@@ -99,64 +102,119 @@ export function AdminShell({
   const { user } = useAuth();
   const unread = useUnreadTotalWithSound("admin", !!user, user);
   const badges: Partial<Record<NavKey, number>> = { mensagens: unread };
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  return (
-    <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
-      <aside
-        className="sticky top-0 hidden h-screen w-[240px] shrink-0 flex-col text-white lg:flex"
-        style={{ background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_2} 100%)` }}
-      >
-        <div className="px-6 pb-6 pt-7">
+  const sidebarInner = (
+    <>
+      <div className="flex items-center justify-between px-6 pb-6 pt-7">
+        <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <Waves className="h-6 w-6" style={{ color: TEAL }} />
-            <span className="text-lg font-bold tracking-wide">MARÉ NOBRE</span>
+            <Waves className="h-6 w-6 shrink-0" style={{ color: TEAL }} />
+            <span className="truncate text-lg font-bold tracking-wide">MARÉ NOBRE</span>
           </div>
           <p className="mt-1 text-[10px] font-medium tracking-[0.14em] text-white/45">
             SOLUÇÕES PARA O SEU LAR
           </p>
         </div>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(false)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white lg:hidden"
+          aria-label="Fechar menu"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 pb-4">
-          <SidebarSection title="PRINCIPAL" items={PRINCIPAL} active={active} badges={badges} />
-          <SidebarSection title="GERENCIAMENTO" items={GERENCIAMENTO} active={active} className="mt-6" />
-        </nav>
+      <nav className="flex-1 overflow-y-auto px-3 pb-4" onClick={() => setMobileOpen(false)}>
+        <SidebarSection title="PRINCIPAL" items={PRINCIPAL} active={active} badges={badges} />
+        <SidebarSection title="GERENCIAMENTO" items={GERENCIAMENTO} active={active} className="mt-6" />
+      </nav>
 
-        <div className="px-3 pb-5">
-          <div className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-3 ring-1 ring-white/10">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style={{ background: TEAL_SOFT, color: TEAL }}>
-              <HelpCircle className="h-4 w-4" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-semibold">Precisa de ajuda?</p>
-              <p className="truncate text-[11px] text-white/60">Central de ajuda</p>
-            </div>
+      <div className="px-3 pb-5">
+        <div className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-3 ring-1 ring-white/10">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg" style={{ background: TEAL_SOFT, color: TEAL }}>
+            <HelpCircle className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-xs font-semibold">Precisa de ajuda?</p>
+            <p className="truncate text-[11px] text-white/60">Central de ajuda</p>
           </div>
         </div>
+      </div>
+    </>
+  );
+
+  return (
+    <div className="flex min-h-screen bg-[#F5F7FA] text-slate-800">
+      {/* Desktop sidebar */}
+      <aside
+        className="sticky top-0 hidden h-screen w-[240px] shrink-0 flex-col text-white lg:flex"
+        style={{ background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_2} 100%)` }}
+      >
+        {sidebarInner}
       </aside>
 
-      <main className="min-w-0 flex-1 px-5 py-6 sm:px-8 lg:px-10">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-[#0A1128]">{title}</h1>
-            <p className="mt-0.5 text-sm text-slate-500">
+      {/* Mobile drawer overlay */}
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label="Fechar menu"
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-[280px] max-w-[85vw] flex-col text-white transition-transform duration-300 lg:hidden ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ background: `linear-gradient(180deg, ${NAVY} 0%, ${NAVY_2} 100%)` }}
+      >
+        {sidebarInner}
+      </aside>
+
+      <main className="min-w-0 flex-1 px-4 py-5 sm:px-6 sm:py-6 lg:px-10">
+        {/* Mobile top bar */}
+        <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm ring-1 ring-slate-200"
+            aria-label="Abrir menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <div className="flex items-center gap-2">
+            <Waves className="h-5 w-5" style={{ color: TEAL }} />
+            <span className="text-sm font-bold tracking-wide text-[#0A1128]">MARÉ NOBRE</span>
+          </div>
+          <div className="flex h-11 w-11 items-center justify-center rounded-full font-semibold text-white" style={{ background: TEAL }}>
+            {initial}
+          </div>
+        </div>
+
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 sm:mb-8 sm:gap-4">
+          <div className="min-w-0">
+            <h1 className="truncate text-xl font-bold text-[#0A1128] sm:text-2xl">{title}</h1>
+            <p className="mt-0.5 truncate text-xs text-slate-500 sm:text-sm">
               {subtitle ?? `Bem-vindo(a) de volta, ${displayName?.split(" ")[0] ?? "Admin"}! 👋`}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {actions}
             <div className="relative hidden sm:block">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
                 type="search"
                 placeholder="Buscar..."
-                className="h-10 w-56 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand)]/20"
+                className="h-10 w-40 rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-700 shadow-sm outline-none transition focus:border-[color:var(--brand)] focus:ring-2 focus:ring-[color:var(--brand)]/20 md:w-56"
                 style={{ ["--brand" as string]: TEAL }}
               />
             </div>
-            <button className="relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 hover:text-[#0A1128]">
+            <button className="relative rounded-full bg-white p-2.5 text-slate-500 shadow-sm ring-1 ring-slate-200 hover:text-[#0A1128]" aria-label="Notificações">
               <Bell className="h-5 w-5" />
             </button>
-            <button className="flex items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-3 shadow-sm ring-1 ring-slate-200">
+            <button className="hidden items-center gap-2 rounded-full bg-white py-1.5 pl-1.5 pr-3 shadow-sm ring-1 ring-slate-200 lg:flex">
               <div className="flex h-8 w-8 items-center justify-center rounded-full font-semibold text-white" style={{ background: TEAL }}>
                 {initial}
               </div>
