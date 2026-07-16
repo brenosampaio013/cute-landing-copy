@@ -1,5 +1,5 @@
 import logoAsset from "@/assets/mare-nobre-logo-oficial.png.asset.json";
-import heroAsset from "@/assets/mare-nobre-hero.png.asset.json";
+import heroAsset from "@/assets/mare-nobre-hero-v2.png.asset.json";
 import posObraAsset from "@/assets/service-pos-obra-clean.jpg.asset.json";
 import passadoriaAsset from "@/assets/service-passadoria-clean.jpg.asset.json";
 import piscinaAsset from "@/assets/service-limpeza-piscina-clean.jpg.asset.json";
@@ -10,7 +10,7 @@ import passadoriaLocal from "@/assets/service-passadoria-clean.jpg";
 import piscinaLocal from "@/assets/service-limpeza-piscina-clean.jpg";
 
 const LOGO_ASSET_VERSION = "20260714-logo-local-primary";
-const HERO_IMAGE_VERSION = "20260714-hero-local-primary";
+const HERO_IMAGE_VERSION = "20260716-hero-v2";
 const SERVICE_IMAGE_VERSION = "20260714-services-local-primary";
 
 function versioned(url: string, version: string) {
