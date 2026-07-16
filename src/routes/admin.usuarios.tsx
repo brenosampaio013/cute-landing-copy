@@ -189,14 +189,14 @@ function UsuariosPage() {
             <Input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar por nome ou e-mail" className="h-10 pl-9" />
           </div>
           <Select value={perfilF} onValueChange={(v) => setPerfilF(v as typeof perfilF)}>
-            <SelectTrigger className="h-10 w-[180px]"><SelectValue placeholder="Perfil" /></SelectTrigger>
+            <SelectTrigger className="h-10 w-full sm:w-[180px]"><SelectValue placeholder="Perfil" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="todos">Todos os perfis</SelectItem>
               {(Object.keys(PERFIL_LABEL) as Perfil[]).map((p) => <SelectItem key={p} value={p}>{PERFIL_LABEL[p]}</SelectItem>)}
             </SelectContent>
           </Select>
           <Select value={statusF} onValueChange={(v) => setStatusF(v as typeof statusF)}>
-            <SelectTrigger className="h-10 w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
+            <SelectTrigger className="h-10 w-full sm:w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="todos">Todos os status</SelectItem>
               {(Object.keys(STATUS_LABEL) as StatusU[]).map((s) => <SelectItem key={s} value={s}>{STATUS_LABEL[s]}</SelectItem>)}
@@ -235,7 +235,7 @@ function UsuariosPage() {
                   <td className="px-5 py-3 text-slate-600">{fmtDate(u.created_at)}</td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setDetalhe(u)}><Eye className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setDetalhe(u)}><Eye className="h-4 w-4" /></Button>
                       <RowMenu u={u} onEdit={() => abrirEdicao(u)} onReset={() => redefinirSenha(u)} onToggle={() => toggleAtivo(u)} onDelete={() => setExcluindo(u)} />
                     </div>
                   </td>
@@ -334,12 +334,12 @@ function UsuariosPage() {
       </AlertDialog>
 
       <Dialog open={perfisAberto} onOpenChange={setPerfisAberto}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="w-[95vw] max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Gerenciar perfis</DialogTitle>
             <DialogDescription>Permissões padrão aplicadas ao criar um novo usuário.</DialogDescription>
           </DialogHeader>
-          <div className="max-h-[60vh] overflow-auto rounded-lg border border-slate-100">
+          <div className="max-h-[60vh] overflow-x-auto overflow-y-auto rounded-lg border border-slate-100">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <tr>
@@ -406,7 +406,7 @@ function NivelPill({ nivel }: { nivel: Nivel }) {
 function RowMenu({ u, onEdit, onReset, onToggle, onDelete }: { u: Usuario; onEdit: () => void; onReset: () => void; onToggle: () => void; onDelete: () => void }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8"><MoreVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-9 w-9"><MoreVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuItem onClick={onEdit}><Pencil className="mr-2 h-4 w-4" /> Editar</DropdownMenuItem>
         <DropdownMenuItem onClick={onReset}><KeyRound className="mr-2 h-4 w-4" /> Redefinir senha</DropdownMenuItem>
@@ -442,7 +442,7 @@ function UsuarioDialog({ open, onOpenChange, editando, onSalvar }: {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{editando ? "Editar usuário" : "Novo usuário"}</DialogTitle>
           <DialogDescription>Preencha os dados e defina o nível de acesso.</DialogDescription>
@@ -470,7 +470,7 @@ function UsuarioDialog({ open, onOpenChange, editando, onSalvar }: {
 
         <div className="mt-2">
           <p className="mb-2 text-sm font-semibold text-[#0A1128]">Permissões por módulo</p>
-          <div className="overflow-hidden rounded-lg border border-slate-100">
+          <div className="overflow-x-auto rounded-lg border border-slate-100">
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <tr><th className="px-3 py-2">Módulo</th><th className="px-3 py-2">Nenhum</th><th className="px-3 py-2">Visualizar</th><th className="px-3 py-2">Editar</th></tr>

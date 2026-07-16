@@ -244,10 +244,10 @@ function Row({ c, onView, onEdit, onDup, onToggle, onDel }: { c: CupomComStats; 
       <td className="px-4 py-3"><span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", STATUS_STYLE[status])}>{STATUS_LABEL[status]}</span></td>
       <td className="px-4 py-3">
         <div className="flex justify-end gap-0.5">
-          <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onView}><Eye className="h-4 w-4" /></Button>
-          <Button size="icon" variant="ghost" className="h-8 w-8" onClick={onEdit}><Pencil className="h-4 w-4" /></Button>
+          <Button size="icon" variant="ghost" className="h-9 w-9" onClick={onView}><Eye className="h-4 w-4" /></Button>
+          <Button size="icon" variant="ghost" className="h-9 w-9" onClick={onEdit}><Pencil className="h-4 w-4" /></Button>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild><Button size="icon" variant="ghost" className="h-8 w-8"><MoreVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild><Button size="icon" variant="ghost" className="h-9 w-9"><MoreVertical className="h-4 w-4" /></Button></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={onDup}><Copy className="mr-2 h-4 w-4" /> Duplicar</DropdownMenuItem>
               <DropdownMenuItem onClick={onToggle}>{c.ativo ? <><PowerOff className="mr-2 h-4 w-4" /> Desativar</> : <><Power className="mr-2 h-4 w-4" /> Ativar</>}</DropdownMenuItem>
@@ -454,7 +454,7 @@ function DetailDrawer({ cupom, onOpenChange, onEdit, onToggle, onDel }: { cupom:
             <CodeBadge code={cupom.codigo} />
             <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", STATUS_STYLE[status])}>{STATUS_LABEL[status]}</span>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <MiniStat label="Usos" value={String(cupom.usos)} />
             <MiniStat label="Desconto total" value={brl(cupom.desconto_total)} />
             <MiniStat label="Ticket médio" value={brl(cupom.ticket_medio)} />
